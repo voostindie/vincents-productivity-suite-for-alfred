@@ -79,6 +79,21 @@ class Config
           name: name,
           root: root
       }
+      if area.has_key?('markdown-notes')
+        notes = area['markdown-notes'] || {}
+        areas[key][:markdown_notes] = {
+          path: notes['path'] || 'Notes',
+          extension: notes['extension'] || 'md',
+          name_template: notes['name-template'] || '$year-$month-$day-$slug',
+          file_template: notes['file-template'] || <<EOT
+---
+date: $day-$month-$year
+---
+# $title
+
+EOT
+        }
+      end
     end
     areas
   end

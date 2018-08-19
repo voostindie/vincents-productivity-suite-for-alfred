@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 #
 # Activates an area of responsibility
+#
+# Requires one argument: the name (key) of the area to focus on
 
 require_relative '../lib/alfred_helper'
 require_relative '../lib/config'
 
-alfred_single do
+Alfred::action do
   config = Config.load
+  raise 'No area specified' if ARGV.empty?
   config.set_area(ARGV[0])
   Config.save_state(config)
   area = config.active_area

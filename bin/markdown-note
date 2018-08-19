@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+#
+# Creates a new, empty note on disk and returns its location
+#
+# Requires one argument: the title of the note
+# The result is the name of the file that was created
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/markdown_notes'
+
+Alfred::action do
+  note = MarkdownNotes::Note.new(ARGV.join(' '))
+  note.create_file
+end
+

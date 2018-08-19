@@ -21,14 +21,39 @@ describe Config, '#load' do
       work_expected = {
         key: 'work',
         name: 'Work',
-        root: File.join(Dir.home, "Work")
+        root: File.join(Dir.home, "Work"),
+        markdown_notes: {
+          path: 'Notes',
+          extension: 'markdown',
+          name_template: '$year/Week $week/$year-$month-$day/$title',
+          file_template: <<EOT
+---
+date: $day-$month-$year
+slug: $slug
+---
+# $title
+EOT
+        }
+
       }
       expect(config.area('work')).to eq(work_expected)
 
       personal_expected = {
         key: 'personal',
         name: 'Personal Stuff',
-        root: File.join(Dir.home, "Personal")
+        root: File.join(Dir.home, "Personal"),
+        markdown_notes: {
+          path: 'Notes',
+          extension: 'md',
+          name_template: '$year-$month-$day-$slug',
+          file_template: <<EOT
+---
+date: $day-$month-$year
+---
+# $title
+
+EOT
+        }
       }
       expect(config.area('personal')).to eq(personal_expected)
     end
