@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+#
+# Lists all available areas of responsibility
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/config'
+
+alfred_items do
+  config = Config.load
+  active_area = config.get_area
+  config.areas.map do |name|
+    area = config.area(name)
+    subtitle = if area[:key].eql? active_area
+                 'Currently active'
+               else
+                 ''
+               end
+    {
+      uid: area[:key],
+      arg: area[:key],
+      title: area[:name],
+      subtitle: subtitle,
+      autocomplete: area[:name]
+    }
+  end
+end

@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+#
+# Activates an area of responsibility
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/config'
+
+alfred_single do
+  config = Config.load
+  config.set_area(ARGV[0])
+  Config.save_state(config)
+  area = config.active_area
+  "#{area[:name]} is now the active area"
+end

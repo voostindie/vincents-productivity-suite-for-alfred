@@ -2,7 +2,7 @@ require 'yaml'
 
 class Config
 
-  DEFAULT_CONFIG_FILE= '$HOME/.plsrc'.freeze
+  DEFAULT_CONFIG_FILE= File.join(Dir.home, '.plsrc').freeze
 
   def self.load(path = DEFAULT_CONFIG_FILE)
     raise "Couldn't read config from '#{path}'" unless File.readable?(path)
@@ -38,6 +38,10 @@ class Config
   def active_area
     raise "No valid area is active" unless @state[:area] && @areas.include?(@state[:area])
     @areas[@state[:area]]
+  end
+
+  def get_area
+    @state[:area]
   end
 
   def set_area(name)
