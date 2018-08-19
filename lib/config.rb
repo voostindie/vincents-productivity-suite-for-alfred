@@ -2,7 +2,7 @@ require 'yaml'
 
 class Config
 
-  DEFAULT_CONFIG_FILE= File.join(Dir.home, '.plsrc').freeze
+  DEFAULT_CONFIG_FILE= File.join(Dir.home, '.vpsrc').freeze
 
   def self.load(path = DEFAULT_CONFIG_FILE)
     raise "Couldn't read config from '#{path}'" unless File.readable?(path)

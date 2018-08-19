@@ -3,7 +3,7 @@ require 'config'
 
 describe Config, '#load' do
 
-  TEST_CONFIG_FILE = 'spec/plsrc.yaml'.freeze
+  TEST_CONFIG_FILE = 'spec/vpsrc.yaml'.freeze
 
   context 'with a missing configuration file' do
     it 'raises an error' do
