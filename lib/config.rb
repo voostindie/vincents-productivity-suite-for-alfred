@@ -2,8 +2,6 @@ require 'yaml'
 
 class Config
 
-  attr_reader :areas
-
   def initialize(hash)
     @areas = extract_areas(hash)
   end
@@ -13,6 +11,14 @@ class Config
     Config.new(YAML.load_file(path))
   end
 
+  def areas()
+    @areas.keys.sort
+  end
+
+  def area(name)
+    @areas[name]
+  end
+
   private
 
   def extract_areas(yaml)
@@ -20,6 +26,7 @@ class Config
     yaml['areas'].each_pair do |key, area|
       area = area || {}
       areas[key] = {
+          key: key,
           name: area['name'] || key.capitalize
       }
     end
