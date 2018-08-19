@@ -7,14 +7,10 @@ require_relative '../lib/config'
 
 Alfred::filter do
   config = Config.load
-  active_area = config.get_area
+  focus = config.focused_area[:key]
   config.areas.map do |name|
     area = config.area(name)
-    subtitle = if area[:key].eql? active_area
-                 'Currently focused'
-               else
-                 ''
-               end
+    subtitle = area[:key].eql?(focus) ? 'Currently focused' : ''
     {
       uid: area[:key],
       arg: area[:key],

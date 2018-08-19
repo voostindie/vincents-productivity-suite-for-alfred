@@ -4,60 +4,52 @@ require_relative 'config'
 
 module MarkdownNotes
 
+  # Creates a Markdown note on disk according to templates
   class Note
 
-    attr_reader :date, :title, :filename, :slug, :path, :content
+    attr_reader :context, :path, :content
 
-    def initialize(title, date: DateTime.now, area: Config.load.active_area)
-      @area = area
-      @notes = @area[:markdown_notes]
-      raise 'Markdown notes are not enabled for this area of responsibility' unless @notes
+    def initialize(title, date: DateTime.now, area: Config.load.focused_area)
+      area = area
+      notes = area[:markdown_notes]
+      raise 'Markdown notes are not enabled for this area of responsibility' unless notes
 
-      @date = date
-      @year = @date.strftime("%Y")
-      @month = @date.strftime("%m")
-      @week = @date.strftime("%V")
-      @day = @date.strftime("%d")
-      @title = title || 'Unnamed note'
-      @filename = safe_filename(@title)
-      @slug = create_slug(@filename)
-      @path = construct_filename
-      @content = merge_template(@notes[:file_template])
+      title ||= 'Unnamed note'
+      safe_title = title.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '')
+      slug = safe_title.downcase.gsub(/[ ]/, '-').gsub('--', '-')
+      @context = {
+        year: date.strftime("%Y"),
+        month: date.strftime("%m"),
+        week: date.strftime("%V"),
+        day: date.strftime("%d"),
+        title: title,
+        safe_title: safe_title,
+        slug: slug
+      }
+      @path = File.join(
+        area[:root],
+        notes[:path],
+        merge_template(notes[:name_template])) +
+              '.' + notes[:extension]
+      @content = merge_template(notes[:file_template])
     end
 
     def create_file
       return @path if File.exist?(@path)
       directory = File.dirname(@path)
       FileUtils.mkdir_p directory
-      File.open(@path, "w") do |file|
-        file.puts @content
-      end
+      File.open(@path, "w") {|file| file.puts @content}
       @path
     end
 
     private
 
-    def safe_filename(string)
-      string.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '')
-    end
-
-    def construct_filename
-      path = merge_template(@notes[:name_template], true)
-      File.join(@area[:root], @notes[:path], path) + '.' + @notes[:extension]
-    end
-
-    def create_slug(string)
-      string.downcase.gsub(/[ ]/, '-').gsub('--', '-')
-    end
-
-    def merge_template(template, escape_title = false)
-      template
-        .gsub('$year', @year)
-        .gsub('$month', @month)
-        .gsub('$week', @week)
-        .gsub('$day', @day)
-        .gsub('$title', escape_title ? @filename : @title)
-        .gsub('$slug', @slug)
+    def merge_template(template)
+      result = template.dup
+      @context.each_pair do |key, value|
+        result.gsub!('$' + key.to_s, value)
+      end
+      result
     end
   end
 end

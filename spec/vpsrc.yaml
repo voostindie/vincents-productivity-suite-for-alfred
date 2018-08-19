@@ -21,8 +21,9 @@ areas:
       # - $week
       # - $day
       # - $title
+      # - $safe_title: the title, usable in filenames
       # - $slug: title in lower case, spaces replaced by hyphens
-      name-template: '$year/Week $week/$year-$month-$day/$title'
+      name-template: '$year/Week $week/$year-$month-$day/$safe_title'
       file-template: |
         ---
         date: $day-$month-$year

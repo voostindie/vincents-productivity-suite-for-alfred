@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Activates an area of responsibility
+# Sets focus to an area of responsibility
 #
 # Requires one argument: the name (key) of the area to focus on
 
@@ -10,8 +10,7 @@ require_relative '../lib/config'
 Alfred::action do
   config = Config.load
   raise 'No area specified' if ARGV.empty?
-  config.set_area(ARGV[0])
+  config.focus(ARGV[0])
   Config.save_state(config)
-  area = config.active_area
-  "#{area[:name]} is now the focused area"
+  "#{config.focused_area[:name]} is now the focused area"
 end

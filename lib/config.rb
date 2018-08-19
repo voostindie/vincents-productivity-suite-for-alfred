@@ -35,16 +35,12 @@ class Config
     @areas[name]
   end
 
-  def active_area
+  def focused_area
     raise "No valid area is active" unless @state[:area] && @areas.include?(@state[:area])
     @areas[@state[:area]]
   end
 
-  def get_area
-    @state[:area]
-  end
-
-  def set_area(name)
+  def focus(name)
     raise "Unknown area '#{name}'" unless @areas.include?(name)
     @state[:area] = name
   end

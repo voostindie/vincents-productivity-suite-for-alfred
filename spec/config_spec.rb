@@ -25,7 +25,7 @@ describe Config, '#load' do
         markdown_notes: {
           path: 'Notes',
           extension: 'markdown',
-          name_template: '$year/Week $week/$year-$month-$day/$title',
+          name_template: '$year/Week $week/$year-$month-$day/$safe_title',
           file_template: <<EOT
 ---
 date: $day-$month-$year
@@ -63,19 +63,19 @@ EOT
     end
 
     it 'allows an existing area to be selected' do
-      config.set_area('work')
-      expect(config.active_area[:key]).to eq('work')
+      config.focus('work')
+      expect(config.focused_area[:key]).to eq('work')
     end
 
     it 'allows state to be saved to disk' do
       state = "#{TEST_CONFIG_FILE}.state"
       expect(File.exist?(state)).to be(false)
-      config.set_area('work')
+      config.focus('work')
       Config.save_state(config, TEST_CONFIG_FILE)
       expect(File.exist?(state)).to be(true)
 
       config2 = Config.load(TEST_CONFIG_FILE)
-      expect(config2.active_area[:key]).to eq('work')
+      expect(config2.focused_area[:key]).to eq('work')
 
       Config.delete_state(TEST_CONFIG_FILE)
       expect(File.exist?(state)).to be(false)
