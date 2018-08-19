@@ -3,3 +3,4 @@ areas:
     # No name specified; the default is the key, capitalized. I.e. 'Work'
   personal:
     name: Personal Stuff
+    root: ~/Personal

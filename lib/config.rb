@@ -68,9 +68,16 @@ class Config
     areas = {}
     yaml['areas'].each_pair do |key, area|
       area = area || {}
+      name = area['name'] || key.capitalize
+      root = if area['root']
+               File.expand_path(area['root'])
+             else
+               File.join(Dir.home, name)
+             end
       areas[key] = {
           key: key,
-          name: area['name'] || key.capitalize
+          name: name,
+          root: root
       }
     end
     areas

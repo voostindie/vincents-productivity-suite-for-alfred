@@ -20,13 +20,15 @@ describe Config, '#load' do
     it 'loads successfully' do
       work_expected = {
         key: 'work',
-        name: 'Work'
+        name: 'Work',
+        root: File.join(Dir.home, "Work")
       }
       expect(config.area('work')).to eq(work_expected)
 
       personal_expected = {
         key: 'personal',
-        name: 'Personal Stuff'
+        name: 'Personal Stuff',
+        root: File.join(Dir.home, "Personal")
       }
       expect(config.area('personal')).to eq(personal_expected)
     end
