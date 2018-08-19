@@ -4,11 +4,6 @@ class Config
 
   DEFAULT_CONFIG_FILE= '$HOME/.plsrc'.freeze
 
-  def initialize(config_hash, state_hash)
-    @areas = extract_areas(config_hash)
-    @state = state_hash
-  end
-
   def self.load(path = DEFAULT_CONFIG_FILE)
     raise "Couldn't read config from '#{path}'" unless File.readable?(path)
     config = YAML.load_file(path)
@@ -50,15 +45,20 @@ class Config
     @state[:area] = name
   end
 
-  def self.state_file(path)
-    "#{path}.state"
-  end
-
   def state
     @state
   end
 
+  def self.state_file(path)
+    "#{path}.state"
+  end
+
   private
+
+  def initialize(config_hash, state_hash)
+    @areas = extract_areas(config_hash)
+    @state = state_hash
+  end
 
   def extract_areas(yaml)
     areas = {}
