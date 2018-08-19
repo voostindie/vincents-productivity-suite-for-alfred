@@ -11,7 +11,7 @@ alfred_items do
   config.areas.map do |name|
     area = config.area(name)
     subtitle = if area[:key].eql? active_area
-                 'Currently active'
+                 'Currently focused'
                else
                  ''
                end

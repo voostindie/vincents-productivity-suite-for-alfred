@@ -10,5 +10,5 @@ alfred_single do
   config.set_area(ARGV[0])
   Config.save_state(config)
   area = config.active_area
-  "#{area[:name]} is now the active area"
+  "#{area[:name]} is now the focused area"
 end
