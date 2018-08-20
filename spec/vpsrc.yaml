@@ -5,10 +5,14 @@
 #   areas:
 #     family:
 #       markdown-notes:
+#       omnifocus:
+#       contacts:
 #
 # This sets up a single area called 'Family' with:
 # - Root directory ~/Family
 # - Markdown notes in ~/Family/Notes
+# - OmniFocus projects from the folder 'Family'
+# - Contacts people from the group 'Family'.
 areas:
   work:
     # No name specified; the default is the key, capitalized. I.e. 'Work'
