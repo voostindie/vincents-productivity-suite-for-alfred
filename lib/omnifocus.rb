@@ -8,7 +8,7 @@ module OmniFocus
 
     def projects(area: Config.load.focused_area, runner: Jxa::Runner.new)
       omnifocus = area[:omnifocus]
-      raise 'OmniFocus is not enabled for this area of responsibility' unless omnifocus
+      raise 'OmniFocus is not enabled for the focused area' unless omnifocus
       folder = omnifocus[:folder]
       supports_notes = area[:markdown_notes] != nil
 

@@ -32,7 +32,9 @@ areas:
         ---
         # $title
     omnifocus:
-      folder: 'Work'
+      folder: 'Professional life'
+    contacts:
+      group: 'Business associates'
   personal:
     name: 'Personal Stuff'
     root: '~/Personal'
@@ -51,3 +53,6 @@ areas:
     omnifocus:
       # Nothing specified here, so the defaults apply:
       # folder: 'Personal Stuff' (the name of the area)
+    contacts:
+      # Nothing specified here, so the defaults apply:
+      # group: 'Personal Stuff' (the name of the area)

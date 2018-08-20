@@ -36,7 +36,10 @@ slug: $slug
 EOT
         },
         omnifocus: {
-          folder: 'Work'
+          folder: 'Professional life'
+        },
+        contacts: {
+          group: 'Business associates'
         }
       }
       expect(config.area('work')).to eq(work_expected)
@@ -60,6 +63,9 @@ EOT
         },
         omnifocus: {
           folder: 'Personal Stuff'
+        },
+        contacts: {
+          group: 'Personal Stuff'
         }
       }
       expect(config.area('personal')).to eq(personal_expected)

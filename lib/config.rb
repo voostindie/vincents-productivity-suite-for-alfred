@@ -97,6 +97,12 @@ EOT
           folder: omnifocus['folder'] || name
         }
       end
+      if area.has_key?('contacts')
+        contacts = area['contacts'] || {}
+        areas[key][:contacts] = {
+          group: contacts['group'] || name
+        }
+      end
     end
     areas
   end
