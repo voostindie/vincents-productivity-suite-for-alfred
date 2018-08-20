@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'markdown_notes'
+require 'markdown'
 
-describe MarkdownNotes::Note, '#initialize' do
+describe Markdown::Note, '#initialize' do
 
   context 'with valid configuration' do
 
@@ -17,17 +17,17 @@ describe MarkdownNotes::Note, '#initialize' do
     }
 
     it 'cleans up invalid characters from the title for the filename' do
-      note = MarkdownNotes::Note.new("!@\#$\t\nnote...%^&*", area: area)
+      note = Markdown::Note.new("!@\#$\t\nnote...%^&*", area: area)
       expect(note.context[:safe_title]).to eq('note')
     end
 
     it 'creates a slug from the title' do
-      note = MarkdownNotes::Note.new('This is a dummy note', area: area)
+      note = Markdown::Note.new('This is a dummy note', area: area)
       expect(note.context[:slug]).to eq('this-is-a-dummy-note')
     end
 
     it 'creates a path according to the name template' do
-      note = MarkdownNotes::Note.new(
+      note = Markdown::Note.new(
         'This is a dummy note',
         area: area,
         date: Date.new(2018, 8, 19))
@@ -36,13 +36,13 @@ describe MarkdownNotes::Note, '#initialize' do
     end
 
     it 'creates note content according to the file template' do
-      note = MarkdownNotes::Note.new('Title', area: area)
+      note = Markdown::Note.new('Title', area: area)
       expect(note.content).to eq('# Title')
     end
 
     it 'can open notes with the preferred editor' do
       runner = DummyRunner.new
-      MarkdownNotes::edit_note(__FILE__, area: area, runner: runner)
+      Markdown::edit_note(__FILE__, area: area, runner: runner)
       expect(runner.command).to eq("/usr/bin/my-preferred-editor \"#{__FILE__}\"")
     end
   end

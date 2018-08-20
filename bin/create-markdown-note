@@ -7,9 +7,9 @@
 # Output: the name of the file that was created
 
 require_relative '../lib/alfred_helper'
-require_relative '../lib/markdown_notes'
+require_relative '../lib/markdown'
 
 Alfred::action do
-  note = MarkdownNotes::Note.new(ARGV.join(' '))
+  note = Markdown::Note.new(ARGV.join(' '))
   note.create_file
 end

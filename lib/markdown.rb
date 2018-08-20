@@ -3,7 +3,7 @@ require 'fileutils'
 require_relative 'config'
 require_relative 'exec'
 
-module MarkdownNotes
+module Markdown
 
   def self.edit_note(path, area: Config.load.focused_area, runner: Exec::Runner.new)
     raise 'File not found' unless File.exist?(path)
