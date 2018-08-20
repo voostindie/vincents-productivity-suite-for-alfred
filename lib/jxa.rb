@@ -14,7 +14,9 @@ module Jxa
     end
 
     def execute(script, *args)
-      command = ([File.join(@root, script) + ".js"] + args).join(' ')
+      script = File.join(@root, script) + '.js'
+      raise "JXA script not found: #{script}" unless File.exist?(script)
+      command = ([script] + args).join(' ')
       json = `#{command}`
       raise "JXA script execution failed: '#{command}'" unless $? == 0
       JSON.parse(json)
