@@ -13,4 +13,3 @@ Alfred::action do
   note = MarkdownNotes::Note.new(ARGV.join(' '))
   note.create_file
 end
-

@@ -79,6 +79,7 @@ class Config
         notes = area['markdown-notes'] || {}
         areas[key][:markdown_notes] = {
           path: notes['path'] || 'Notes',
+          editor: notes['editor'] || 'open',
           extension: notes['extension'] || 'md',
           name_template: notes['name-template'] || '$year-$month-$day-$slug',
           file_template: notes['file-template'] || <<EOT

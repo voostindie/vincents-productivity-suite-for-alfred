@@ -15,7 +15,15 @@ describe OmniFocus, '#projects' do
         {
           uid: 'foo',
           title: 'Foo',
-          arg: 'Foo'
+          arg: 'Foo',
+          autocomplete: 'Foo',
+          mods: {
+            alt: {
+              valid: false,
+              arg: 'Foo',
+              subtitle: 'Markdown notes are not available for the focused area'
+            }
+          }
         }
       ]
       projects = OmniFocus::projects(area: area, runner: StubRunner.new)

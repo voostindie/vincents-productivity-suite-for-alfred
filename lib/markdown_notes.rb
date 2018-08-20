@@ -1,8 +1,15 @@
 require 'date'
 require 'fileutils'
 require_relative 'config'
+require_relative 'exec'
 
 module MarkdownNotes
+
+  def self.edit_note(path, area: Config.load.focused_area, runner: Exec::Runner.new)
+    raise 'File not found' unless File.exist?(path)
+    command = "#{area[:markdown_notes][:editor]} \"#{path}\""
+    runner.execute(command)
+  end
 
   # Creates a Markdown note on disk according to templates
   class Note
@@ -11,7 +18,7 @@ module MarkdownNotes
 
     def initialize(title, date: DateTime.now, area: Config.load.focused_area)
       notes = area[:markdown_notes]
-      raise 'Markdown notes are not enabled for this area of responsibility' unless notes
+      raise 'Markdown notes are not enabled for the focused area' unless notes
 
       title ||= 'Unnamed note'
       safe_title = title.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '')

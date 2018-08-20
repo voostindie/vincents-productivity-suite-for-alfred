@@ -10,19 +10,28 @@ module OmniFocus
       omnifocus = area[:omnifocus]
       raise 'OmniFocus is not enabled for this area of responsibility' unless omnifocus
       folder = omnifocus[:folder]
+      supports_notes = area[:markdown_notes] != nil
 
       projects = runner.execute('omnifocus-projects', folder)
       projects.map do |project|
         {
           uid: project['id'],
           title: project['name'],
-          arg: project['name']
+          arg: project['name'],
+          autocomplete: project['name'],
+          mods: {
+            alt: {
+              valid: supports_notes,
+              arg: project['name'],
+              subtitle: if supports_notes
+                          'Create a Markdown note for this project'
+                        else
+                          'Markdown notes are not available for the focused area'
+                        end
+            }
+          }
         }
       end
     end
-
-    private
-
-
   end
 end

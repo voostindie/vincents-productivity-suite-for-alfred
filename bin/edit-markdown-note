@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+#
+# Opens a note for editing in the preferred editor
+#
+# Requires one argument: the path to the note
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/markdown_notes'
+
+Alfred::action do
+  raise 'No path specified' if ARGV.empty?
+  MarkdownNotes::edit_note(ARGV[0].chomp)
+end

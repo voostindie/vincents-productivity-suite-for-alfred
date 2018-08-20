@@ -25,6 +25,7 @@ describe Config, '#load' do
         markdown_notes: {
           path: 'Notes',
           extension: 'markdown',
+          editor: 'open -a Byword.app',
           name_template: '$year/Week $week/$year-$month-$day/$safe_title',
           file_template: <<EOT
 ---
@@ -47,6 +48,7 @@ EOT
         markdown_notes: {
           path: 'Notes',
           extension: 'md',
+          editor: 'open',
           name_template: '$year-$month-$day-$slug',
           file_template: <<EOT
 ---

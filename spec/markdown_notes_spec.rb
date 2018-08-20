@@ -8,6 +8,7 @@ describe MarkdownNotes::Note, '#initialize' do
     area = {
       root: File.join(Dir.home, 'tmp', 'test'),
       markdown_notes: {
+        editor: '/usr/bin/my-preferred-editor',
         path: 'Notes',
         extension: 'md',
         name_template: '$year-$month-$day/$slug',
@@ -16,7 +17,7 @@ describe MarkdownNotes::Note, '#initialize' do
     }
 
     it 'cleans up invalid characters from the title for the filename' do
-      note = MarkdownNotes::Note.new("!@\#$\t\nnote%^&*", area: area)
+      note = MarkdownNotes::Note.new("!@\#$\t\nnote...%^&*", area: area)
       expect(note.context[:safe_title]).to eq('note')
     end
 
@@ -38,6 +39,18 @@ describe MarkdownNotes::Note, '#initialize' do
       note = MarkdownNotes::Note.new('Title', area: area)
       expect(note.content).to eq('# Title')
     end
-  end
 
+    it 'can open notes with the preferred editor' do
+      runner = DummyRunner.new
+      MarkdownNotes::edit_note(__FILE__, area: area, runner: runner)
+      expect(runner.command).to eq("/usr/bin/my-preferred-editor \"#{__FILE__}\"")
+    end
+  end
+end
+
+class DummyRunner
+  attr_reader :command
+  def execute(command)
+    @command = command
+  end
 end
