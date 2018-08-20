@@ -90,6 +90,12 @@ date: $day-$month-$year
 EOT
         }
       end
+      if area.has_key?('omnifocus')
+        omnifocus = area['omnifocus'] || {}
+        areas[key][:omnifocus] = {
+          folder: omnifocus['folder'] || name
+        }
+      end
     end
     areas
   end

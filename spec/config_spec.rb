@@ -33,8 +33,10 @@ slug: $slug
 ---
 # $title
 EOT
+        },
+        omnifocus: {
+          folder: 'Work'
         }
-
       }
       expect(config.area('work')).to eq(work_expected)
 
@@ -53,6 +55,9 @@ date: $day-$month-$year
 # $title
 
 EOT
+        },
+        omnifocus: {
+          folder: 'Personal Stuff'
         }
       }
       expect(config.area('personal')).to eq(personal_expected)

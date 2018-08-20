@@ -30,6 +30,8 @@ areas:
         slug: $slug
         ---
         # $title
+    omnifocus:
+      folder: 'Work'
   personal:
     name: 'Personal Stuff'
     root: '~/Personal'
@@ -44,3 +46,6 @@ areas:
       #   ---
       #   # $title
       #
+    omnifocus:
+      # Nothing specified here, so the defaults apply:
+      # folder: 'Personal Stuff' (the name of the area)

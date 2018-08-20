@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+# Lists all OmniFocus projects for this area of responsibility
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/omnifocus'
+
+Alfred::filter do
+  OmniFocus::projects
+end

@@ -10,7 +10,6 @@ module MarkdownNotes
     attr_reader :context, :path, :content
 
     def initialize(title, date: DateTime.now, area: Config.load.focused_area)
-      area = area
       notes = area[:markdown_notes]
       raise 'Markdown notes are not enabled for this area of responsibility' unless notes
 
