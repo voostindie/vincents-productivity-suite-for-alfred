@@ -6,7 +6,7 @@ module Contacts
 
   class << self
 
-    def people(area: Config.load.focused_area, runner: Jxa::Runner.new)
+    def people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new)
       contacts = area[:contacts]
       raise "Contacts is not enabled for the focused area" unless contacts
       group = contacts[:group]
@@ -16,7 +16,16 @@ module Contacts
         {
           uid: contact['id'],
           title: contact['name'],
-          arg: contact['name'],
+          subtitle: if triggered_as_snippet
+                      'Paste this name in the frontmost application'
+                    else
+                      'Open this person in Contacts'
+                    end,
+          arg: if triggered_as_snippet
+                 contact['name']
+               else
+                 contact['id']
+               end,
           autocomplete: contact['name'],
           mods: {
             alt: {

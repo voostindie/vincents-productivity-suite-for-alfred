@@ -10,12 +10,13 @@ describe OmniFocus, '#projects' do
       }
     }
 
-    it 'lists all projects in the configured OmniFocus folder' do
+    it 'lists all projects in the configured OmniFocus folder in shortcut mode' do
       expected = [
         {
           uid: 'foo',
           title: 'Foo',
-          arg: 'Foo',
+          subtitle: 'Open this project in OmniFocus',
+          arg: 'foo',
           autocomplete: 'Foo',
           mods: {
             alt: {
@@ -27,6 +28,27 @@ describe OmniFocus, '#projects' do
         }
       ]
       projects = OmniFocus::projects(area: area, runner: StubRunner.new)
+      expect(projects).to eq(expected)
+    end
+
+    it 'lists all projects in the configured OmniFocus folder in snippet mode' do
+      expected = [
+        {
+          uid: 'foo',
+          title: 'Foo',
+          subtitle: 'Paste this name in the frontmost application',
+          arg: 'Foo',
+          autocomplete: 'Foo',
+          mods: {
+            alt: {
+              valid: false,
+              arg: 'Foo',
+              subtitle: 'Markdown notes are not available for the focused area'
+            }
+          }
+        }
+      ]
+      projects = OmniFocus::projects(true, area: area, runner: StubRunner.new)
       expect(projects).to eq(expected)
     end
   end

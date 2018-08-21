@@ -6,7 +6,7 @@ module OmniFocus
 
   class << self
 
-    def projects(area: Config.load.focused_area, runner: Jxa::Runner.new)
+    def projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new)
       omnifocus = area[:omnifocus]
       raise 'OmniFocus is not enabled for the focused area' unless omnifocus
       folder = omnifocus[:folder]
@@ -17,7 +17,16 @@ module OmniFocus
         {
           uid: project['id'],
           title: project['name'],
-          arg: project['name'],
+          subtitle: if triggered_as_snippet
+                      'Paste this name in the frontmost application'
+                    else
+                      'Open this project in OmniFocus'
+                    end,
+          arg: if triggered_as_snippet
+                 project['name']
+               else
+                 project['id']
+               end,
           autocomplete: project['name'],
           mods: {
             alt: {
