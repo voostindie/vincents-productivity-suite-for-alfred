@@ -10,12 +10,11 @@ Alfred::filter do
   focus = config.focused_area[:key]
   config.areas.map do |name|
     area = config.area(name)
-    subtitle = area[:key].eql?(focus) ? 'Currently focused' : ''
+    postfix = area[:key].eql?(focus) ? ' (focused)' : ''
     {
       uid: area[:key],
       arg: area[:key],
-      title: area[:name],
-      subtitle: subtitle,
+      title: area[:name] + postfix,
       autocomplete: area[:name]
     }
   end
