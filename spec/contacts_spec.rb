@@ -7,6 +7,10 @@ describe Contacts, '#people' do
     area = {
       contacts: {
         group: 'Foo',
+        mail: {
+          client: 'Mail',
+          from: 'Me Myself <me@example.com>'
+        }
       }
     }
 
@@ -51,6 +55,17 @@ describe Contacts, '#people' do
       people = Contacts::people(true, area: area, runner: StubRunner.new)
       expect(people).to eq(expected)
     end
+
+    it 'creates e-mail using the configured from address' do
+      expected = {
+        script: 'mail-create-email-message',
+        to: 'test@example.com',
+        from: 'Me Myself <me@example.com>'
+      }
+      runner = MailStubRunner.new
+      Contacts::create_email('test@example.com', area: area, runner: runner)
+      expect(runner.command).to eq(expected)
+    end
   end
 end
 
@@ -58,8 +73,20 @@ class StubRunner
   def execute(script, *args)
     group = args[0]
     [{
-      'id' => group.downcase,
-      'name' => group
-    }]
+       'id' => group.downcase,
+       'name' => group
+     }]
+  end
+end
+
+class MailStubRunner
+  attr_reader :command
+
+  def execute(script, *args)
+    @command = {
+      script: script,
+      to: args[0],
+      from: args[1]
+    }
   end
 end

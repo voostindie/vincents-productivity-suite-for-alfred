@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+#
+# Creates a new e-mail message using the area's preferred mail client
+#
+# Requires one argument: the e-mail address to send the mail to.
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/contacts'
+
+Alfred::action do
+  raise 'No email address specified' if ARGV.empty?
+  Contacts::create_email(ARGV[0])
+end

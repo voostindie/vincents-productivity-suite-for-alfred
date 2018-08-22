@@ -99,8 +99,13 @@ EOT
       end
       if area.has_key?('contacts')
         contacts = area['contacts'] || {}
+        mail = contacts['mail'] || {}
         areas[key][:contacts] = {
-          group: contacts['group'] || name
+          group: contacts['group'] || name,
+          mail: {
+            client: mail['client'] || 'Mail',
+            from: mail['from'] || nil
+          }
         }
       end
     end

@@ -232,6 +232,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>43684ECD-254E-4932-88D0-2E999E5DBB79</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<array>
 			<dict>
@@ -250,6 +263,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>B1C51158-7234-43A3-94A0-8006F4388F5F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -876,6 +902,63 @@
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>name</key>
+				<string>Write e-mail using the focused area's preferred mail client</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.contact</string>
+			<key>uid</key>
+			<string>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/create-email-message</string>
+				<key>type</key>
+				<integer>8</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>43684ECD-254E-4932-88D0-2E999E5DBB79</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>This is Vincent's Productivity Suite for Alfred.
@@ -935,6 +1018,13 @@ See the README for more information.</string>
 			<integer>370</integer>
 			<key>ypos</key>
 			<integer>350</integer>
+		</dict>
+		<key>43684ECD-254E-4932-88D0-2E999E5DBB79</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1070</integer>
+			<key>ypos</key>
+			<integer>840</integer>
 		</dict>
 		<key>492E4749-88F2-46BC-A846-A6EF34121962</key>
 		<dict>
@@ -1021,6 +1111,15 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>590</integer>
 		</dict>
+		<key>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</key>
+		<dict>
+			<key>note</key>
+			<string>Creates an e-mail</string>
+			<key>xpos</key>
+			<integer>920</integer>
+			<key>ypos</key>
+			<integer>840</integer>
+		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
 			<key>xpos</key>
@@ -1036,6 +1135,13 @@ See the README for more information.</string>
 			<integer>370</integer>
 			<key>ypos</key>
 			<integer>40</integer>
+		</dict>
+		<key>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</key>
+		<dict>
+			<key>xpos</key>
+			<integer>60</integer>
+			<key>ypos</key>
+			<integer>840</integer>
 		</dict>
 		<key>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</key>
 		<dict>

@@ -39,6 +39,8 @@ areas:
       folder: 'Professional life'
     contacts:
       group: 'Business associates'
+      mail:
+        client: 'Microsoft Outlook'
   personal:
     name: 'Personal Stuff'
     root: '~/Personal'
@@ -60,3 +62,6 @@ areas:
     contacts:
       # Nothing specified here, so the defaults apply:
       # group: 'Personal Stuff' (the name of the area)
+      mail:
+        from: 'Me Myself <me@example.com>'
+        # Client is not defined, and is therefore 'Mail'

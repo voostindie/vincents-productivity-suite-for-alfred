@@ -39,7 +39,11 @@ EOT
           folder: 'Professional life'
         },
         contacts: {
-          group: 'Business associates'
+          group: 'Business associates',
+          mail: {
+            client: 'Microsoft Outlook',
+            from: nil
+          }
         }
       }
       expect(config.area('work')).to eq(work_expected)
@@ -65,7 +69,11 @@ EOT
           folder: 'Personal Stuff'
         },
         contacts: {
-          group: 'Personal Stuff'
+          group: 'Personal Stuff',
+          mail: {
+            client: 'Mail',
+            from: 'Me Myself <me@example.com>'
+          }
         }
       }
       expect(config.area('personal')).to eq(personal_expected)
