@@ -16,7 +16,7 @@ describe Contacts, '#people' do
           uid: 'foo',
           title: 'Foo',
           subtitle: 'Open this person in Contacts',
-          arg: 'foo',
+          arg: 'addressbook://foo',
           autocomplete: 'Foo',
           mods: {
             alt: {

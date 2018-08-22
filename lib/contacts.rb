@@ -24,7 +24,7 @@ module Contacts
           arg: if triggered_as_snippet
                  contact['name']
                else
-                 contact['id']
+                 "addressbook://#{contact['id']}"
                end,
           autocomplete: contact['name'],
           mods: {

@@ -25,7 +25,7 @@ module OmniFocus
           arg: if triggered_as_snippet
                  project['name']
                else
-                 project['id']
+                 "omnifocus://task/#{project['id']}"
                end,
           autocomplete: project['name'],
           mods: {

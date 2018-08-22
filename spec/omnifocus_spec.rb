@@ -16,7 +16,7 @@ describe OmniFocus, '#projects' do
           uid: 'foo',
           title: 'Foo',
           subtitle: 'Open this project in OmniFocus',
-          arg: 'foo',
+          arg: 'omnifocus://task/foo',
           autocomplete: 'Foo',
           mods: {
             alt: {

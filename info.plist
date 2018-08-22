@@ -143,7 +143,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>5A87D089-2011-450E-96B0-0FB069D1554A</string>
+				<string>317868F8-57D2-4B31-83F1-5551E7EFCAD0</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -262,7 +262,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>3C5C8721-9CDD-4EBA-A5A8-3CC54C1732C6</string>
+				<string>317868F8-57D2-4B31-83F1-5551E7EFCAD0</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -518,6 +518,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>317868F8-57D2-4B31-83F1-5551E7EFCAD0</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -596,25 +615,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>omnifocus://task/{query}</string>
-				<key>utf8</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
-			<key>uid</key>
-			<string>3C5C8721-9CDD-4EBA-A5A8-3CC54C1732C6</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>inputstring</key>
 				<string>{var:TRIGGERED_AS_SNIPPET}</string>
 				<key>matchcasesensitive</key>
@@ -688,6 +688,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -715,25 +732,6 @@
 			<string>0ED34B50-BB28-4DAF-83CF-6431B7340FD1</string>
 			<key>version</key>
 			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>addressbook://{query}</string>
-				<key>utf8</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
-			<key>uid</key>
-			<string>5A87D089-2011-450E-96B0-0FB069D1554A</string>
-			<key>version</key>
-			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -821,23 +819,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
-				<true/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>transient</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argument</key>
 				<string>{query}</string>
 				<key>variables</key>
@@ -916,6 +897,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>190</integer>
 		</dict>
+		<key>317868F8-57D2-4B31-83F1-5551E7EFCAD0</key>
+		<dict>
+			<key>xpos</key>
+			<integer>920</integer>
+			<key>ypos</key>
+			<integer>350</integer>
+		</dict>
 		<key>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</key>
 		<dict>
 			<key>note</key>
@@ -925,26 +913,12 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>350</integer>
 		</dict>
-		<key>3C5C8721-9CDD-4EBA-A5A8-3CC54C1732C6</key>
-		<dict>
-			<key>xpos</key>
-			<integer>920</integer>
-			<key>ypos</key>
-			<integer>350</integer>
-		</dict>
 		<key>492E4749-88F2-46BC-A846-A6EF34121962</key>
 		<dict>
 			<key>xpos</key>
 			<integer>920</integer>
 			<key>ypos</key>
 			<integer>40</integer>
-		</dict>
-		<key>5A87D089-2011-450E-96B0-0FB069D1554A</key>
-		<dict>
-			<key>xpos</key>
-			<integer>920</integer>
-			<key>ypos</key>
-			<integer>590</integer>
 		</dict>
 		<key>66D7A9C1-49EE-44E2-A44A-94DBFC132274</key>
 		<dict>
@@ -1034,9 +1008,9 @@ See the README for more information.</string>
 		<key>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</key>
 		<dict>
 			<key>xpos</key>
-			<integer>920</integer>
+			<integer>910</integer>
 			<key>ypos</key>
-			<integer>710</integer>
+			<integer>590</integer>
 		</dict>
 		<key>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</key>
 		<dict>
