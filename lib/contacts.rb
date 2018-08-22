@@ -19,13 +19,9 @@ module Contacts
           subtitle: if triggered_as_snippet
                       'Paste this name in the frontmost application'
                     else
-                      'Open this person in Contacts'
+                      'View this contact in Alfred'
                     end,
-          arg: if triggered_as_snippet
-                 contact['name']
-               else
-                 "addressbook://#{contact['id']}"
-               end,
+          arg: contact['name'],
           autocomplete: contact['name'],
           mods: {
             alt: {
