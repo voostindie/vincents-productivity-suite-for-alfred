@@ -143,7 +143,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>E90B305E-2361-41B3-A71F-99C65733CB3E</string>
+				<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -766,24 +766,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>applescript</key>
-				<string>on alfred_script(name)
-  tell application "Alfred 3"
-    search name
-	tell application "System Events"
-		keystroke {return}
-	end tell
-  end tell
-end alfred_script</string>
-				<key>cachescript</key>
-				<true/>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>lib/jxa/alfred-search.js</string>
+				<key>type</key>
+				<integer>8</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.applescript</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>E90B305E-2361-41B3-A71F-99C65733CB3E</string>
+			<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1011,6 +1012,15 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>40</integer>
 		</dict>
+		<key>B37B2B6C-1EF8-4314-9887-7BD512760411</key>
+		<dict>
+			<key>note</key>
+			<string>Search in Alfred</string>
+			<key>xpos</key>
+			<integer>920</integer>
+			<key>ypos</key>
+			<integer>590</integer>
+		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
 			<key>xpos</key>
@@ -1040,13 +1050,6 @@ See the README for more information.</string>
 			<integer>650</integer>
 			<key>ypos</key>
 			<integer>380</integer>
-		</dict>
-		<key>E90B305E-2361-41B3-A71F-99C65733CB3E</key>
-		<dict>
-			<key>xpos</key>
-			<integer>920</integer>
-			<key>ypos</key>
-			<integer>590</integer>
 		</dict>
 		<key>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</key>
 		<dict>
