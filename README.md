@@ -4,9 +4,7 @@
 
 This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothing. It might not be of any use to anyone but myself. But there's also no reason not to make it public; it could be useful to at least one other person beside me. So why not share?
 
-But please remember that I've had exactly one person in mind while creating this suite: me.
-
-"Your mileage may vary!"
+But please remember that I've had exactly one person in mind while creating this suite: me. *Your mileage may vary!*
 
 ## So, what's this all about?
 
@@ -25,18 +23,18 @@ This Alfred workflow can:
 
 - Create new notes according to a template and open them for editing in a text editor.
 - Select a person and:
+	- Write an e-mail
+	- View details
+	- Create a note
 	- Copy his/her name into the frontmost application
-	- Create a note on that contact
-	- Write an e-mail to the contact
-	- View details on the contact
 - Select a project and:
+	- Open it in OmniFocus
+	- Create a note
 	- Copy its name into the frontmost application
-	- Create a note on that project
-	- Open the project in OmniFocus
 
 It may not sound like much, but for me this is an enormous time saver.
 
-Another important aspect of this Alfred workflow is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area is active. The keyboard shortcuts, keywords and snippets for Alfred are always the same, but they show different things depending on the area that has the focus. For example, I use a different e-mail client for work (Microsoft Outlook) than for all other areas (Apple Mail).
+Another important aspect of this Alfred workflow is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus. For example, I use a different e-mail client for work (Microsoft Outlook) than for all other areas (Apple Mail).
 
 ## Alfred features
 
@@ -44,13 +42,13 @@ Another important aspect of this Alfred workflow is that it works with *areas of
 
 - `focus` / ⌃⌥⌘-F: sets the focus to an area of responsibility
 - `note` / ⌃⌥⌘-N: creates a new note and opens it for editing after you specify the title.
-- `contact` / ⌃⌥⌘-C: select a person from Contacts and:
-	- ↵: write an e-mail to this person
-	- ⌘↵: show this person in the Contact Viewer
-	- ⌥↵: write a note on this person
-- `project` / ⌃⌥⌘-P: select a project from OmniFocus and:
-	- ↵: show this project in OmniFocus
-	- ⌥↵: write a note on this project
+- `contact` / ⌃⌥⌘-C: selects a person from Contacts and:
+	- ↵: writes an e-mail to this person
+	- ⌘↵: shows this person in the Contact Viewer
+	- ⌥↵: creates a note on this person
+- `project` / ⌃⌥⌘-P: selects a project from OmniFocus and:
+	- ↵: shows this project in OmniFocus
+	- ⌥↵: creates a note on this project
 
 The alternative action for writing a note is available only if Markdown notes are configured for the focused area.
 
@@ -69,12 +67,14 @@ The workflow contains a Contact action *Write e-mail using the focused area's pr
 
 Create a file `.vpsrc` in your home folder and put something like this in there:
 
-	areas:
-		work:
-			markdown-notes:
-			omnifocus:
-			contacts:
-			
+```yaml
+areas:
+	work:
+		markdown-notes:
+		omnifocus:
+		contacts:
+```
+
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
 This sets up a single *area of responsibility* with all available features -- Markdown notes, OmniFocus and Contacts -- enabled. All features have default configurations, which is why you don't see anything here.
@@ -85,28 +85,30 @@ Once the configuration file exists, use the `focus` keyword (or ⌃⌥⌘-F) in 
 
 The minimal configuration sample above means exactly the same as:
 
-	areas:
-		work:
-			name: 'Work'
-			root: '~/Work'
-			markdown-notes:
-				path: 'Notes'
-				extension: 'md'
-				editor: 'open'
-				name-template: '$year-$month-$day-$slug'
-				file-template: |
-					---
-					date: $day-$month-$year
-					---
-					# $title
-			omnifocus:
-				folder: 'Work'
-			contacts:
-				group: 'Work'
-				mail:
-					client: 'Mail'
-					from: null
-				
+```yaml
+areas:
+	work:
+		name: 'Work'
+		root: '~/Work'
+		markdown-notes:
+			path: 'Notes'
+			extension: 'md'
+			editor: 'open'
+			name-template: '$year-$month-$day-$slug'
+			file-template: |
+				---
+				date: $day-$month-$year
+				---
+				# $title
+		omnifocus:
+			folder: 'Work'
+		contacts:
+			group: 'Work'
+			mail:
+				client: 'Mail'
+				from: null
+```
+			
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate feature.
 
 To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `markdown-notes` section, creating notes is not possible in that area.
@@ -115,10 +117,12 @@ To define an additional area, just add one at the same level as 'work'. Name it 
 
 An area looks as follow:
 
-	key:
-		name: 
-		root:
-		
+```yaml
+key:
+	name: 
+	root:
+```
+
 Where:
 
 - `key`: the technical key to use internally. It doesn't really matter what you name an area, except that the name is derived from it.
@@ -133,12 +137,14 @@ Each note is intended to be self-contained. The filename or the directory struct
 
 The configuration for Markdown notes within an area looks as follows:
 
-	markdown-notes:
-		path:
-		editor:
-		extension:
-		name-template:
-		file-template
+```yaml
+markdown-notes:
+	path:
+	editor:
+	extension:
+	name-template:
+	file-template
+```
 		
 Where:
 
@@ -206,8 +212,10 @@ Whatever floats your boat!
 
 I use OmniFocus to keep track of all projects and tasks in my life. As most OmniFocus users will have done, I've created top-level folders in the project tree, one for each area of responsibility. This is why the configuration looks like this:
 
-	omnifocus:
-		folder:
+```yaml
+omnifocus:
+	folder:
+```
 
 Where `folder` is the name of the folder to get projects from. It defaults to the name of the area.
 
@@ -221,11 +229,13 @@ For me, the default Contacts app from Apple is good enough to manage all my cont
 
 The configuration for Contacts looks as follows:
 
-	contacts:
-		group:
-		mail:
-			client:
-			from:
+```yaml
+contacts:
+	group:
+	mail:
+		client:
+		from:
+```
 			
 With:
 
