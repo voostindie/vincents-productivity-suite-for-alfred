@@ -61,7 +61,17 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
+				<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -71,7 +81,7 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
+				<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -143,7 +153,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
+				<string>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -233,18 +243,7 @@
 			</dict>
 		</array>
 		<key>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>43684ECD-254E-4932-88D0-2E999E5DBB79</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
+		<array/>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<array>
 			<dict>
@@ -815,25 +814,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>inputstring</key>
-				<string>{var:TRIGGERED_AS_SNIPPET}</string>
-				<key>matchcasesensitive</key>
-				<true/>
-				<key>matchmode</key>
-				<integer>1</integer>
-				<key>matchstring</key>
-				<string>true</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>focusedappvariable</key>
 				<false/>
 				<key>focusedappvariablename</key>
@@ -845,6 +825,19 @@
 			<string>alfred.workflow.trigger.snippet</string>
 			<key>uid</key>
 			<string>ADE417A6-3768-436F-B3B6-181614AA540D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>name</key>
+				<string>Write e-mail using the focused area's preferred mail client</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.contact</string>
+			<key>uid</key>
+			<string>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -905,19 +898,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>name</key>
-				<string>Write e-mail using the focused area's preferred mail client</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.contact</string>
-			<key>uid</key>
-			<string>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -941,21 +921,19 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<false/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string></string>
-				<key>title</key>
-				<string></string>
+				<key>inputstring</key>
+				<string>{var:TRIGGERED_AS_SNIPPET}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<key>matchstring</key>
+				<string>true</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
+			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
-			<string>43684ECD-254E-4932-88D0-2E999E5DBB79</string>
+			<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -985,7 +963,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>250</integer>
 			<key>ypos</key>
-			<integer>740</integer>
+			<integer>750</integer>
 		</dict>
 		<key>1EA1C2CE-E59A-4003-A62F-279C5E0E9B87</key>
 		<dict>
@@ -1019,13 +997,6 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>350</integer>
 		</dict>
-		<key>43684ECD-254E-4932-88D0-2E999E5DBB79</key>
-		<dict>
-			<key>xpos</key>
-			<integer>1070</integer>
-			<key>ypos</key>
-			<integer>840</integer>
-		</dict>
 		<key>492E4749-88F2-46BC-A846-A6EF34121962</key>
 		<dict>
 			<key>xpos</key>
@@ -1047,7 +1018,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>650</integer>
 			<key>ypos</key>
-			<integer>620</integer>
+			<integer>880</integer>
 		</dict>
 		<key>8461DBBD-62E5-4319-9E09-C8C08803401E</key>
 		<dict>
@@ -1075,7 +1046,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>650</integer>
 			<key>ypos</key>
-			<integer>740</integer>
+			<integer>750</integer>
 		</dict>
 		<key>A3751974-8A0F-4A4C-8F5E-F642C3556220</key>
 		<dict>
@@ -1091,7 +1062,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>710</integer>
+			<integer>720</integer>
 		</dict>
 		<key>B1C51158-7234-43A3-94A0-8006F4388F5F</key>
 		<dict>
@@ -1118,7 +1089,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>920</integer>
 			<key>ypos</key>
-			<integer>840</integer>
+			<integer>850</integer>
 		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
@@ -1139,16 +1110,16 @@ See the README for more information.</string>
 		<key>CEE7D6BA-8850-4219-994B-7E8EC4A16EE1</key>
 		<dict>
 			<key>xpos</key>
-			<integer>60</integer>
+			<integer>370</integer>
 			<key>ypos</key>
-			<integer>840</integer>
+			<integer>720</integer>
 		</dict>
 		<key>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</key>
 		<dict>
 			<key>xpos</key>
 			<integer>920</integer>
 			<key>ypos</key>
-			<integer>710</integer>
+			<integer>720</integer>
 		</dict>
 		<key>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</key>
 		<dict>

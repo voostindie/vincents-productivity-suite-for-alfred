@@ -18,9 +18,9 @@ module OmniFocus
           uid: project['id'],
           title: project['name'],
           subtitle: if triggered_as_snippet
-                      'Paste this name in the frontmost application'
+                      "Paste '#{project['name']}' in the frontmost application"
                     else
-                      'Open this project in OmniFocus'
+                      "Open '#{project['name']}' in OmniFocus"
                     end,
           arg: if triggered_as_snippet
                  project['name']
@@ -33,7 +33,7 @@ module OmniFocus
               valid: supports_notes,
               arg: project['name'],
               subtitle: if supports_notes
-                          'Create a Markdown note for this project'
+                          "Create a Markdown note on '#{project['name']}'"
                         else
                           'Markdown notes are not available for the focused area'
                         end

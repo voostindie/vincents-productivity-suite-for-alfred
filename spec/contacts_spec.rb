@@ -19,10 +19,15 @@ describe Contacts, '#people' do
         {
           uid: 'foo',
           title: 'Foo',
-          subtitle: 'View this contact in Alfred',
+          subtitle: 'Write an e-mail to Foo',
           arg: 'Foo',
           autocomplete: 'Foo',
           mods: {
+            cmd: {
+              valid: true,
+              arg: 'Foo',
+              subtitle: "Show 'Foo' in the Contact Viewer"
+            },
             alt: {
               valid: false,
               arg: 'Foo',
@@ -40,10 +45,15 @@ describe Contacts, '#people' do
         {
           uid: 'foo',
           title: 'Foo',
-          subtitle: 'Paste this name in the frontmost application',
+          subtitle: "Paste 'Foo' in the frontmost application",
           arg: 'Foo',
           autocomplete: 'Foo',
           mods: {
+            cmd: {
+              valid: false,
+              arg: 'Foo',
+              subtitle: "Show 'Foo' in the Contact Viewer"
+            },
             alt: {
               valid: false,
               arg: 'Foo',
