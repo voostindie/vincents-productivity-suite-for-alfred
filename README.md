@@ -23,14 +23,14 @@ This Alfred workflow can:
 
 - Create new notes according to a template and open them for editing in a text editor.
 - Select a person and:
-	- Write an e-mail
-	- View details
-	- Create a note
-	- Copy his/her name into the frontmost application
+    - Write an e-mail
+    - View details
+    - Create a note
+    - Copy his/her name into the frontmost application
 - Select a project and:
-	- Open it in OmniFocus
-	- Create a note
-	- Copy its name into the frontmost application
+    - Open it in OmniFocus
+    - Create a note
+    - Copy its name into the frontmost application
 
 It may not sound like much, but for me this is an enormous time saver.
 
@@ -43,12 +43,12 @@ Another important aspect of this Alfred workflow is that it works with *areas of
 - `focus` / ⌃⌥⌘-F: sets the focus to an area of responsibility
 - `note` / ⌃⌥⌘-N: creates a new note and opens it for editing after you specify the title.
 - `contact` / ⌃⌥⌘-C: selects a person from Contacts and:
-	- ↵: writes an e-mail to this person
-	- ⌘↵: shows this person in the Contact Viewer
-	- ⌥↵: creates a note on this person
+    - ↵: writes an e-mail to this person
+    - ⌘↵: shows this person in the Contact Viewer
+    - ⌥↵: creates a note on this person
 - `project` / ⌃⌥⌘-P: selects a project from OmniFocus and:
-	- ↵: shows this project in OmniFocus
-	- ⌥↵: creates a note on this project
+    - ↵: shows this project in OmniFocus
+    - ⌥↵: creates a note on this project
 
 The alternative action for writing a note is available only if Markdown notes are configured for the focused area.
 
@@ -69,10 +69,10 @@ Create a file `.vpsrc` in your home folder and put something like this in there:
 
 ```yaml
 areas:
-	work:
-		markdown-notes:
-		omnifocus:
-		contacts:
+   work:
+        markdown-notes:
+        omnifocus:
+        contacts:
 ```
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
@@ -87,28 +87,28 @@ The minimal configuration sample above means exactly the same as:
 
 ```yaml
 areas:
-	work:
-		name: 'Work'
-		root: '~/Work'
-		markdown-notes:
-			path: 'Notes'
-			extension: 'md'
-			editor: 'open'
-			name-template: '$year-$month-$day-$slug'
-			file-template: |
-				---
-				date: $day-$month-$year
-				---
-				# $title
-		omnifocus:
-			folder: 'Work'
-		contacts:
-			group: 'Work'
-			mail:
-				client: 'Mail'
-				from: null
+    work:
+        name: 'Work'
+        root: '~/Work'
+        markdown-notes:
+            path: 'Notes'
+            extension: 'md'
+            editor: 'open'
+            name-template: '$year-$month-$day-$slug'
+            file-template: |
+                ---
+                date: $day-$month-$year
+                ---
+                # $title
+        omnifocus:
+            folder: 'Work'
+        contacts:
+            group: 'Work'
+            mail:
+                client: 'Mail'
+                from: null
 ```
-			
+            
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate feature.
 
 To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `markdown-notes` section, creating notes is not possible in that area.
@@ -119,8 +119,8 @@ An area looks as follow:
 
 ```yaml
 key:
-	name: 
-	root:
+    name: 
+    root:
 ```
 
 Where:
@@ -139,13 +139,13 @@ The configuration for Markdown notes within an area looks as follows:
 
 ```yaml
 markdown-notes:
-	path:
-	editor:
-	extension:
-	name-template:
-	file-template
+    path:
+    editor:
+    extension:
+    name-template:
+    file-template
 ```
-		
+        
 Where:
 
 - `path` is the subdirectory under the area's root directory to store notes under. Defaults to `Notes`.
@@ -172,39 +172,39 @@ All that the scripts do is replace these placeholders with their actual values. 
 
 The default name template is:
 
-	$year-$month-$day-$slug
+    $year-$month-$day-$slug
 
 This means that all notes will reside in the same directory. For example, a note with title *Yes! It works!* written on August 23, 2018 will be created at the path
 
-	~/Area/Notes/2018-08-23-yes-it-works.md
-	
+    ~/Area/Notes/2018-08-23-yes-it-works.md
+    
 Here `~/Area` is the area's root directory, `Notes` is the path to the Markdown notes, and `md` is the file extension.
 
 For work, where I write lots of notes per day and want to be able to browse them by week, I use:
 
-	$year/Week $week/$year-$month-$day/$safe_title
-	
+    $year/Week $week/$year-$month-$day/$safe_title
+    
 So the same note as before will now end up at the path:
 
-	~/Area/Notes/2018/Week 34/2018-08-23/Yes It Works.md
+    ~/Area/Notes/2018/Week 34/2018-08-23/Yes It Works.md
 
 ### File template
 
 The default file template is:
 
-	---
-	date: $day-$month-$year
-	---
-	# $title
+    ---
+    date: $day-$month-$year
+    ---
+    # $title
 
 I always have exactly one heading at level 1 in my Markdown notes: the title of the note. Others prefer to have the title in the front matter, and use headings for other things. And maybe the slug is stored in the front matter as well. That's easy to set up, with a template such as the following:
 
-	---
-	date: $day-$month-$year
-	title: $title
-	slug: $slug
-	---
-	# 
+    ---
+    date: $day-$month-$year
+    title: $title
+    slug: $slug
+    ---
+    # 
 
 Whatever floats your boat!
 
@@ -214,7 +214,7 @@ I use OmniFocus to keep track of all projects and tasks in my life. As most Omni
 
 ```yaml
 omnifocus:
-	folder:
+    folder:
 ```
 
 Where `folder` is the name of the folder to get projects from. It defaults to the name of the area.
@@ -231,12 +231,12 @@ The configuration for Contacts looks as follows:
 
 ```yaml
 contacts:
-	group:
-	mail:
-		client:
-		from:
+    group:
+    mail:
+        client:
+        from:
 ```
-			
+            
 With:
 
 - `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
@@ -244,7 +244,7 @@ With:
 - `from`: **Only for Apple Mail!** In case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail.  If the account is not found, Mail will fall back on its default one.
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get.
-		
+        
 ## Future steps
 
 I have some ideas on improvements and additions for this workflow, specifically for managing files on disk. For each area of responsibility I typically have a `Projects` directory (within the root directory) in which I store my own documents and the reference material per project. Currently I maintain that directory structure by hand, completely. With this worklow as a basis, I should be able to store and find files under the right structure fully automatically. I'm still thinking on it though. 
