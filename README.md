@@ -143,7 +143,7 @@ markdown-notes:
     editor:
     extension:
     name-template:
-    file-template
+    file-template:
 ```
         
 Where:
@@ -225,7 +225,7 @@ Projects are sorted in the order they appear in OmniFocus, but thanks to Alfred'
 
 ### Contacts
 
-For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I set up several groups. (You still can't create or edit groups on iOS, but once you have them, you do see them and you can use them there!)
+For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see  and use them on all your devices!)
 
 The configuration for Contacts looks as follows:
 
@@ -241,13 +241,13 @@ With:
 
 - `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
 - `client`: the name of the mail client you use for this area. The default is `Mail`. Alternatively, `Microsoft Outlook` is also supported.
-- `from`: **Only for Apple Mail!** In case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail.  If the account is not found, Mail will fall back on its default one.
+- `from` **Apple Mail only!**: in case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail.  If the account is not found, Mail will fall back to its default.
 
-Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get.
+Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
         
 ## Future steps
 
-I have some ideas on improvements and additions for this workflow, specifically for managing files on disk. For each area of responsibility I typically have a `Projects` directory (within the root directory) in which I store my own documents and the reference material per project. Currently I maintain that directory structure by hand, completely. With this worklow as a basis, I should be able to store and find files under the right structure fully automatically. I'm still thinking on it though. 
+I have some ideas on improvements and additions for this workflow, specifically for managing files on disk. For each area of responsibility I typically have a `Projects` directory (within the root directory) in which I store my own documents and the reference material per project. Currently I mostly maintain that directory structure by hand. With this worklow as a basis, I should be able to store and find files under the right structure fully automatically. I'm still thinking on it though. 
 
 (Wild idea: when a project is done (in OmniFocus) why not archive the project directory (move it), and add extracts from other sources to it, like my notes, and the bookmarks I tagged for the project in Pinboard, and the articles I added to Pocket, and the actual list of actions I completed from OmniFocus? In a fully automated manner, of course!)
 
