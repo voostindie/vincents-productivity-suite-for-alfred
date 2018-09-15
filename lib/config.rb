@@ -36,7 +36,7 @@ class Config
   end
 
   def focused_area
-    raise "No valid area is active" unless @state[:area] && @areas.include?(@state[:area])
+    return {} unless @state[:area] && @areas.include?(@state[:area])
     @areas[@state[:area]]
   end
 

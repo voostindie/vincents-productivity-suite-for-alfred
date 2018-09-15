@@ -3,19 +3,8 @@
 # Lists all available areas of responsibility
 
 require_relative '../lib/alfred_helper'
-require_relative '../lib/config'
+require_relative '../lib/area'
 
 Alfred::filter do
-  config = Config.load
-  focus = config.focused_area[:key]
-  config.areas.map do |name|
-    area = config.area(name)
-    postfix = area[:key].eql?(focus) ? ' (focused)' : ''
-    {
-      uid: area[:key],
-      arg: area[:key],
-      title: area[:name] + postfix,
-      autocomplete: area[:name]
-    }
-  end
+  Area::list
 end

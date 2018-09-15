@@ -5,12 +5,9 @@
 # Requires one argument: the name (key) of the area to focus on
 
 require_relative '../lib/alfred_helper'
-require_relative '../lib/config'
+require_relative '../lib/area'
 
 Alfred::action do
-  config = Config.load
   raise 'No area specified' if ARGV.empty?
-  config.focus(ARGV[0])
-  Config.save_state(config)
-  "#{config.focused_area[:name]} is now the focused area"
+  Area::focus(ARGV[0])
 end
