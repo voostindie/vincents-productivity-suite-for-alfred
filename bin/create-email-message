@@ -8,6 +8,7 @@ require_relative '../lib/alfred_helper'
 require_relative '../lib/contacts'
 
 Alfred::action do
-  raise 'No email address specified' if ARGV.empty?
-  Contacts::create_email(ARGV[0])
+  raise 'No email address specified' if ENV['id'].nil?
+  address = "#{ENV['name']} <#{ENV['email']}>"
+  Contacts::create_email(address)
 end

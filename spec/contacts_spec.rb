@@ -22,6 +22,11 @@ describe Contacts, '#people' do
           subtitle: 'Write an e-mail to Foo',
           arg: 'Foo',
           autocomplete: 'Foo',
+          variables: {
+            id: 'foo',
+            name: 'Foo',
+            email: 'foo@example.com'
+          },
           mods: {
             cmd: {
               valid: true,
@@ -36,7 +41,7 @@ describe Contacts, '#people' do
           }
         }
       ]
-      people = Contacts::people(area: area, runner: StubRunner.new)
+      people = Contacts::people(area: area, runner: ScriptStubRunner.new)
       expect(people).to eq(expected)
     end
 
@@ -48,6 +53,11 @@ describe Contacts, '#people' do
           subtitle: "Paste 'Foo' in the frontmost application",
           arg: 'Foo',
           autocomplete: 'Foo',
+          variables: {
+            id: 'foo',
+            name: 'Foo',
+            email: 'foo@example.com'
+          },
           mods: {
             cmd: {
               valid: false,
@@ -62,7 +72,7 @@ describe Contacts, '#people' do
           }
         }
       ]
-      people = Contacts::people(true, area: area, runner: StubRunner.new)
+      people = Contacts::people(true, area: area, runner: ScriptStubRunner.new)
       expect(people).to eq(expected)
     end
 
@@ -79,12 +89,13 @@ describe Contacts, '#people' do
   end
 end
 
-class StubRunner
+class ScriptStubRunner
   def execute(script, *args)
     group = args[0]
     [{
        'id' => group.downcase,
-       'name' => group
+       'name' => group,
+       'email' => "#{group.downcase}@example.com"
      }]
   end
 end

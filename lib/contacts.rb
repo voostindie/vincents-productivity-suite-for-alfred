@@ -37,6 +37,11 @@ module Contacts
                     end,
           arg: contact['name'],
           autocomplete: contact['name'],
+          variables: {
+            id: contact['id'],
+            name: contact['name'],
+            email: contact['email']
+          },
           mods: {
             cmd: {
               valid: !triggered_as_snippet,

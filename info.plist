@@ -61,9 +61,9 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
+				<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
 				<key>modifiers</key>
-				<integer>1048576</integer>
+				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
 				<key>vitoclose</key>
@@ -71,9 +71,9 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
+				<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
 				<key>modifiers</key>
-				<integer>0</integer>
+				<integer>1048576</integer>
 				<key>modifiersubtext</key>
 				<string></string>
 				<key>vitoclose</key>
@@ -713,6 +713,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -791,25 +808,21 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
+				<key>inputstring</key>
+				<string>{var:TRIGGERED_AS_SNIPPET}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
 				<integer>0</integer>
-				<key>script</key>
-				<string></string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>lib/jxa/alfred-search.js</string>
-				<key>type</key>
-				<integer>8</integer>
+				<key>matchstring</key>
+				<string>true</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
-			<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
+			<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -844,19 +857,44 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
-				<true/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>transient</key>
-				<true/>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>lib/jxa/alfred-search.js</string>
+				<key>type</key>
+				<integer>8</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</string>
+			<string>B37B2B6C-1EF8-4314-9887-7BD512760411</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:TRIGGERED_AS_SNIPPET}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<key>matchstring</key>
+				<string>true</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -873,25 +911,6 @@
 			<string>alfred.workflow.utility.argument</string>
 			<key>uid</key>
 			<string>141255DE-26A7-4A0A-91D9-4D46C4924504</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>inputstring</key>
-				<string>{var:TRIGGERED_AS_SNIPPET}</string>
-				<key>matchcasesensitive</key>
-				<true/>
-				<key>matchmode</key>
-				<integer>0</integer>
-				<key>matchstring</key>
-				<string>true</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -917,25 +936,6 @@
 			<string>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</string>
 			<key>version</key>
 			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>inputstring</key>
-				<string>{var:TRIGGERED_AS_SNIPPET}</string>
-				<key>matchcasesensitive</key>
-				<true/>
-				<key>matchmode</key>
-				<integer>1</integer>
-				<key>matchstring</key>
-				<string>true</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>745B8AB2-B719-4B16-8172-4E4877DDF978</string>
-			<key>version</key>
-			<integer>1</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -1018,7 +1018,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>650</integer>
 			<key>ypos</key>
-			<integer>880</integer>
+			<integer>750</integer>
 		</dict>
 		<key>8461DBBD-62E5-4319-9E09-C8C08803401E</key>
 		<dict>
@@ -1046,7 +1046,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>650</integer>
 			<key>ypos</key>
-			<integer>750</integer>
+			<integer>620</integer>
 		</dict>
 		<key>A3751974-8A0F-4A4C-8F5E-F642C3556220</key>
 		<dict>
@@ -1080,7 +1080,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>920</integer>
 			<key>ypos</key>
-			<integer>590</integer>
+			<integer>720</integer>
 		</dict>
 		<key>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</key>
 		<dict>
@@ -1119,7 +1119,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>920</integer>
 			<key>ypos</key>
-			<integer>720</integer>
+			<integer>590</integer>
 		</dict>
 		<key>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</key>
 		<dict>
