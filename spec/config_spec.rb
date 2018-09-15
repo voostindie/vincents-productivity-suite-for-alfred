@@ -92,14 +92,13 @@ EOT
       state = "#{TEST_CONFIG_FILE}.state"
       expect(File.exist?(state)).to be(false)
       config.focus('work')
-      Config.save_state(config, TEST_CONFIG_FILE)
+      config.save
       expect(File.exist?(state)).to be(true)
 
       config2 = Config.load(TEST_CONFIG_FILE)
       expect(config2.focused_area[:key]).to eq('work')
 
-      Config.delete_state(TEST_CONFIG_FILE)
-      expect(File.exist?(state)).to be(false)
+      File.delete(state)
     end
   end
 

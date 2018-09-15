@@ -16,9 +16,8 @@ module Area
   end
 
   def self.focus(area, config: Config.load)
-    config = Config.load
-    config.focus(ARGV[0])
-    Config.save_state(config)
+    config.focus(area)
+    config.save
     "#{config.focused_area[:name]} is now the focused area"
   end
 end

@@ -13,18 +13,7 @@ class Config
             else
               {}
             end
-    Config.new(config, state)
-  end
-
-  def self.save_state(config, path = DEFAULT_CONFIG_FILE)
-    File.open(state_file(path), 'w') do |file|
-      file.write config.state.to_yaml
-    end
-  end
-
-  def self.delete_state(path = DEFAULT_CONFIG_FILE)
-    file = state_file(path)
-    File.delete(file) if File.exist?(file)
+    Config.new(path, config, state)
   end
 
   def areas
@@ -45,6 +34,12 @@ class Config
     @state[:area] = name
   end
 
+  def save
+    File.open(Config.state_file(@path), 'w') do |file|
+      file.write @state.to_yaml
+    end
+  end
+
   def state
     @state
   end
@@ -55,7 +50,8 @@ class Config
 
   private
 
-  def initialize(config_hash, state_hash)
+  def initialize(path, config_hash, state_hash)
+    @path = path
     @areas = extract_areas(config_hash)
     @state = state_hash
   end
