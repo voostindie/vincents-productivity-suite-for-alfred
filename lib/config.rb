@@ -104,6 +104,12 @@ EOT
           }
         }
       end
+      if area.has_key?('wallpaper')
+        wallpaper = area['wallpaper'] || {}
+        areas[key][:wallpaper] = {
+          path: wallpaper['path'] || nil
+        }
+      end
     end
     areas
   end

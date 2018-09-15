@@ -1,4 +1,5 @@
 require_relative 'config'
+require_relative 'wallpaper'
 
 module Area
   def self.list(config: Config.load)
@@ -15,9 +16,11 @@ module Area
     end
   end
 
-  def self.focus(area, config: Config.load)
+  def self.focus(area, config: Config.load, wallpaper: Wallpaper)
     config.focus(area)
     config.save
-    "#{config.focused_area[:name]} is now the focused area"
+    area = config.focused_area
+    wallpaper::change(area)
+    "#{area[:name]} is now the focused area"
   end
 end

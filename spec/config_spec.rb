@@ -44,6 +44,9 @@ EOT
             client: 'Microsoft Outlook',
             from: nil
           }
+        },
+        wallpaper: {
+          path: 'work.jpg'
         }
       }
       expect(config.area('work')).to eq(work_expected)

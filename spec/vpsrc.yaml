@@ -41,6 +41,8 @@ areas:
       group: 'Business associates'
       mail:
         client: 'Microsoft Outlook'
+    wallpaper:
+      path: 'work.jpg'
   personal:
     name: 'Personal Stuff'
     root: '~/Personal'
@@ -65,3 +67,4 @@ areas:
       mail:
         from: 'Me Myself <me@example.com>'
         # Client is not defined, and is therefore 'Mail'
+    # No "wallpaper" specified, so nothing happens when focusing on this area.

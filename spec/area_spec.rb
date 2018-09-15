@@ -44,9 +44,11 @@ describe Area do
 
     it 'allows a different area to be focused' do
       config = ConfigStub.new(:two)
+      wallpaper = WallpaperStub.new
       expect(config.saved).to be(false)
-      result = Area::focus(:one, config: config)
+      result = Area::focus(:one, config: config, wallpaper: wallpaper)
       expect(result).to eq("First is now the focused area")
+      expect(wallpaper.path).to eq('one.jpg')
       expect(config.saved).to be(true)
     end
   end
@@ -91,5 +93,12 @@ class ConfigStub
 
   def save
     @saved = true
+  end
+end
+
+class WallpaperStub
+  attr_reader :path
+  def change(area)
+    @path = "#{area[:key]}.jpg"
   end
 end
