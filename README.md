@@ -16,6 +16,7 @@ This is is an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ru
 - Apple Contacts
 - Apple Mail
 - Microsoft Outlook 2016
+- Desktop wallpapers
 
 A lot of activity at my computer consists of managing projects and tasks in OmniFocus, keeping notes in Markdown files, writing e-mails and tracking people in Contacts. This workflow gives me the means to quickly create notes and e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
 
@@ -31,6 +32,7 @@ This Alfred workflow can:
     - Open it in OmniFocus
     - Create a note
     - Copy its name into the frontmost application
+- Change the desktop wallpaper.
 
 It may not sound like much, but for me this is an enormous time saver.
 
@@ -77,7 +79,7 @@ areas:
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with all available features -- Markdown notes, OmniFocus and Contacts -- enabled. All features have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the Markdown notes, OmniFocus and Contacts features enabled. These features all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
@@ -108,7 +110,7 @@ areas:
                 client: 'Mail'
                 from: null
 ```
-            
+
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate feature.
 
 To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `markdown-notes` section, creating notes is not possible in that area.
@@ -119,7 +121,7 @@ An area looks as follow:
 
 ```yaml
 key:
-    name: 
+    name:
     root:
 ```
 
@@ -145,7 +147,7 @@ markdown-notes:
     name-template:
     file-template:
 ```
-        
+
 Where:
 
 - `path` is the subdirectory under the area's root directory to store notes under. Defaults to `Notes`.
@@ -154,7 +156,7 @@ Where:
 - `name-template`: is the template to use to create new file names. See below.
 - `file-template`: is the template to use as file contents for new files. Again, see below.
 
-### Templates
+#### Templates
 
 The name and file templates are pieces of text that may contain special placeholders. These placeholders are replaced by dynamically computed values. The available placeholders and their meaning are:
 
@@ -168,7 +170,7 @@ The name and file templates are pieces of text that may contain special placehol
 
 All that the scripts do is replace these placeholders with their actual values. Nothing fancy; pure text replacement. No calculations, no filters, nothing. The scripts also don't protect you from silly mistakes, like formatting dates incorrectly, or using the title in filenames. So, take care.
 
-### Name template
+#### Name template
 
 The default name template is:
 
@@ -177,18 +179,18 @@ The default name template is:
 This means that all notes will reside in the same directory. For example, a note with title *Yes! It works!* written on August 23, 2018 will be created at the path
 
     ~/Area/Notes/2018-08-23-yes-it-works.md
-    
+
 Here `~/Area` is the area's root directory, `Notes` is the path to the Markdown notes, and `md` is the file extension.
 
 For work, where I write lots of notes per day and want to be able to browse them by week, I use:
 
     $year/Week $week/$year-$month-$day/$safe_title
-    
+
 So the same note as before will now end up at the path:
 
     ~/Area/Notes/2018/Week 34/2018-08-23/Yes It Works.md
 
-### File template
+#### File template
 
 The default file template is:
 
@@ -204,7 +206,7 @@ I always have exactly one heading at level 1 in my Markdown notes: the title of 
     title: $title
     slug: $slug
     ---
-    # 
+    #
 
 Whatever floats your boat!
 
@@ -236,7 +238,7 @@ contacts:
         client:
         from:
 ```
-            
+
 With:
 
 - `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
@@ -244,12 +246,29 @@ With:
 - `from` **Apple Mail only!**: in case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail.  If the account is not found, Mail will fall back to its default.
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
-        
+
+### Desktop wallpaper
+
+To be able to see which area has the focus, it's possible to have the wallpaper on the current desktop change when changing the focus.
+
+The configuration for wallpapers looks as follows:
+
+```yaml
+wallpaper:
+    path:
+```
+
+With:
+
+- `path`: the path to the picture to use as desktop wallpaper. There is no default, meaning that the current wallpaper is left intact.
+
 ## Future steps
 
-I have some ideas on improvements and additions for this workflow, specifically for managing files on disk. For each area of responsibility I typically have a `Projects` directory (within the root directory) in which I store my own documents and the reference material per project. Currently I mostly maintain that directory structure by hand. With this worklow as a basis, I should be able to store and find files under the right structure fully automatically. I'm still thinking on it though. 
+I have some ideas on improvements and additions for this workflow, specifically for managing files on disk. For each area of responsibility I typically have a `Projects` directory (within the root directory) in which I store my own documents and the reference material per project. Currently I mostly maintain that directory structure by hand. With this worklow as a basis, I should be able to store and find files under the right structure fully automatically. I'm still thinking on it though.
 
 (Wild idea: when a project is done (in OmniFocus) why not archive the project directory (move it), and add extracts from other sources to it, like my notes, and the bookmarks I tagged for the project in Pinboard, and the articles I added to Pocket, and the actual list of actions I completed from OmniFocus? In a fully automated manner, of course!)
+
+Another idea is to change the default accounts in different applications - like Mail and Calendar - whenever the focus changes.
 
 ## About the icon
 
