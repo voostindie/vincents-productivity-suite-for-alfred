@@ -75,3 +75,6 @@ actions:
   wallpaper:
     # Nothing specified here, so the defaults apply:
     # default: '/Library/Desktop Pictures/High Sierra.jpg'
+  bitbar:
+    # Nothing specified here, so the defaults apply:
+    # plugin: 'focused-area'

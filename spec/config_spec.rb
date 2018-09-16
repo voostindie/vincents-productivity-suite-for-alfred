@@ -91,9 +91,14 @@ EOT
       expect(config.focused_area[:key]).to eq('work')
     end
 
-    it 'returns a list of all focus actions to perform' do
-      expect(config.actions).to eq [:wallpaper]
+    it 'returns the wallpaper action' do
+      expect(config.actions).to include :wallpaper
       expect(config.action(:wallpaper)[:default]).to eq('/Library/Desktop Pictures/High Sierra.jpg')
+    end
+
+    it 'returns the bitbar action' do
+      expect(config.actions).to include :bitbar
+      expect(config.action(:bitbar)[:plugin]).to eq('focused-area')
     end
 
     it 'allows state to be saved to disk' do

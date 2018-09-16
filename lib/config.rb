@@ -129,9 +129,15 @@ EOT
     actions = {}
     yaml['actions'].each_pair do |key, config|
       config = config || {}
-      if key == 'wallpaper'
+      case key
+      when 'wallpaper'
         actions[:wallpaper] = {}
         actions[:wallpaper][:default] = config['default'] || '/Library/Desktop Pictures/High Sierra.jpg'
+      when 'bitbar'
+        actions[:bitbar] = {}
+        actions[:bitbar][:plugin] = config['plugin'] || 'focused-area.1d.rb'
+      else
+        # Unknown key, we'll just ignore it.
       end
     end
     actions
