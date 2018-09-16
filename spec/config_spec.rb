@@ -98,7 +98,7 @@ EOT
 
     it 'returns the bitbar action' do
       expect(config.actions).to include :bitbar
-      expect(config.action(:bitbar)[:plugin]).to eq('focused-area')
+      expect(config.action(:bitbar)[:plugin]).to eq('focused-area.1d.rb')
     end
 
     it 'allows state to be saved to disk' do

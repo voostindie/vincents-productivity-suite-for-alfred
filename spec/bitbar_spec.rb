@@ -11,7 +11,7 @@ describe BitBar, '#change' do
     it 'sets the desktop wallpaper to the configured path' do
       stub = BitBarStubRunner.new
       BitBar.new(stub).change({}, defaults)
-      expect(stub.command).to eq('open bitbar://refreshPlugin?name=plugin')
+      expect(stub.command).to eq('open -g bitbar://refreshPlugin?name=plugin')
     end
   end
 end
