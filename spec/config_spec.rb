@@ -91,6 +91,11 @@ EOT
       expect(config.focused_area[:key]).to eq('work')
     end
 
+    it 'returns a list of all focus actions to perform' do
+      expect(config.actions).to eq [:wallpaper]
+      expect(config.action(:wallpaper)[:default]).to eq('/Library/Desktop Pictures/High Sierra.jpg')
+    end
+
     it 'allows state to be saved to disk' do
       state = "#{TEST_CONFIG_FILE}.state"
       expect(File.exist?(state)).to be(false)

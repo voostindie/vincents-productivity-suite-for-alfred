@@ -4,15 +4,22 @@ require 'wallpaper'
 describe Wallpaper, '#change' do
   context 'when passed a valid configuration' do
 
-    area = {
-      wallpaper: {
-        path: 'test.jpg'
+    config = {
+      areas: {
+        wallpaper: {
+          path: 'test.jpg'
+        }
+      },
+      actions: {
+        wallpaper: {
+          default: 'foo.jpg'
+        }
       }
     }
 
     it 'sets the desktop wallpaper to the configured path' do
       stub = WallpaperStubRunner.new
-      Wallpaper::change(area, runner: stub)
+      Wallpaper.new(stub).change(config[:areas], config[:actions])
       expect(stub.path).to eq('test.jpg')
     end
   end

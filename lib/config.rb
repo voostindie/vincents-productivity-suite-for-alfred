@@ -2,7 +2,7 @@ require 'yaml'
 
 class Config
 
-  DEFAULT_CONFIG_FILE= File.join(Dir.home, '.vpsrc').freeze
+  DEFAULT_CONFIG_FILE = File.join(Dir.home, '.vpsrc').freeze
 
   def self.load(path = DEFAULT_CONFIG_FILE)
     raise "Couldn't read config from '#{path}'" unless File.readable?(path)
@@ -32,12 +32,21 @@ class Config
   def focus(name)
     raise "Unknown area '#{name}'" unless @areas.include?(name)
     @state[:area] = name
+    focused_area
   end
 
   def save
     File.open(Config.state_file(@path), 'w') do |file|
       file.write @state.to_yaml
     end
+  end
+
+  def actions
+    @actions.keys
+  end
+
+  def action(key)
+    @actions[key]
   end
 
   def state
@@ -53,6 +62,7 @@ class Config
   def initialize(path, config_hash, state_hash)
     @path = path
     @areas = extract_areas(config_hash)
+    @actions = extract_actions(config_hash)
     @state = state_hash
   end
 
@@ -67,9 +77,9 @@ class Config
                File.join(Dir.home, name)
              end
       areas[key] = {
-          key: key,
-          name: name,
-          root: root
+        key: key,
+        name: name,
+        root: root
       }
       if area.has_key?('markdown-notes')
         notes = area['markdown-notes'] || {}
@@ -112,5 +122,18 @@ EOT
       end
     end
     areas
+  end
+
+  def extract_actions(yaml)
+    return {} unless yaml.has_key?('actions')
+    actions = {}
+    yaml['actions'].each_pair do |key, config|
+      config = config || {}
+      if key == 'wallpaper'
+        actions[:wallpaper] = {}
+        actions[:wallpaper][:default] = config['default'] || '/Library/Desktop Pictures/High Sierra.jpg'
+      end
+    end
+    actions
   end
 end

@@ -1,14 +1,16 @@
+require_relative 'config'
 require_relative 'jxa'
 
-module Wallpaper
+class Wallpaper
 
-  def self.change(area, runner: Jxa::Runner.new)
-    wallpaper = area[:wallpaper]
-    return if wallpaper.nil?
-    path = wallpaper[:path]
-    unless path.nil?
-      runner.execute('wallpaper-change', path)
-    end
+  def initialize(runner = Jxa::Runner.new)
+    @runner = runner
+  end
+
+  def change(area, defaults)
+    wallpaper = area[:wallpaper] || {}
+    path = wallpaper[:path] || defaults[:default]
+    @runner.execute('wallpaper-change', path)
   end
 
 end
