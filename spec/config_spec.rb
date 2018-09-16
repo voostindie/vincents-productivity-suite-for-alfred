@@ -101,6 +101,10 @@ EOT
       expect(config.action(:bitbar)[:plugin]).to eq('focused-area.1d.rb')
     end
 
+    it 'returns the omnifocus action' do
+      expect(config.actions).to include :omnifocus
+    end
+
     it 'allows state to be saved to disk' do
       state = "#{TEST_CONFIG_FILE}.state"
       expect(File.exist?(state)).to be(false)

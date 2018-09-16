@@ -253,10 +253,11 @@ Contacts are sorted by name. But thanks to Alfred, the more you use a name, the 
 ## Performing actions when the focus changes
 
 Apart from the `areas` section, the configuration also supports an `actions`
-section, where you can list things that must happen whenever the focus changes. Currently there are two:
+section, where you can list things that must happen whenever the focus changes. Currently there are three:
 
 1. Show the name of the focused area in BitBar
 2. Changing the desktop wallpaper
+3. Changing the focus in OmniFocus
 
 To enable both actions, add this to your configuration:
 
@@ -313,6 +314,18 @@ wallpaper:
 With:
 
 - `path`: the path to the picture to use as desktop wallpaper. If not specified, the default will be used (see above).
+
+## Change the focus in OmniFocus
+
+To set the focus to the group configured for the active area, simply add an action for OmniFocus:
+
+```yaml
+omnifocus:
+```
+
+That's it. The section has no default settings as of yet.
+
+What this action does is pick the very first OmniFocus window it can find, and change its focus. For me this is just fine, since I always have exactly one OmniFocus window open anyway.
 
 ## Future steps
 

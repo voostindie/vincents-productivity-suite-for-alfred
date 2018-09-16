@@ -3,7 +3,8 @@ require_relative 'config'
 module Area
   ACTION_CLASSES = {
     wallpaper: 'Wallpaper',
-    bitbar: 'BitBar'
+    bitbar: 'BitBar',
+    omnifocus: 'OmniFocus'
   }.freeze
 
   def self.list(config: Config.load)

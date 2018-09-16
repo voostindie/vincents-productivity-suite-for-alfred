@@ -136,6 +136,8 @@ EOT
       when 'bitbar'
         actions[:bitbar] = {}
         actions[:bitbar][:plugin] = config['plugin'] || 'focused-area.1d.rb'
+      when 'omnifocus'
+        actions[:omnifocus] = {}
       else
         # Unknown key, we'll just ignore it.
       end

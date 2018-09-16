@@ -27,7 +27,7 @@ describe OmniFocus, '#projects' do
           }
         }
       ]
-      projects = OmniFocus::projects(area: area, runner: StubRunner.new)
+      projects = OmniFocus::projects(area: area, runner: OmniFocusStubRunner.new)
       expect(projects).to eq(expected)
     end
 
@@ -48,18 +48,29 @@ describe OmniFocus, '#projects' do
           }
         }
       ]
-      projects = OmniFocus::projects(true, area: area, runner: StubRunner.new)
+      projects = OmniFocus::projects(true, area: area, runner: OmniFocusStubRunner.new)
       expect(projects).to eq(expected)
+    end
+
+    it 'can set the focus in OmniFocus to the right folder' do
+      stub = OmniFocusStubRunner.new
+      omnifocus = OmniFocus.new(stub)
+      omnifocus.change(area, {})
+      expect(stub.script[:name]).to eq('omnifocus-set-focus')
+      expect(stub.script[:arg]).to eq('Foo')
     end
   end
 end
 
-class StubRunner
+class OmniFocusStubRunner
+  attr_reader :script
+
   def execute(script, *args)
+    @script = {name: script, arg: args[0]}
     folder = args[0]
     [{
-      'id' => folder.downcase,
-      'name' => folder
-    }]
+       'id' => folder.downcase,
+       'name' => folder
+     }]
   end
 end

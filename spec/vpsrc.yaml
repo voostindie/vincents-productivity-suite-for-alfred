@@ -78,3 +78,5 @@ actions:
   bitbar:
     # Nothing specified here, so the defaults apply:
     # plugin: 'focused-area'
+  omnifocus:
+    # The OmniFocus action has no further settings
