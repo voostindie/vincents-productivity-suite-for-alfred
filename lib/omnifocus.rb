@@ -43,31 +43,30 @@ class OmniFocus
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     supports_notes = area[:markdown_notes] != nil
-    actions = [
-      {
-        title: "Open '#{project[:name]}' in OmniFocus",
-        arg: "omnifocus://task/#{project[:id]}",
-        variables: {
-          action: 'open'
-        }
-      },
-      {
-        title: "Paste '#{project[:name]}' in the frontmost application",
-        arg: project[:name],
-        variables: {
-          action: 'snippet'
-        }
+    actions = []
+    actions.push(
+      title: 'Open in OmniFocus',
+      arg: "omnifocus://task/#{project[:id]}",
+      variables: {
+        action: 'open'
       }
-    ]
+    )
     if supports_notes
       actions.push(
-        title: "Create a Markdown note on '#{project[:name]}'",
+        title: 'Create Markdown note',
         arg: project[:name],
         variables: {
           action: 'markdown-note'
         }
       )
     end
+    actions.push(
+      title: 'Paste in frontmost application',
+      arg: project[:name],
+      variables: {
+        action: 'snippet'
+      }
+    )
     actions
   end
 end

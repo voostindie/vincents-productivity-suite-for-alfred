@@ -50,26 +50,26 @@ describe OmniFocus, '#projects' do
     it 'lists all available actions for a specific project' do
       expected = [
         {
-          title: "Open 'Foo' in OmniFocus",
+          title: "Open in OmniFocus",
           arg: 'omnifocus://task/foo',
           variables: {
             action: 'open'
           }
         },
         {
-          title: "Paste 'Foo' in the frontmost application",
-          arg: 'Foo',
-          variables: {
-            action: 'snippet'
-          }
-        },
-        {
-          title: "Create a Markdown note on 'Foo'",
+          title: "Create Markdown note",
           arg: 'Foo',
           variables: {
             action: 'markdown-note'
           }
         },
+        {
+          title: "Paste in frontmost application",
+          arg: 'Foo',
+          variables: {
+            action: 'snippet'
+          }
+        }
       ]
       actions = OmniFocus::actions({id: 'foo', name: 'Foo'}, area: area)
       expect(actions).to eq(expected)

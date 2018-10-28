@@ -56,7 +56,21 @@ describe Contacts, '#people' do
     it 'lists all available actions for a specific contact' do
       expected = [
         {
-          title: "Write an e-mail to 'Foo'",
+          title: "Open in Contacts",
+          arg: 'addressbook://foo',
+          variables: {
+            action: 'open'
+          }
+        },
+        {
+          title: "Create Markdown note",
+          arg: 'Foo',
+          variables: {
+            action: 'markdown-note'
+          }
+        },
+        {
+          title: "Write e-mail",
           arg: 'Foo',
           variables: {
             action: 'create-email',
@@ -66,33 +80,19 @@ describe Contacts, '#people' do
           }
         },
         {
-          title: "Show 'Foo' in the Contact Viewer",
+          title: "Show in Contact Viewer",
           arg: 'Foo',
           variables: {
             action: 'contact-viewer'
           }
         },
         {
-          title: "Open 'Foo' in Contacts",
-          arg: 'addressbook://foo',
-          variables: {
-            action: 'open'
-          }
-        },
-        {
-          title: "Paste 'Foo' in the frontmost application",
+          title: "Paste in frontmost application",
           arg: 'Foo',
           variables: {
             action: 'snippet'
           }
-        },
-        {
-          title: "Create a Markdown note on 'Foo'",
-          arg: 'Foo',
-          variables: {
-            action: 'markdown-note'
-          }
-        },
+        }
       ]
       actions = Contacts::actions({id: 'foo', name: 'Foo', email: 'foo@example.com'}, area: area)
       expect(actions).to eq(expected)

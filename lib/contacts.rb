@@ -20,7 +20,7 @@ module Contacts
 
   def self.people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new)
     contacts = area[:contacts]
-    raise "Contacts is not enabled for the focused area" unless contacts
+    raise 'Contacts is not enabled for the focused area' unless contacts
     group = contacts[:group]
     contacts = runner.execute('contacts-people', group)
     contacts.map do |contact|
@@ -45,50 +45,49 @@ module Contacts
 
   def self.actions(contact, area: Config.load.focused_area)
     contacts = area[:contacts]
-    raise "Contacts is not enabled for the focused area" unless contacts
+    raise 'Contacts is not enabled for the focused area' unless contacts
     supports_notes = area[:markdown_notes] != nil
-    actions = [
-      {
-        title: "Write an e-mail to '#{contact[:name]}'",
-        arg: contact[:name],
-        variables: {
-          action: 'create-email',
-          id: contact[:id],
-          name: contact[:name],
-          email: contact[:email]
-        }
-      },
-      {
-        title: "Show '#{contact[:name]}' in the Contact Viewer",
-        arg: contact[:name],
-        variables: {
-          action: 'contact-viewer'
-        }
-      },
-      {
-        title: "Open '#{contact[:name]}' in Contacts",
-        arg: "addressbook://#{contact[:id]}",
-        variables: {
-          action: 'open'
-        }
-      },
-      {
-        title: "Paste '#{contact[:name]}' in the frontmost application",
-        arg: contact[:name],
-        variables: {
-          action: 'snippet'
-        }
-      },
-    ]
+    actions = []
+    actions.push(
+      title: 'Open in Contacts',
+      arg: "addressbook://#{contact[:id]}",
+      variables: {
+        action: 'open'
+      }
+    )
     if supports_notes
       actions.push(
-        title: "Create a Markdown note on '#{contact[:name]}'",
+        title: 'Create Markdown note',
         arg: contact[:name],
         variables: {
           action: 'markdown-note'
         }
       )
     end
+    actions.push(
+      title: 'Write e-mail',
+      arg: contact[:name],
+      variables: {
+        action: 'create-email',
+        id: contact[:id],
+        name: contact[:name],
+        email: contact[:email]
+      }
+    )
+    actions.push(
+      title: 'Show in Contact Viewer',
+      arg: contact[:name],
+      variables: {
+        action: 'contact-viewer'
+      }
+    )
+    actions.push(
+      title: 'Paste in frontmost application',
+      arg: contact[:name],
+      variables: {
+        action: 'snippet'
+      }
+    )
     actions
   end
 end
