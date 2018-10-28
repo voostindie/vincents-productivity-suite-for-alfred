@@ -5,14 +5,15 @@ require_relative 'jxa'
 module Contacts
 
   def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new)
+    address_line = "#{address[:name]} <#{address[:email]}>"
     mail = area[:contacts][:mail]
     case mail[:client]
     when 'Mail'
-      runner.execute('mail-create-email-message', address, mail[:from])
+      runner.execute('mail-create-email-message', address_line, mail[:from])
     when 'Microsoft Outlook'
       # Note, the "from" address is not supported for Outlook.
       # I don't need it, so I don't care right now.
-      runner.execute('outlook-create-email-message', address)
+      runner.execute('outlook-create-email-message', address_line)
     else
       raise "Unsupported mail client: #{mail[:client]}"
     end

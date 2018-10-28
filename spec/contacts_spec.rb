@@ -101,11 +101,11 @@ describe Contacts, '#people' do
     it 'creates e-mail using the configured from address' do
       expected = {
         script: 'mail-create-email-message',
-        to: 'test@example.com',
+        to: 'Test <test@example.com>',
         from: 'Me Myself <me@example.com>'
       }
       runner = MailStubRunner.new
-      Contacts::create_email('test@example.com', area: area, runner: runner)
+      Contacts::create_email({name: 'Test', email: 'test@example.com'}, area: area, runner: runner)
       expect(runner.command).to eq(expected)
     end
   end
