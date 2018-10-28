@@ -19,8 +19,6 @@ class OmniFocus
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     folder = omnifocus[:folder]
-    supports_notes = area[:markdown_notes] != nil
-
     projects = runner.execute('omnifocus-projects', folder)
     projects.map do |project|
       {
@@ -29,26 +27,47 @@ class OmniFocus
         subtitle: if triggered_as_snippet
                     "Paste '#{project['name']}' in the frontmost application"
                   else
-                    "Open '#{project['name']}' in OmniFocus"
+                    "Select an action for '#{project['name']}'"
                   end,
-        arg: if triggered_as_snippet
-               project['name']
-             else
-               "omnifocus://task/#{project['id']}"
-             end,
+        arg: project['name'],
+        variables: {
+          id: project['id'],
+          name: project['name']
+        },
         autocomplete: project['name'],
-        mods: {
-          alt: {
-            valid: supports_notes,
-            arg: project['name'],
-            subtitle: if supports_notes
-                        "Create a Markdown note on '#{project['name']}'"
-                      else
-                        'Markdown notes are not available for the focused area'
-                      end
-          }
-        }
       }
     end
+  end
+
+  def self.actions(project, area: Config.load.focused_area)
+    omnifocus = area[:omnifocus]
+    raise 'OmniFocus is not enabled for the focused area' unless omnifocus
+    supports_notes = area[:markdown_notes] != nil
+    actions = [
+      {
+        title: "Open '#{project[:name]}' in OmniFocus",
+        arg: "omnifocus://task/#{project[:id]}",
+        variables: {
+          action: 'open'
+        }
+      },
+      {
+        title: "Paste '#{project[:name]}' in the frontmost application",
+        arg: project[:name],
+        variables: {
+          action: 'snippet'
+        }
+      }
+    ]
+    if supports_notes
+      actions.push(
+        title: "Create a Markdown note on '#{project[:name]}'",
+        arg: project[:name],
+        variables: {
+          action: 'markdown-note'
+        }
+      )
+    end
+    actions
   end
 end

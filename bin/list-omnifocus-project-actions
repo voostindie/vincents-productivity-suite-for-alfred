@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+#
+# Lists all actions that can be performed on a single OmniFocus project
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/omnifocus'
+
+Alfred::filter do
+  raise 'No project specified' if ENV['id'].nil?
+  project = {
+    id: ENV['id'],
+    name: ENV['name']
+  }
+  OmniFocus::actions(project)
+end

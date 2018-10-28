@@ -107,16 +107,6 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>66D7A9C1-49EE-44E2-A44A-94DBFC132274</string>
-				<key>modifiers</key>
-				<integer>524288</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
 				<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -141,6 +131,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>A3751974-8A0F-4A4C-8F5E-F642C3556220</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>6FD62478-8BFC-48B6-8B63-A90CF716B38C</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>317868F8-57D2-4B31-83F1-5551E7EFCAD0</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -216,11 +219,37 @@
 		</array>
 		<key>A3751974-8A0F-4A4C-8F5E-F642C3556220</key>
 		<array/>
+		<key>AAAF8DDC-D2DD-4879-8790-E6A09BE320BC</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>66D7A9C1-49EE-44E2-A44A-94DBFC132274</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>141255DE-26A7-4A0A-91D9-4D46C4924504</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>AE2146DC-8D6C-413E-9DA2-16CA55F5B798</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -283,11 +312,44 @@
 				<false/>
 			</dict>
 		</array>
+		<key>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>AAAF8DDC-D2DD-4879-8790-E6A09BE320BC</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>AE2146DC-8D6C-413E-9DA2-16CA55F5B798</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>317868F8-57D2-4B31-83F1-5551E7EFCAD0</string>
+				<string>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -543,6 +605,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string>markdown-note</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>AAAF8DDC-D2DD-4879-8790-E6A09BE320BC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>browser</key>
 				<string></string>
 				<key>spaces</key>
@@ -640,6 +721,51 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-project-actions</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>8</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>inputstring</key>
 				<string>{var:TRIGGERED_AS_SNIPPET}</string>
 				<key>matchcasesensitive</key>
@@ -653,6 +779,44 @@
 			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
 			<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string>open</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string>snippet</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>AE2146DC-8D6C-413E-9DA2-16CA55F5B798</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -984,7 +1148,7 @@ See the README for more information.</string>
 		<key>317868F8-57D2-4B31-83F1-5551E7EFCAD0</key>
 		<dict>
 			<key>xpos</key>
-			<integer>920</integer>
+			<integer>1090</integer>
 			<key>ypos</key>
 			<integer>350</integer>
 		</dict>
@@ -1009,9 +1173,16 @@ See the README for more information.</string>
 			<key>note</key>
 			<string>Creates a Markdown note</string>
 			<key>xpos</key>
-			<integer>720</integer>
+			<integer>1090</integer>
 			<key>ypos</key>
 			<integer>190</integer>
+		</dict>
+		<key>6FD62478-8BFC-48B6-8B63-A90CF716B38C</key>
+		<dict>
+			<key>xpos</key>
+			<integer>950</integer>
+			<key>ypos</key>
+			<integer>380</integer>
 		</dict>
 		<key>745B8AB2-B719-4B16-8172-4E4877DDF978</key>
 		<dict>
@@ -1039,7 +1210,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>650</integer>
 			<key>ypos</key>
-			<integer>500</integer>
+			<integer>520</integer>
 		</dict>
 		<key>96B54AB1-CDC8-4EA1-8440-E8A2221231E3</key>
 		<dict>
@@ -1053,9 +1224,16 @@ See the README for more information.</string>
 			<key>note</key>
 			<string>Edits a Markdown note</string>
 			<key>xpos</key>
-			<integer>920</integer>
+			<integer>1300</integer>
 			<key>ypos</key>
 			<integer>190</integer>
+		</dict>
+		<key>AAAF8DDC-D2DD-4879-8790-E6A09BE320BC</key>
+		<dict>
+			<key>xpos</key>
+			<integer>950</integer>
+			<key>ypos</key>
+			<integer>330</integer>
 		</dict>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<dict>
@@ -1063,6 +1241,13 @@ See the README for more information.</string>
 			<integer>60</integer>
 			<key>ypos</key>
 			<integer>720</integer>
+		</dict>
+		<key>AE2146DC-8D6C-413E-9DA2-16CA55F5B798</key>
+		<dict>
+			<key>xpos</key>
+			<integer>950</integer>
+			<key>ypos</key>
+			<integer>430</integer>
 		</dict>
 		<key>B1C51158-7234-43A3-94A0-8006F4388F5F</key>
 		<dict>
@@ -1114,10 +1299,19 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>720</integer>
 		</dict>
+		<key>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</key>
+		<dict>
+			<key>note</key>
+			<string>Lists all available actions for an OmniFocus project</string>
+			<key>xpos</key>
+			<integer>720</integer>
+			<key>ypos</key>
+			<integer>350</integer>
+		</dict>
 		<key>E5AA1657-2F47-4877-B88E-AB6BAC9B509D</key>
 		<dict>
 			<key>xpos</key>
-			<integer>920</integer>
+			<integer>1090</integer>
 			<key>ypos</key>
 			<integer>590</integer>
 		</dict>

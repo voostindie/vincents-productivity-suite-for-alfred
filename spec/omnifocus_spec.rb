@@ -7,7 +7,8 @@ describe OmniFocus, '#projects' do
     area = {
       omnifocus: {
         folder: 'Foo',
-      }
+      },
+      markdown_notes: {}
     }
 
     it 'lists all projects in the configured OmniFocus folder in shortcut mode' do
@@ -15,16 +16,13 @@ describe OmniFocus, '#projects' do
         {
           uid: 'foo',
           title: 'Foo',
-          subtitle: "Open 'Foo' in OmniFocus",
-          arg: 'omnifocus://task/foo',
+          subtitle: "Select an action for 'Foo'",
+          arg: 'Foo',
+          variables: {
+            id: 'foo',
+            name: 'Foo'
+          },
           autocomplete: 'Foo',
-          mods: {
-            alt: {
-              valid: false,
-              arg: 'Foo',
-              subtitle: 'Markdown notes are not available for the focused area'
-            }
-          }
         }
       ]
       projects = OmniFocus::projects(area: area, runner: OmniFocusStubRunner.new)
@@ -38,18 +36,43 @@ describe OmniFocus, '#projects' do
           title: 'Foo',
           subtitle: "Paste 'Foo' in the frontmost application",
           arg: 'Foo',
+          variables: {
+            id: 'foo',
+            name: 'Foo'
+          },
           autocomplete: 'Foo',
-          mods: {
-            alt: {
-              valid: false,
-              arg: 'Foo',
-              subtitle: 'Markdown notes are not available for the focused area'
-            }
-          }
         }
       ]
       projects = OmniFocus::projects(true, area: area, runner: OmniFocusStubRunner.new)
       expect(projects).to eq(expected)
+    end
+
+    it 'lists all available actions for a specific project' do
+      expected = [
+        {
+          title: "Open 'Foo' in OmniFocus",
+          arg: 'omnifocus://task/foo',
+          variables: {
+            action: 'open'
+          }
+        },
+        {
+          title: "Paste 'Foo' in the frontmost application",
+          arg: 'Foo',
+          variables: {
+            action: 'snippet'
+          }
+        },
+        {
+          title: "Create a Markdown note on 'Foo'",
+          arg: 'Foo',
+          variables: {
+            action: 'markdown-note'
+          }
+        },
+      ]
+      actions = OmniFocus::actions({id: 'foo', name: 'Foo'}, area: area)
+      expect(actions).to eq(expected)
     end
 
     it 'can set the focus in OmniFocus to the right folder' do
