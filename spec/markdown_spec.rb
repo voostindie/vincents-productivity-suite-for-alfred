@@ -20,6 +20,11 @@ describe Markdown::Note, '#initialize' do
       note = Markdown::Note.new("!@\#$\t\nnote...%^&*", area: area)
       expect(note.context[:safe_title]).to eq('note')
     end
+    
+    it 'replaces slashes with hyphens in the safe title' do
+      note = Markdown::Note.new('a/b/c', area: area)
+      expect(note.context[:safe_title]).to eq('a-b-c')
+    end
 
     it 'creates a slug from the title' do
       note = Markdown::Note.new('This is a dummy note', area: area)

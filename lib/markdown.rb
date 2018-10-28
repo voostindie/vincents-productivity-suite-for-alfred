@@ -21,7 +21,7 @@ module Markdown
       raise 'Markdown notes are not enabled for the focused area' unless notes
 
       title ||= 'Unnamed note'
-      safe_title = title.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '')
+      safe_title = title.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '').gsub(/\//, '-')
       slug = safe_title.downcase.gsub(/[ ]/, '-').gsub('--', '-')
       @context = {
         year: date.strftime("%Y"),
