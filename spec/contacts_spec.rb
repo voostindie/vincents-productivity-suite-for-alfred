@@ -11,7 +11,8 @@ describe Contacts, '#people' do
           client: 'Mail',
           from: 'Me Myself <me@example.com>'
         }
-      }
+      },
+      markdown_notes: {}
     }
 
     it 'lists all names in the configured Contacts group in shortcut mode' do
@@ -19,25 +20,13 @@ describe Contacts, '#people' do
         {
           uid: 'foo',
           title: 'Foo',
-          subtitle: 'Write an e-mail to Foo',
+          subtitle: "Select an action for 'Foo'",
           arg: 'Foo',
           autocomplete: 'Foo',
           variables: {
             id: 'foo',
             name: 'Foo',
             email: 'foo@example.com'
-          },
-          mods: {
-            cmd: {
-              valid: true,
-              arg: 'Foo',
-              subtitle: "Show 'Foo' in the Contact Viewer"
-            },
-            alt: {
-              valid: false,
-              arg: 'Foo',
-              subtitle: 'Markdown notes are not available for the focused area'
-            }
           }
         }
       ]
@@ -57,23 +46,56 @@ describe Contacts, '#people' do
             id: 'foo',
             name: 'Foo',
             email: 'foo@example.com'
-          },
-          mods: {
-            cmd: {
-              valid: false,
-              arg: 'Foo',
-              subtitle: "Show 'Foo' in the Contact Viewer"
-            },
-            alt: {
-              valid: false,
-              arg: 'Foo',
-              subtitle: 'Markdown notes are not available for the focused area'
-            }
           }
         }
       ]
       people = Contacts::people(true, area: area, runner: ScriptStubRunner.new)
       expect(people).to eq(expected)
+    end
+
+    it 'lists all available actions for a specific contact' do
+      expected = [
+        {
+          title: "Write an e-mail to 'Foo'",
+          arg: 'Foo',
+          variables: {
+            action: 'create-email',
+            id: 'foo',
+            name: 'Foo',
+            email: 'foo@example.com'
+          }
+        },
+        {
+          title: "Show 'Foo' in the Contact Viewer",
+          arg: 'Foo',
+          variables: {
+            action: 'contact-viewer'
+          }
+        },
+        {
+          title: "Open 'Foo' in Contacts",
+          arg: 'addressbook://foo',
+          variables: {
+            action: 'open'
+          }
+        },
+        {
+          title: "Paste 'Foo' in the frontmost application",
+          arg: 'Foo',
+          variables: {
+            action: 'snippet'
+          }
+        },
+        {
+          title: "Create a Markdown note on 'Foo'",
+          arg: 'Foo',
+          variables: {
+            action: 'markdown-note'
+          }
+        },
+      ]
+      actions = Contacts::actions({id: 'foo', name: 'Foo', email: 'foo@example.com'}, area: area)
+      expect(actions).to eq(expected)
     end
 
     it 'creates e-mail using the configured from address' do

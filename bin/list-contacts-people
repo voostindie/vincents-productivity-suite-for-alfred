@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Lists all OmniFocus projects for this area of responsibility
+# Lists all Contacts for this area of responsibility
 
 require_relative '../lib/alfred_helper'
 require_relative '../lib/contacts'

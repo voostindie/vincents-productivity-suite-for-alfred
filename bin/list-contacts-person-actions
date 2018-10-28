@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+#
+# Lists all actions that can be performed on a single Contact
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/contacts'
+
+Alfred::filter do
+  raise 'No contact specified' if ENV['id'].nil?
+  contact = {
+    id: ENV['id'],
+    name: ENV['name'],
+    email: ENV['email']
+  }
+  Contacts::actions(contact)
+end
