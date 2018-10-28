@@ -5,11 +5,10 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/omnifocus'
 
-Alfred::filter do
+Alfred.filter do
   raise 'No project specified' if ENV['id'].nil?
-  project = {
+  OmniFocus.actions(
     id: ENV['id'],
     name: ENV['name']
-  }
-  OmniFocus::actions(project)
+  )
 end

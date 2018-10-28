@@ -5,12 +5,12 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/contacts'
 
-Alfred::filter do
+Alfred.filter do
   raise 'No contact specified' if ENV['id'].nil?
   contact = {
     id: ENV['id'],
     name: ENV['name'],
     email: ENV['email']
   }
-  Contacts::actions(contact)
+  Contacts.actions(contact)
 end

@@ -5,7 +5,7 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/contacts'
 
-Alfred::filter do
-  triggered_as_snippet = ENV['TRIGGERED_AS_SNIPPET'] != nil
-  Contacts::people(triggered_as_snippet)
+Alfred.filter do
+  triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?
+  Contacts.people(triggered_as_snippet)
 end

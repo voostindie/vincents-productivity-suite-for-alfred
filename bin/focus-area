@@ -7,7 +7,7 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/area'
 
-Alfred::action do
+Alfred.action do
   raise 'No area specified' if ARGV.empty?
-  Area::focus(ARGV[0])
+  Area.focus(ARGV[0])
 end

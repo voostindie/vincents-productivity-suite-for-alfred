@@ -26,6 +26,5 @@ module Jxa
       raise "JXA script execution failed: '#{command}'" unless $? == 0
       JSON.parse(json)
     end
-
   end
 end

@@ -5,6 +5,6 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/area'
 
-Alfred::filter do
-  Area::list
+Alfred.filter do
+  Area.list
 end

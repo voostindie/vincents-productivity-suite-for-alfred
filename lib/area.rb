@@ -24,7 +24,7 @@ module Area
   def self.focus(key, config: Config.load)
     area = config.focus(key)
     config.save
-    config.actions.each do | key|
+    config.actions.each do |key|
       action = instantiate_action(key)
       action.change(area, config.action(key))
     end

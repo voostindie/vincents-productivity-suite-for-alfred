@@ -7,7 +7,7 @@
 require_relative '../lib/alfred_helper'
 require_relative '../lib/markdown'
 
-Alfred::action do
+Alfred.action do
   raise 'No path specified' if ARGV.empty?
-  Markdown::edit_note(ARGV[0].chomp)
+  Markdown.edit_note(ARGV[0].chomp)
 end
