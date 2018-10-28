@@ -29,11 +29,12 @@ This Alfred workflow can:
     - Show the name of the area in BitBar
     - Change the desktop wallpaper
 - Create new notes according to a template and open them for editing in a text editor.
-- Select a person and:
-    - Write an e-mail
-    - View details
+- Select a contact and:
+    - Open it in Contacts
     - Create a note
-    - Copy his/her name into the frontmost application
+    - Write an e-mail
+    - View details in Contact Viewer
+    - Paste the its name into the frontmost application
 - Select a project and:
     - Open it in OmniFocus
     - Create a note
@@ -45,23 +46,20 @@ It may not sound like much, but for me this is an enormous time saver.
 
 ### Keywords and hotkeys
 
-- `focus` / ⌃⌥⌘-F: sets the focus to an area of responsibility
-- `note` / ⌃⌥⌘-N: creates a new note and opens it for editing after you specify the title.
-- `contact` / ⌃⌥⌘-C: selects a person from Contacts and:
-    - ↵: writes an e-mail to this person
-    - ⌘↵: shows this person in the Contact Viewer
-    - ⌥↵: creates a note on this person
-- `project` / ⌃⌥⌘-P: selects a project from OmniFocus and:
-    - ↵: shows this project in OmniFocus
-    - ⌥↵: creates a note on this project
+- `focus` / *ctrl* + *opt* + *cmd* + F: sets the focus to an area of responsibility.
+- `note` / *ctrl* + *opt* + *cmd* + N: creates a new note and opens it for editing after you specify the title.
+- `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
+- `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
 
-The alternative action for writing a note is available only if Markdown notes are configured for the focused area.
+The list of actions available for a contact or project depends on the configuration of the focused area of 
+responsibility. E.g. if Markdown notes are enabled, the action to create a note on the contact or project will
+automatically show up. 
 
 ### Snippets
 
 Using the shared prefix `;` and no suffix for snippets:
 
-- `;c`: copies a person's name into the frontmost application.
+- `;c`: copies a contact's name into the frontmost application.
 - `;p`: copies a project's name into the frontmost application.
 
 ### Contact action
@@ -259,12 +257,13 @@ section, where you can list things that must happen whenever the focus changes. 
 2. Changing the desktop wallpaper
 3. Changing the focus in OmniFocus
 
-To enable both actions, add this to your configuration:
+To enable all actions, add this to your configuration:
 
 ```yaml
 actions:
     bitbar:
     wallpaper:
+    omnifocus:
 ```
 
 See below for details on configuration of each action.
