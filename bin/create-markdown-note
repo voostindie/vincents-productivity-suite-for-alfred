@@ -10,6 +10,6 @@ require_relative '../lib/alfred_helper'
 require_relative '../lib/markdown'
 
 Alfred.action do
-  note = Markdown.Note.new(ARGV.join(' '))
+  note = Markdown::Note.new(ARGV.join(' '))
   note.create_file
 end
