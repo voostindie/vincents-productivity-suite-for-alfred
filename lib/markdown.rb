@@ -1,17 +1,16 @@
 require 'date'
 require 'fileutils'
 require_relative 'config'
-require_relative 'exec'
-require_relative 'backtick'
+require_relative 'shell'
 
 module Markdown
-  def self.edit_note(path, area: Config.load.focused_area, runner: Exec::Runner.new)
+  def self.edit_note(path, area: Config.load.focused_area, runner: Shell::ReplaceProcessRunner.new)
     raise 'File not found' unless File.exist?(path)
     command = "#{area[:markdown_notes][:editor]} \"#{path}\""
     runner.execute(command)
   end
 
-  def self.search_notes(criteria, area: Config.load.focused_area, runner: Backtick::Runner.new)
+  def self.search_notes(criteria, area: Config.load.focused_area, runner: Shell::CaptureOutputRunner.new)
     notes = area[:markdown_notes]
     raise 'Markdown notes are not enabled for the focused area' unless notes
     ext = notes[:extension]

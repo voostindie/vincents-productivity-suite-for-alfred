@@ -1,9 +1,9 @@
 require_relative 'config'
-require_relative 'system'
+require_relative 'shell'
 
 class BitBar
 
-  def initialize(runner = System::Runner.new)
+  def initialize(runner = Shell::SystemRunner.new)
     @runner = runner
   end
 
