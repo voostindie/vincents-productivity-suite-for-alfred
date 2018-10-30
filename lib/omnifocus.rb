@@ -53,10 +53,17 @@ class OmniFocus
     )
     if supports_notes
       actions.push(
-        title: 'Create Markdown note',
+        title: 'Create note',
         arg: project[:name],
         variables: {
-          action: 'markdown-note'
+          action: 'create-markdown-note'
+        }
+      )
+      actions.push(
+        title: 'Search notes',
+        arg: project[:name],
+        variables: {
+          action: 'search-markdown-notes'
         }
       )
     end

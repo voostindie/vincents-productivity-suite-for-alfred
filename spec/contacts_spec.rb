@@ -63,10 +63,17 @@ describe Contacts, '#people' do
           }
         },
         {
-          title: "Create Markdown note",
+          title: "Create note",
           arg: 'Foo',
           variables: {
-            action: 'markdown-note'
+            action: 'create-markdown-note'
+          }
+        },
+        {
+          title: "Search notes",
+          arg: 'Foo',
+          variables: {
+            action: 'search-markdown-notes'
           }
         },
         {

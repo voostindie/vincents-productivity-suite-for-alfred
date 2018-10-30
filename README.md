@@ -18,6 +18,7 @@ This is is an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ru
 - Microsoft Outlook 2016 (*unmaintained; because I no longer need it*)
 - Desktop wallpapers
 - BitBar
+- Spotlight
 
 A lot of activity at my computer consists of managing projects and tasks in OmniFocus, keeping notes in Markdown files, writing e-mails and tracking people in Contacts. This workflow gives me the means to quickly create notes and e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
 
@@ -28,16 +29,19 @@ This Alfred workflow can:
 - Set focus to an area and
     - Show the name of the area in BitBar
     - Change the desktop wallpaper
-- Create new notes according to a template and open them for editing in a text editor.
+- Create new notes according to a template and open them for editing in a text editor
+- Search for text in notes using Spotlight
 - Select a contact and:
     - Open it in Contacts
     - Create a note
+    - Search notes using Spotlight
     - Write an e-mail
     - View details in Contact Viewer
     - Paste the its name into the frontmost application
 - Select a project and:
     - Open it in OmniFocus
     - Create a note
+    - Search notes using Spotlight
     - Copy its name into the frontmost application
 
 It may not sound like much, but for me this is an enormous time saver.
@@ -48,6 +52,7 @@ It may not sound like much, but for me this is an enormous time saver.
 
 - `focus` / *ctrl* + *opt* + *cmd* + F: sets the focus to an area of responsibility.
 - `note` / *ctrl* + *opt* + *cmd* + N: creates a new note and opens it for editing after you specify the title.
+- `search-notes`: search for text within notes.
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
 

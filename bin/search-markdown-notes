@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+#
+# Searches all notes for a certain text
+#
+# Requires one argument: the text to search for
+
+require_relative '../lib/alfred_helper'
+require_relative '../lib/markdown'
+
+Alfred.filter do
+  raise 'No search criteria specified' if ARGV.empty?
+  Markdown.search_notes(ARGV.join(' '))
+end

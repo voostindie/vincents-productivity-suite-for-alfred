@@ -50,6 +50,13 @@ describe Markdown::Note, '#initialize' do
       Markdown::edit_note(__FILE__, area: area, runner: runner)
       expect(runner.command).to eq("/usr/bin/my-preferred-editor \"#{__FILE__}\"")
     end
+
+    it 'can search for notes using Spotlight' do
+      runner = DummyRunner.new
+      Markdown::search_notes('query', area: area, runner: runner)
+      path = File.join(Dir.home, 'tmp', 'test', 'Notes')
+      expect(runner.command).to eq("mdfind -onlyin \"#{path}\" query")
+    end
   end
 end
 
