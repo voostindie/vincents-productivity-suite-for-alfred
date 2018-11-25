@@ -1768,7 +1768,7 @@ See the README for more information.</string>
 			<key>note</key>
 			<string>Search for notes</string>
 			<key>xpos</key>
-			<integer>370</integer>
+			<integer>1300</integer>
 			<key>ypos</key>
 			<integer>340</integer>
 		</dict>
