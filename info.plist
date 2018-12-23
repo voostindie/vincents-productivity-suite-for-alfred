@@ -1021,25 +1021,6 @@
 			<key>config</key>
 			<dict>
 				<key>inputstring</key>
-				<string>{var:action}</string>
-				<key>matchcasesensitive</key>
-				<false/>
-				<key>matchmode</key>
-				<integer>0</integer>
-				<key>matchstring</key>
-				<string>open</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>inputstring</key>
 				<string>{var:TRIGGERED_AS_SNIPPET}</string>
 				<key>matchcasesensitive</key>
 				<true/>
@@ -1052,6 +1033,25 @@
 			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
 			<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string>open</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -1613,7 +1613,7 @@ See the README for more information.</string>
 		<key>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</key>
 		<dict>
 			<key>note</key>
-			<string>Search in Alfred</string>
+			<string>Type text in the frontmost app</string>
 			<key>xpos</key>
 			<integer>1090</integer>
 			<key>ypos</key>
