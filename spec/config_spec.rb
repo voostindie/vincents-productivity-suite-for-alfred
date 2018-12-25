@@ -45,6 +45,11 @@ EOT
             from: nil
           }
         },
+        project_files: {
+          path: 'Files',
+          documents: 'Docs',
+          reference: 'Refs'
+        },
         wallpaper: {
           path: 'work.jpg'
         }
@@ -77,6 +82,11 @@ EOT
             client: 'Mail',
             from: 'Me Myself <me@example.com>'
           }
+        },
+        project_files: {
+          path: 'Projects',
+          documents: 'Documents',
+          reference: 'Reference Material'
         }
       }
       expect(config.area('personal')).to eq(personal_expected)

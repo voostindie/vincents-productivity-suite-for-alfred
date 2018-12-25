@@ -114,6 +114,14 @@ EOT
           }
         }
       end
+      if area.has_key?('project-files')
+        files = area['project-files'] || {}
+        areas[key][:project_files] = {
+          path: files['path'] || 'Projects',
+          documents: files['documents'] || 'Documents',
+          reference: files['reference'] || 'Reference Material'
+        }
+      end
       if area.has_key?('wallpaper')
         wallpaper = area['wallpaper'] || {}
         areas[key][:wallpaper] = {

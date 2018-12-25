@@ -1,6 +1,7 @@
 require 'json'
 require_relative 'config'
 require_relative 'jxa'
+require_relative 'filesystem'
 
 class OmniFocus
 
@@ -43,6 +44,7 @@ class OmniFocus
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     supports_notes = area[:markdown_notes] != nil
+    supports_files = area[:project_files] != nil
     actions = []
     actions.push(
       title: 'Open in OmniFocus',
@@ -66,6 +68,30 @@ class OmniFocus
           action: 'search-markdown-notes'
         }
       )
+    end
+    if supports_files
+      files = area[:project_files]
+      path = File.join(area[:root], files[:path], FileSystem::safe_filename(project[:name]))
+      documents = File.join(path, files[:documents])
+      if FileSystem::exists?(documents)
+        actions.push(
+          title: 'Browse documents',
+          arg: documents,
+          variables: {
+            action: 'browse-project-files'
+          }
+        )
+      end
+      reference = File.join(path, files[:reference])
+      if FileSystem::exists?(reference)
+       actions.push(
+          title: 'Browse reference material',
+          arg: reference,
+          variables: {
+            action: 'browse-project-files'
+          }
+        )
+      end
     end
     actions.push(
       title: 'Paste in frontmost application',

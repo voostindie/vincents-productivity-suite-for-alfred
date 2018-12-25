@@ -7,6 +7,7 @@
 #       markdown-notes:
 #       omnifocus:
 #       contacts:
+#       files:
 #
 # This sets up a single area called 'Family' with:
 # - Root directory ~/Family
@@ -41,6 +42,10 @@ areas:
       group: 'Business associates'
       mail:
         client: 'Microsoft Outlook'
+    project-files:
+      path: 'Files'
+      documents: 'Docs'
+      reference: 'Refs'
     wallpaper:
       path: 'work.jpg'
   personal:
@@ -68,6 +73,10 @@ areas:
         from: 'Me Myself <me@example.com>'
         # Client is not defined, and is therefore 'Mail'
     # No "wallpaper" specified, so nothing happens when focusing on this area.
+    project-files:
+      # Nothing specified here, so the defaults apply:
+      # documents: 'Documents'
+      # reference: 'Reference Material'
 
 # The optional actions section describes the things to do whenever the focus changes.
 # If this section is not available, nothing special happens.

@@ -5,10 +5,16 @@ describe OmniFocus, '#projects' do
   context 'when passed a valid configuration' do
 
     area = {
+      root: '/Area',
       omnifocus: {
         folder: 'Foo',
       },
-      markdown_notes: {}
+      markdown_notes: {},
+      project_files: {
+        path: 'Projects',
+        documents: 'Documents',
+        reference: 'Reference Material'
+      }
     }
 
     it 'lists all projects in the configured OmniFocus folder in shortcut mode' do
@@ -68,6 +74,20 @@ describe OmniFocus, '#projects' do
           arg: 'Foo',
           variables: {
             action: 'search-markdown-notes'
+          }
+        },
+        {
+          title: "Browse documents",
+          arg: '/Area/Projects/Foo/Documents',
+          variables: {
+            action: 'browse-project-files'
+          }
+        },
+        {
+          title: "Browse reference material",
+          arg: '/Area/Projects/Foo/Reference Material',
+          variables: {
+            action: 'browse-project-files'
           }
         },
         {

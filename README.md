@@ -42,6 +42,7 @@ This Alfred workflow can:
     - Open it in OmniFocus
     - Create a note
     - Search notes using Spotlight
+    - Browse files with Alfred's built-in file browser
     - Copy its name into the frontmost application
 
 It may not sound like much, but for me this is an enormous time saver.
@@ -80,12 +81,13 @@ areas:
    work:
         markdown-notes:
         omnifocus:
+        project-files:
         contacts:
 ```
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the Markdown notes, OmniFocus and Contacts features enabled. These features all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the Markdown notes, OmniFocus, project files and Contacts features enabled. These features all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
@@ -110,6 +112,10 @@ areas:
                 # $title
         omnifocus:
             folder: 'Work'
+        project-files:
+            path: 'Projects'
+            documents: 'Documents'
+            reference: 'Reference Material'
         contacts:
             group: 'Work'
             mail:
@@ -230,6 +236,27 @@ Where `folder` is the name of the folder to get projects from. It defaults to th
 In my work folder, where I have the biggest list of projects, I have created several subfolders. That doesn't matter for this workflow, because it gets all projects from all subfolders.
 
 Projects are sorted in the order they appear in OmniFocus, but thanks to Alfred's smart filtering the more you use a project, the higher it will get on the list.
+
+### Project files
+
+I like to store files for projects in a directory specific to that project. To that end, I've set up a directory under each area of focus, typically called `Projects` that has in turn a directory for each project I store files for. This directory in turn has two directories: a `Documents` directory for documents I created myself, and a `Reference Material` directory for documents that I receive from others.
+
+By enabling the `project-files` feature on top of the OmniFocus feature, project files can be browsed after selecting a project in Alfred. For now that's it. The plan is to later extend this with more functionality, for example for filing files directly into the right folder.
+
+The configuration looks as follows:
+
+```yaml
+project-files:
+    path:
+    documents:
+    reference:
+```
+
+With:
+
+* `path` (optional): the subdirectory under the area's root directory to project files under. Defaults to `Projects`.
+* `documents` (optional): the subdirectory under the project files directory to store self-created documents under. Defaults to `Documents`.
+* `reference` (optional): the subdirectory under the project files directory to store reference material under. Defaults to `Reference Material`.
 
 ### Contacts
 

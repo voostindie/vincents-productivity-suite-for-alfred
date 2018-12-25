@@ -2,6 +2,7 @@ require 'date'
 require 'fileutils'
 require_relative 'config'
 require_relative 'shell'
+require_relative 'filesystem'
 
 module Markdown
   def self.edit_note(path, area: Config.load.focused_area, runner: Shell::ReplaceProcessRunner.new)
@@ -39,7 +40,7 @@ module Markdown
       raise 'Markdown notes are not enabled for the focused area' unless notes
 
       title ||= 'Unnamed note'
-      safe_title = title.gsub(/[\t\n"',;\.!@#\$%\^&*]/, '').gsub(/\//, '-')
+      safe_title = FileSystem.safe_filename(title)
       slug = safe_title.downcase.gsub(/[ ]/, '-').gsub('--', '-')
       @context = {
         year: date.strftime('%Y'),

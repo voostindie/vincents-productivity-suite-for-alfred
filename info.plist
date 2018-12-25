@@ -425,6 +425,16 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>F8D057D7-BA5F-4E11-BD92-6BEEA17739F9</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 		<key>E7410F2F-9E71-43DC-A97D-A2EFB2F7BBD7</key>
 		<array>
@@ -507,6 +517,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>B7A3A33E-7BA8-4C2B-A374-F8DAF49B0570</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>F8D057D7-BA5F-4E11-BD92-6BEEA17739F9</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>24A79444-1362-4640-8E06-24F875296BCE</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1077,6 +1100,19 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>path</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.browseinalfred</string>
+			<key>uid</key>
+			<string>24A79444-1362-4640-8E06-24F875296BCE</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>focusedappvariable</key>
 				<false/>
 				<key>focusedappvariablename</key>
@@ -1094,25 +1130,21 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
 				<integer>0</integer>
-				<key>script</key>
-				<string></string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>lib/jxa/type-text.js</string>
-				<key>type</key>
-				<integer>8</integer>
+				<key>matchstring</key>
+				<string>browse-project-files</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
-			<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
+			<string>F8D057D7-BA5F-4E11-BD92-6BEEA17739F9</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1195,6 +1227,29 @@
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>1EA1C2CE-E59A-4003-A62F-279C5E0E9B87</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>lib/jxa/type-text.js</string>
+				<key>type</key>
+				<integer>8</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -1578,6 +1633,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>730</integer>
 		</dict>
+		<key>24A79444-1362-4640-8E06-24F875296BCE</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1090</integer>
+			<key>ypos</key>
+			<integer>600</integer>
+		</dict>
 		<key>25F37FFD-0AC5-47B1-98CC-0526E2732384</key>
 		<dict>
 			<key>note</key>
@@ -1617,7 +1679,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>1090</integer>
 			<key>ypos</key>
-			<integer>630</integer>
+			<integer>730</integer>
 		</dict>
 		<key>66D7A9C1-49EE-44E2-A44A-94DBFC132274</key>
 		<dict>
@@ -1818,6 +1880,13 @@ See the README for more information.</string>
 			<integer>950</integer>
 			<key>ypos</key>
 			<integer>1060</integer>
+		</dict>
+		<key>F8D057D7-BA5F-4E11-BD92-6BEEA17739F9</key>
+		<dict>
+			<key>xpos</key>
+			<integer>950</integer>
+			<key>ypos</key>
+			<integer>630</integer>
 		</dict>
 		<key>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</key>
 		<dict>
