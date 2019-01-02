@@ -77,7 +77,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
+				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -253,7 +253,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
+				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -266,7 +266,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
+				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -320,7 +320,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
+				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1044,25 +1044,6 @@
 			<key>config</key>
 			<dict>
 				<key>inputstring</key>
-				<string>{var:TRIGGERED_AS_SNIPPET}</string>
-				<key>matchcasesensitive</key>
-				<true/>
-				<key>matchmode</key>
-				<integer>1</integer>
-				<key>matchstring</key>
-				<string>true</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>inputstring</key>
 				<string>{var:action}</string>
 				<key>matchcasesensitive</key>
 				<false/>
@@ -1075,6 +1056,25 @@
 			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
 			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:TRIGGERED_AS_SNIPPET}</string>
+				<key>matchcasesensitive</key>
+				<true/>
+				<key>matchmode</key>
+				<integer>1</integer>
+				<key>matchstring</key>
+				<string>true</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -1233,29 +1233,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>script</key>
-				<string></string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>lib/jxa/type-text.js</string>
-				<key>type</key>
-				<integer>8</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -1281,6 +1258,23 @@
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
 			<string>0ED34B50-BB28-4DAF-83CF-6431B7340FD1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -1672,15 +1666,6 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>40</integer>
 		</dict>
-		<key>576FAFDB-2C2B-4C98-B3DB-2C54E8A2FBFA</key>
-		<dict>
-			<key>note</key>
-			<string>Type text in the frontmost app</string>
-			<key>xpos</key>
-			<integer>1090</integer>
-			<key>ypos</key>
-			<integer>730</integer>
-		</dict>
 		<key>66D7A9C1-49EE-44E2-A44A-94DBFC132274</key>
 		<dict>
 			<key>note</key>
@@ -1689,6 +1674,13 @@ See the README for more information.</string>
 			<integer>1090</integer>
 			<key>ypos</key>
 			<integer>190</integer>
+		</dict>
+		<key>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1090</integer>
+			<key>ypos</key>
+			<integer>730</integer>
 		</dict>
 		<key>6FD62478-8BFC-48B6-8B63-A90CF716B38C</key>
 		<dict>
