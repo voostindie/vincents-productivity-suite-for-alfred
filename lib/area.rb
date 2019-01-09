@@ -1,10 +1,19 @@
 require_relative 'config'
 
 module Area
-  ACTION_CLASSES = {
-    wallpaper: 'Wallpaper',
-    bitbar: 'BitBar',
-    omnifocus: 'OmniFocus'
+  PLUGINS = {
+    wallpaper: {
+      path: 'wallpaper/wallpaper_plugin',
+      class: 'WallpaperPlugin'
+    },
+    bitbar: {
+      path: 'bitbar/bitbar_plugin',
+      class: 'BitBarPlugin',
+    },
+    omnifocus: {
+      path: 'omnifocus',
+      class: 'OmniFocus'
+    }
   }.freeze
 
   def self.list(config: Config.load)
@@ -26,13 +35,15 @@ module Area
     config.save
     config.actions.each do |key|
       action = instantiate_action(key)
-      action.change(area, config.action(key))
+      action.focus_changed(area, config.action(key))
     end
     "#{area[:name]} is now the focused area"
   end
 
   def self.instantiate_action(key)
-    require_relative(key.to_s)
-    Object.const_get(ACTION_CLASSES[key]).new
+    plugin = PLUGINS[key]
+    return if plugin.nil?
+    require_relative(plugin[:path])
+    Object.const_get(plugin[:class]).new
   end
 end

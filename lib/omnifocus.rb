@@ -1,15 +1,16 @@
 require 'json'
+require_relative 'focus_plugin'
 require_relative 'config'
 require_relative 'jxa'
 require_relative 'filesystem'
 
-class OmniFocus
+class OmniFocus < FocusPlugin
 
   def initialize(runner = Jxa::Runner.new)
     @runner = runner
   end
 
-  def change(area, defaults)
+  def focus_changed(area, defaults)
     omnifocus = area[:omnifocus]
     return if omnifocus.nil?
     puts omnifocus[:folder]

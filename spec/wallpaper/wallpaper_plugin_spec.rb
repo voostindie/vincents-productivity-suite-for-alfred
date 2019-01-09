@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'wallpaper'
+require 'wallpaper/wallpaper_plugin'
 
-describe Wallpaper, '#change' do
+describe WallpaperPlugin, '#change' do
   context 'when passed a valid configuration' do
 
     config = {
@@ -19,7 +19,7 @@ describe Wallpaper, '#change' do
 
     it 'sets the desktop wallpaper to the configured path' do
       stub = WallpaperStubRunner.new
-      Wallpaper.new(stub).change(config[:areas], config[:actions])
+      WallpaperPlugin.new(stub).focus_changed(config[:areas], config[:actions])
       expect(stub.path).to eq('test.jpg')
     end
   end

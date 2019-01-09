@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'bitbar'
+require 'bitbar/bitbar_plugin'
 
-describe BitBar, '#change' do
+describe BitBarPlugin, '#change_focus' do
   context 'when passed a valid configuration' do
 
     defaults = {
@@ -10,7 +10,7 @@ describe BitBar, '#change' do
 
     it 'sets the desktop wallpaper to the configured path' do
       stub = BitBarStubRunner.new
-      BitBar.new(stub).change({}, defaults)
+      BitBarPlugin.new(stub).focus_changed({}, defaults)
       expect(stub.command).to eq('open -g bitbar://refreshPlugin?name=plugin')
     end
   end
