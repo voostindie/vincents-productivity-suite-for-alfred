@@ -6,7 +6,7 @@ require 'fileutils'
 require 'shellwords'
 
 # Support code
-require 'vps/alfred_helper'
+require 'vps/alfred/alfred_helper'
 require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/config'
