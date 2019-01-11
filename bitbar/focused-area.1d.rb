@@ -10,6 +10,11 @@
 # include "bitbar" in your actions configuration.
 
 VPS_BITBAR_ROOT = File.dirname(File.realdirpath(__FILE__))
-require "#{VPS_BITBAR_ROOT}/../lib/config.rb"
+VPS_ROOT = File.expand_path('../lib', VPS_BITBAR_ROOT)
+
+$LOAD_PATH.unshift VPS_ROOT
+
+require 'vps'
+
 area = Config.load.focused_area
 puts area[:name]
