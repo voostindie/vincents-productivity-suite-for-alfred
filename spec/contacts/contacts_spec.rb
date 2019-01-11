@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'contacts'
+require 'contacts/contacts'
 
 describe Contacts, '#people' do
   context 'when passed a valid configuration' do
@@ -107,7 +107,7 @@ describe Contacts, '#people' do
 
     it 'creates e-mail using the configured from address' do
       expected = {
-        script: 'mail-create-email-message',
+        script: 'create-mail-message',
         to: 'Test <test@example.com>',
         from: 'Me Myself <me@example.com>'
       }

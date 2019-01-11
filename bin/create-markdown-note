@@ -6,8 +6,10 @@
 #  (if there are multiple arguments, these are joined together)
 # Output: the name of the file that was created
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/markdown'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'markdown'
 
 Alfred.action do
   note = Markdown::Note.new(ARGV.join(' '))

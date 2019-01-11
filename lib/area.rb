@@ -1,4 +1,4 @@
-require_relative 'config'
+require 'config'
 
 module Area
   PLUGINS = {

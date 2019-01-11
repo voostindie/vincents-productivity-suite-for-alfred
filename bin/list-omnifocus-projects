@@ -2,8 +2,10 @@
 #
 # Lists all OmniFocus projects for this area of responsibility
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/omnifocus/omnifocus_plugin'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'omnifocus/omnifocus_plugin'
 
 Alfred.filter do
   triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?

@@ -1,6 +1,6 @@
 require 'json'
-require_relative 'config'
-require_relative 'jxa'
+require 'jxa'
+require 'config'
 
 module Contacts
 
@@ -9,11 +9,11 @@ module Contacts
     mail = area[:contacts][:mail]
     case mail[:client]
     when 'Mail'
-      runner.execute('mail-create-email-message', address_line, mail[:from])
+      runner.execute('create-mail-message', address_line, mail[:from])
     when 'Microsoft Outlook'
       # Note, the "from" address is not supported for Outlook.
       # I don't need it, so I don't care right now.
-      runner.execute('outlook-create-email-message', address_line)
+      runner.execute('create-outlook-message', address_line)
     else
       raise "Unsupported mail client: #{mail[:client]}"
     end
@@ -23,7 +23,7 @@ module Contacts
     contacts = area[:contacts]
     raise 'Contacts is not enabled for the focused area' unless contacts
     group = contacts[:group]
-    contacts = runner.execute('contacts-people', group)
+    contacts = runner.execute('list-people', group)
     contacts.map do |contact|
       {
         uid: contact['id'],

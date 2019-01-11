@@ -4,8 +4,10 @@
 #
 # Requires one argument: the text to search for
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/markdown'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'markdown'
 
 Alfred.filter do
   raise 'No search criteria specified' if ARGV.empty?

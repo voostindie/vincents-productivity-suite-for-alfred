@@ -1,8 +1,8 @@
 require 'date'
 require 'fileutils'
-require_relative 'config'
-require_relative 'shell'
-require_relative 'filesystem'
+require 'config'
+require 'shell'
+require 'filesystem'
 
 module Markdown
   def self.edit_note(path, area: Config.load.focused_area, runner: Shell::ReplaceProcessRunner.new)

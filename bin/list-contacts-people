@@ -2,8 +2,10 @@
 #
 # Lists all Contacts for this area of responsibility
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/contacts'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'contacts/contacts'
 
 Alfred.filter do
   triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?

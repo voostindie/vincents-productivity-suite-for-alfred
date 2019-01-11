@@ -2,8 +2,10 @@
 #
 # Lists all actions that can be performed on a single OmniFocus project
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/omnifocus/omnifocus_plugin'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'omnifocus/omnifocus_plugin'
 
 Alfred.filter do
   raise 'No project specified' if ENV['id'].nil?

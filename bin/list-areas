@@ -2,8 +2,10 @@
 #
 # Lists all available areas of responsibility
 
-require_relative '../lib/alfred_helper'
-require_relative '../lib/area'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'alfred_helper'
+require 'area'
 
 Alfred.filter do
   Area.list
