@@ -4,7 +4,7 @@ require_relative 'jxa'
 
 module Contacts
 
-  def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new)
+  def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
     address_line = "#{address[:name]} <#{address[:email]}>"
     mail = area[:contacts][:mail]
     case mail[:client]
@@ -19,7 +19,7 @@ module Contacts
     end
   end
 
-  def self.people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new)
+  def self.people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
     contacts = area[:contacts]
     raise 'Contacts is not enabled for the focused area' unless contacts
     group = contacts[:group]

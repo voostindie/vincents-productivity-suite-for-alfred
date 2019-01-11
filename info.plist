@@ -1044,25 +1044,6 @@
 			<key>config</key>
 			<dict>
 				<key>inputstring</key>
-				<string>{var:action}</string>
-				<key>matchcasesensitive</key>
-				<false/>
-				<key>matchmode</key>
-				<integer>0</integer>
-				<key>matchstring</key>
-				<string>open</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.filter</string>
-			<key>uid</key>
-			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>inputstring</key>
 				<string>{var:TRIGGERED_AS_SNIPPET}</string>
 				<key>matchcasesensitive</key>
 				<true/>
@@ -1075,6 +1056,25 @@
 			<string>alfred.workflow.utility.filter</string>
 			<key>uid</key>
 			<string>E8A72C2E-9EFC-43C2-B0B3-B84DCC93F295</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>inputstring</key>
+				<string>{var:action}</string>
+				<key>matchcasesensitive</key>
+				<false/>
+				<key>matchmode</key>
+				<integer>0</integer>
+				<key>matchstring</key>
+				<string>open</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.filter</string>
+			<key>uid</key>
+			<string>6FD62478-8BFC-48B6-8B63-A90CF716B38C</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -1446,7 +1446,7 @@
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
-				<string>lib/jxa/alfred-search.js</string>
+				<string>lib/alfred-search.js</string>
 				<key>type</key>
 				<integer>8</integer>
 			</dict>

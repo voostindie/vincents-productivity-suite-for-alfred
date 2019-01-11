@@ -21,16 +21,16 @@ require_relative '../focus_plugin'
 #
 class WallpaperPlugin < FocusPlugin
 
-  def initialize(runner = Jxa::Runner.new)
+  def initialize(runner = Jxa::Runner.new(__FILE__))
     @runner = runner
   end
 
   ##
-  #
+  # Changes the desktop wallpaper. It does so by invoking a JXA script.
   def focus_changed(area, defaults)
     wallpaper = area[:wallpaper] || {}
     path = wallpaper[:path] || defaults[:default]
-    @runner.execute('wallpaper-change', path)
+    @runner.execute('change-wallpaper', path)
   end
 
 end

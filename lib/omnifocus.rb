@@ -6,7 +6,7 @@ require_relative 'filesystem'
 
 class OmniFocus < FocusPlugin
 
-  def initialize(runner = Jxa::Runner.new)
+  def initialize(runner = Jxa::Runner.new(__FILE__))
     @runner = runner
   end
 
@@ -17,7 +17,7 @@ class OmniFocus < FocusPlugin
     @runner.execute('omnifocus-set-focus', omnifocus[:folder])
   end
 
-  def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new)
+  def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     folder = omnifocus[:folder]
