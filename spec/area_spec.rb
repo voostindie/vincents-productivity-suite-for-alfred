@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'area'
 
 describe Area, '#instantiate_action' do
 

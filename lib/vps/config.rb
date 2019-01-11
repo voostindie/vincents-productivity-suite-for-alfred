@@ -1,5 +1,3 @@
-require 'yaml'
-
 class Config
 
   DEFAULT_CONFIG_FILE = File.join(Dir.home, '.vpsrc').freeze

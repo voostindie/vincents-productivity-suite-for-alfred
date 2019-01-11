@@ -4,8 +4,7 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'alfred_helper'
-require 'contacts/contacts'
+require 'vps'
 
 Alfred.filter do
   triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?

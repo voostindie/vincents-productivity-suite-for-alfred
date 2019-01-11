@@ -1,7 +1,3 @@
-require 'json'
-require 'jxa'
-require 'config'
-
 module Contacts
 
   def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))

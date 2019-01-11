@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'alfred_helper'
 
 describe Alfred, '#filter' do
   context 'with code that returns a list of items' do

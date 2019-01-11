@@ -1,5 +1,3 @@
-require 'json'
-
 # For Alfred's Script Filter JSON Format, see:
 # https://www.alfredapp.com/help/workflows/inputs/script-filter/json/
 module Alfred

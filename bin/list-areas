@@ -4,8 +4,7 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'alfred_helper'
-require 'area'
+require 'vps'
 
 Alfred.filter do
   Area.list

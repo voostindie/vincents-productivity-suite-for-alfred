@@ -1,5 +1,3 @@
-require 'config'
-
 module Area
   PLUGINS = {
     wallpaper: {

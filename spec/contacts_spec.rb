@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'contacts/contacts'
 
 describe Contacts, '#people' do
   context 'when passed a valid configuration' do

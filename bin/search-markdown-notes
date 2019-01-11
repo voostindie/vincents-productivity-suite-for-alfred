@@ -6,8 +6,7 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'alfred_helper'
-require 'markdown'
+require 'vps'
 
 Alfred.filter do
   raise 'No search criteria specified' if ARGV.empty?

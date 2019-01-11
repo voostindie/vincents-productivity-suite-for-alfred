@@ -6,8 +6,7 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-require 'alfred_helper'
-require 'area'
+require 'vps'
 
 Alfred.action do
   raise 'No area specified' if ARGV.empty?

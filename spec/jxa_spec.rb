@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'jxa'
 
 describe Jxa::Runner, '#execute' do
   context 'with the echo script' do

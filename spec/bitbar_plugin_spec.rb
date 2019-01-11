@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'bitbar/bitbar_plugin'
 
 describe BitBarPlugin, '#change_focus' do
   context 'when passed a valid configuration' do

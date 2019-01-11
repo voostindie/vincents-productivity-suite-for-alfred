@@ -1,9 +1,3 @@
-require 'json'
-require 'focus_plugin'
-require 'config'
-require 'jxa'
-require 'filesystem'
-
 class OmniFocusPlugin < FocusPlugin
 
   def initialize(runner = Jxa::Runner.new(__FILE__))

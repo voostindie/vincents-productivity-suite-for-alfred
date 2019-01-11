@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'wallpaper/wallpaper_plugin'
 
 describe WallpaperPlugin, '#change' do
   context 'when passed a valid configuration' do

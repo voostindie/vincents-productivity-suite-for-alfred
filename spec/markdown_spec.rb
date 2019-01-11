@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'markdown'
 
 describe Markdown::Note, '#initialize' do
 

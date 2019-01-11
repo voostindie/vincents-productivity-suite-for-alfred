@@ -1,7 +1,3 @@
-require 'focus_plugin'
-require 'config'
-require 'shell'
-
 ##
 # Triggers BitBar to refresh the bundled +focused-area.1d.rb+ plugin.
 #

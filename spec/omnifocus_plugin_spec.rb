@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'omnifocus/omnifocus_plugin'
 
 describe OmniFocusPlugin, '#projects' do
   context 'when passed a valid configuration' do

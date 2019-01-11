@@ -10,8 +10,6 @@ require 'shellwords'
 #
 # The code is NOT protected against escaping out of the 'jxa' folder. Don't use this code
 # anywhere outside of the scope of this application!
-require 'shellwords'
-
 module Jxa
 
   class Runner
