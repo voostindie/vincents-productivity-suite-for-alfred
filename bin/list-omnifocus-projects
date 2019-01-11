@@ -3,9 +3,9 @@
 # Lists all OmniFocus projects for this area of responsibility
 
 require_relative '../lib/alfred_helper'
-require_relative '../lib/omnifocus'
+require_relative '../lib/omnifocus/omnifocus_plugin'
 
 Alfred.filter do
   triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?
-  OmniFocus.projects(triggered_as_snippet)
+  OmniFocusPlugin.projects(triggered_as_snippet)
 end

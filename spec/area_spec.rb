@@ -26,7 +26,7 @@ describe Area, '#instantiate_action' do
       plugin = Area.instantiate_action(:omnifocus)
       expect(plugin).to_not be(nil)
       expect(plugin).to be_a(FocusPlugin)
-      expect(plugin.class.to_s).to eq('OmniFocus')
+      expect(plugin.class.to_s).to eq('OmniFocusPlugin')
     end
   end
 

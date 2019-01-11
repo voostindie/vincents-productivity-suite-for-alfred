@@ -1,6 +1,6 @@
-require_relative '../config'
-require_relative '../jxa'
-require_relative '../focus_plugin'
+require 'focus_plugin'
+require 'config'
+require 'jxa'
 
 ##
 # Changes the desktop wallpaper.

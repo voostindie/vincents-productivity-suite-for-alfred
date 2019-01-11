@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'omnifocus'
+require 'omnifocus/omnifocus_plugin'
 
-describe OmniFocus, '#projects' do
+describe OmniFocusPlugin, '#projects' do
   context 'when passed a valid configuration' do
 
     area = {
@@ -31,7 +31,7 @@ describe OmniFocus, '#projects' do
           autocomplete: 'Foo',
         }
       ]
-      projects = OmniFocus::projects(area: area, runner: OmniFocusStubRunner.new)
+      projects = OmniFocusPlugin::projects(area: area, runner: OmniFocusStubRunner.new)
       expect(projects).to eq(expected)
     end
 
@@ -49,7 +49,7 @@ describe OmniFocus, '#projects' do
           autocomplete: 'Foo',
         }
       ]
-      projects = OmniFocus::projects(true, area: area, runner: OmniFocusStubRunner.new)
+      projects = OmniFocusPlugin::projects(true, area: area, runner: OmniFocusStubRunner.new)
       expect(projects).to eq(expected)
     end
 
@@ -98,15 +98,15 @@ describe OmniFocus, '#projects' do
           }
         }
       ]
-      actions = OmniFocus::actions({id: 'foo', name: 'Foo'}, area: area)
+      actions = OmniFocusPlugin::actions({id: 'foo', name: 'Foo'}, area: area)
       expect(actions).to eq(expected)
     end
 
     it 'can set the focus in OmniFocus to the right folder' do
       stub = OmniFocusStubRunner.new
-      omnifocus = OmniFocus.new(stub)
+      omnifocus = OmniFocusPlugin.new(stub)
       omnifocus.focus_changed(area, {})
-      expect(stub.script[:name]).to eq('omnifocus-set-focus')
+      expect(stub.script[:name]).to eq('set-focus')
       expect(stub.script[:arg]).to eq('Foo')
     end
   end

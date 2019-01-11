@@ -1,10 +1,10 @@
 require 'json'
-require_relative 'focus_plugin'
-require_relative 'config'
-require_relative 'jxa'
-require_relative 'filesystem'
+require 'focus_plugin'
+require 'config'
+require 'jxa'
+require 'filesystem'
 
-class OmniFocus < FocusPlugin
+class OmniFocusPlugin < FocusPlugin
 
   def initialize(runner = Jxa::Runner.new(__FILE__))
     @runner = runner
@@ -14,14 +14,14 @@ class OmniFocus < FocusPlugin
     omnifocus = area[:omnifocus]
     return if omnifocus.nil?
     puts omnifocus[:folder]
-    @runner.execute('omnifocus-set-focus', omnifocus[:folder])
+    @runner.execute('set-focus', omnifocus[:folder])
   end
 
   def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     folder = omnifocus[:folder]
-    projects = runner.execute('omnifocus-projects', folder)
+    projects = runner.execute('list-projects', folder)
     projects.map do |project|
       {
         uid: project['id'],

@@ -11,8 +11,8 @@ module Area
       class: 'BitBarPlugin',
     },
     omnifocus: {
-      path: 'omnifocus',
-      class: 'OmniFocus'
+      path: 'omnifocus/omnifocus_plugin',
+      class: 'OmniFocusPlugin'
     }
   }.freeze
 
