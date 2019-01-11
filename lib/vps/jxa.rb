@@ -1,17 +1,14 @@
-require 'json'
-require 'shellwords'
-
-##
-# Runs macOS JavaScript Automation scripts. Output is always assumed to be in JSON
-# format, which is parsed and returned as the result.
-#
-# By default scripts are located in the same directory as the calling Ruby file is in,
-# for easy co-location of related code.
-#
-# The code is NOT protected against escaping out of the 'jxa' folder. Don't use this code
-# anywhere outside of the scope of this application!
 module Jxa
 
+  ##
+  # Runs macOS JavaScript Automation scripts. Output is always assumed to be in JSON
+  # format, which is parsed and returned as the result.
+  #
+  # By default scripts are located in the same directory as the calling Ruby file is in,
+  # for easy co-location of related code.
+  #
+  # The code is NOT protected against escaping out of the 'jxa' folder. Don't use this code
+  # anywhere outside of the scope of this application!
   class Runner
 
     ##
