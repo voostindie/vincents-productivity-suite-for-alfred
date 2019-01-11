@@ -17,7 +17,7 @@ require 'vps/focus_plugin'
 require 'vps/area'
 
 # Plugins
-require 'vps/markdown'
+require 'vps/markdown/markdown_notes'
 require 'vps/bitbar/bitbar_plugin'
 require 'vps/contacts/contacts'
 require 'vps/omnifocus/omnifocus_plugin'
