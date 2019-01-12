@@ -1,7 +1,3 @@
-require 'vps/focus_plugin'
-require 'vps/config'
-require 'vps/jxa'
-
 ##
 # Changes the desktop wallpaper.
 #
