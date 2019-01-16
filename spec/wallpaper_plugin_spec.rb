@@ -11,7 +11,7 @@ describe WallpaperPlugin, '#change' do
 
   context 'when passed a valid configuration' do
     defaults = {
-      'default' => 'default.jpg'
+      'path' => 'default.jpg'
     }
 
     empty_area = {
