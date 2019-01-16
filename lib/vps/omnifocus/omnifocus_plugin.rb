@@ -1,10 +1,10 @@
 class OmniFocusPlugin < FocusPlugin
 
-  def initialize(runner = Jxa::Runner.new(__FILE__))
+  def initialize(defaults = {}, runner: Jxa::Runner.new(__FILE__))
     @runner = runner
   end
 
-  def focus_changed(area, defaults)
+  def focus_changed(area)
     omnifocus = area[:omnifocus]
     return if omnifocus.nil?
     puts omnifocus[:folder]

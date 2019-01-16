@@ -13,14 +13,15 @@
 #
 class BitBarPlugin < FocusPlugin
 
-  def initialize(runner = Shell::SystemRunner.new)
+  def initialize(defaults = {}, runner: Shell::SystemRunner.new)
+    @plugin_name = defaults['plugin'] || 'focused-area.1d.rb'
     @runner = runner
   end
 
   ##
   # Triggers the URL callback for BitBar to refresh our "focused-area" plugin.
-  def focus_changed(area, defaults)
-    @runner.execute("open -g bitbar://refreshPlugin?name=#{defaults[:plugin]}")
+  def focus_changed(area)
+    @runner.execute("open -g bitbar://refreshPlugin?name=#{@plugin_name}")
   end
 
 end

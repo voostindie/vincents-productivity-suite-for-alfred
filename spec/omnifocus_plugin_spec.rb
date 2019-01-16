@@ -103,8 +103,8 @@ describe OmniFocusPlugin, '#projects' do
 
     it 'can set the focus in OmniFocus to the right folder' do
       stub = OmniFocusStubRunner.new
-      omnifocus = OmniFocusPlugin.new(stub)
-      omnifocus.focus_changed(area, {})
+      omnifocus = OmniFocusPlugin.new(runner: stub)
+      omnifocus.focus_changed(area)
       expect(stub.script[:name]).to eq('set-focus')
       expect(stub.script[:arg]).to eq('Foo')
     end

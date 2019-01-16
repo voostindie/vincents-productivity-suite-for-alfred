@@ -10,6 +10,7 @@ require 'vps/alfred/alfred_helper'
 require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/config'
+require 'vps/new_config'
 require 'vps/jxa'
 
 # Abstract classes

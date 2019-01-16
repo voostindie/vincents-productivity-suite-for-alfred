@@ -7,6 +7,10 @@
 # @abstract
 class FocusPlugin
 
+  def initialize(defaults = {})
+
+  end
+
   ##
   # Called when the focus has changed. A plugin can do anything it wants, except
   # raise an error. All plugins are executed sequentially, in the order they are
@@ -14,8 +18,19 @@ class FocusPlugin
   # whole program stops. So don't do that.
   #
   # @param area [Hash] the configuration of the activated area.
-  # @param defaults [Hash] the default configuration for this plugin
-  def focus_changed(area, defaults)
+  def focus_changed(area)
     raise "TODO: override this method!"
   end
+
+  def self.plugins
+    @@plugins
+  end
+
+  private
+  @@plugins = {}
+  def self.inherited(plugin)
+    key = plugin.name.downcase.gsub(/plugin$/, '')
+    @@plugins[key] = plugin
+  end
+
 end
