@@ -14,9 +14,10 @@ module Area
   end
 
   def self.focus(key, config: Config.load, new_config: NewConfig.new)
-    area = config.focus(key)
+    config.focus(key)
     config.save
+    area = new_config.areas[key]
     new_config.instantiate_actions.each {|a|a.focus_changed(area)}
-    "#{area[:name]} is now the focused area"
+    "#{area['name']} is now the focused area"
   end
 end
