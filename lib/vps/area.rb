@@ -1,4 +1,5 @@
-module Area
+class Area
+
   def self.list(config: Config.load)
     focus = config.focused_area[:key]
     config.areas.map do |name|
@@ -18,6 +19,6 @@ module Area
     config.save
     area = new_config.areas[key]
     new_config.instantiate_actions.each {|a|a.focus_changed(area)}
-    "#{area['name']} is now the focused area"
+    "#{config.area(key)[:name]} is now the focused area"
   end
 end
