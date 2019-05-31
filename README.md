@@ -121,6 +121,8 @@ areas:
             mail:
                 client: 'Mail'
                 from: null
+        bitbar:
+            label: 'Work'
 ```
 
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate feature.
@@ -280,6 +282,22 @@ With:
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
 
+### BitBar
+
+In case you enable the BitBar action that's triggered when the focus changes (see below), you can override the name that the BitBar will show as a label. By default it's the name of the area.
+
+The configuration for BitBar looks as follows:
+
+```yaml
+bitbar:
+    label:
+```
+
+With:
+
+- `label`: the text to show in the menu bar. (Hint: try emoji's!)
+
+
 ## Performing actions when the focus changes
 
 Apart from the `areas` section, the configuration also supports an `actions`
@@ -319,6 +337,8 @@ bitbar:
 With:
 
 - `plugin` (optional): the exact name of the plugin. You only need to set this if you changed the name of the symlink.
+
+To override what BitBar shows in the menubar for the focused, see the BitBar configuration on area level, described above.
 
 ### Change the desktop wallpaper
 

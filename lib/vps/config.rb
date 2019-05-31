@@ -120,6 +120,12 @@ EOT
           reference: files['reference'] || 'Reference Material'
         }
       end
+      if area.has_key?('bitbar')
+        bitbar = area['bitbar'] || {}
+        areas[key][:bitbar] = {
+          label: bitbar['label'] || area[:name]
+        }
+      end
       if area.has_key?('wallpaper')
         wallpaper = area['wallpaper'] || {}
         areas[key][:wallpaper] = {

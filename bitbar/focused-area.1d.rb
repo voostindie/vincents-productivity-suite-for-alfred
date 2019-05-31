@@ -17,4 +17,10 @@ $LOAD_PATH.unshift VPS_ROOT
 require 'vps'
 
 area = Config.load.focused_area
-puts area[:name]
+bitbar = area[:bitbar]
+label = unless bitbar.nil?
+  bitbar[:label]
+else
+  area[:name]
+end
+puts label
