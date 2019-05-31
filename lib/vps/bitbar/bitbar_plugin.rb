@@ -20,7 +20,7 @@ class BitBarPlugin < FocusPlugin
 
   ##
   # Triggers the URL callback for BitBar to refresh our "focused-area" plugin.
-  def focus_changed(area)
+  def focus_changed(area, old_area_config)
     @runner.execute("open -g bitbar://refreshPlugin?name=#{@plugin_name}")
   end
 

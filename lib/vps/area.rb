@@ -18,7 +18,7 @@ class Area
     config.focus(key)
     config.save
     area = new_config.areas[key]
-    new_config.instantiate_actions.each {|a|a.focus_changed(area)}
+    new_config.instantiate_actions.each {|a|a.focus_changed(area, config.area(key))}
     "#{config.area(key)[:name]} is now the focused area"
   end
 end

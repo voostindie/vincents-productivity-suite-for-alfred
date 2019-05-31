@@ -24,7 +24,7 @@ class WallpaperPlugin < FocusPlugin
 
   ##
   # Changes the desktop wallpaper. It does so by invoking a JXA script.
-  def focus_changed(area)
+  def focus_changed(area, old_area_config)
     wallpaper = area['wallpaper'] || {}
     path = wallpaper['path'] || @default_wallpaper
     @runner.execute('change-wallpaper', path)

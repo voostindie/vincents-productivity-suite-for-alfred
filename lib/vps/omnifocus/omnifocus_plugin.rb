@@ -4,8 +4,8 @@ class OmniFocusPlugin < FocusPlugin
     @runner = runner
   end
 
-  def focus_changed(area)
-    omnifocus = area[:omnifocus]
+  def focus_changed(area, old_area_config)
+    omnifocus = old_area_config[:omnifocus]
     return if omnifocus.nil?
     puts omnifocus[:folder]
     @runner.execute('set-focus', omnifocus[:folder])

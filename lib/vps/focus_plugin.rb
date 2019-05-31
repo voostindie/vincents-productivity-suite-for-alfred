@@ -18,7 +18,7 @@ class FocusPlugin
   # whole program stops. So don't do that.
   #
   # @param area [Hash] the configuration of the activated area.
-  def focus_changed(area)
+  def focus_changed(area, old_area_config)
     raise "TODO: override this method!"
   end
 
