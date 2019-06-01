@@ -210,18 +210,18 @@ The default file template is:
 
     ---
     date: $day-$month-$year
+    title: $title
     ---
-    # $title
-
-I always have exactly one heading at level 1 in my Markdown notes: the title of the note. Others prefer to have the title in the front matter, and use headings for other things. And maybe the slug is stored in the front matter as well. That's easy to set up, with a template such as the following:
+    
+    
+Maybe you want to store the slug in the file and use the title as a header in the Markdown content. In that case, use this template:
 
     ---
     date: $day-$month-$year
-    title: $title
     slug: $slug
     ---
-    #
-
+    # $title
+ 
 Whatever floats your boat!
 
 ### OmniFocus

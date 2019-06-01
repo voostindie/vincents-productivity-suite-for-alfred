@@ -89,8 +89,9 @@ class Config
           file_template: notes['file-template'] || <<EOT
 ---
 date: $day-$month-$year
+title: $title
 ---
-# $title
+
 
 EOT
         }
