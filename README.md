@@ -12,6 +12,7 @@ This is is an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ru
 
 - Alfred (duh!)
 - Plaintext files (Markdown)
+- Bear
 - OmniFocus
 - Apple Contacts
 - Apple Mail
@@ -29,7 +30,9 @@ This Alfred workflow can:
 - Set focus to an area and
     - Show the name of the area in BitBar
     - Change the desktop wallpaper
-- Create new notes according to a template and open them for editing in a text editor
+- Create new notes according to a template
+    - Either a Markdown note that is opened for editing in a text editor
+    - Or a new note in the Bear notekeeping app
 - Search for text in notes using Spotlight
 - Select a contact and:
     - Open it in Contacts
@@ -223,6 +226,29 @@ Maybe you want to store the slug in the file and use the title as a header in th
     # $title
  
 Whatever floats your boat!
+
+### Bear
+
+As of Juny 2019 I'm trying out Bear as my notekeeping app. I've imported over 6500 notes in it from Markdown notes and am experimenting with it a bit. To support my daily workflow of course I had to built support for Bear into this suite. Note: don't activate this feature together with the Markdown notes feature within a single area. I'm not sure what will happen then...
+
+The configuration for Bear is the following:
+
+```yaml
+bear:
+    tags:
+        - tag1
+        - tag2
+```
+
+Where `tags` represent a list of tags you want to add to the newly created note. It's entirely optional. If you decide to use it, then you can use the same placeholders in the tag as for the Markdown notes. So, for example, this is valid:
+
+```yaml
+bear:
+    tags:
+        - Work/Journal/$year/$month/$day
+```
+
+You can leave out the `tags` entry completely, in which case no tags will be set at all.
 
 ### OmniFocus
 

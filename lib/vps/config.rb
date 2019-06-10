@@ -96,6 +96,12 @@ title: $title
 EOT
         }
       end
+      if area.has_key?('bear')
+        bear = area['bear'] || {}
+        areas[key][:bear] = {
+          tags: bear['tags'] || []
+        }
+      end
       if area.has_key?('omnifocus')
         omnifocus = area['omnifocus'] || {}
         areas[key][:omnifocus] = {

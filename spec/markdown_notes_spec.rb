@@ -61,7 +61,7 @@ end
 
 class DummyRunner
   attr_reader :command
-  def execute(command)
-    @command = command
+  def execute(*args)
+    @command = args.join ' '
   end
 end

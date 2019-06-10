@@ -59,19 +59,8 @@ EOT
         key: 'personal',
         name: 'Personal Stuff',
         root: File.join(Dir.home, "Personal"),
-        markdown_notes: {
-          path: 'Notes',
-          extension: 'md',
-          editor: 'open',
-          name_template: '$year-$month-$day-$slug',
-          file_template: <<EOT
----
-date: $day-$month-$year
-title: $title
----
-
-
-EOT
+        bear: {
+          tags: []
         },
         omnifocus: {
           folder: 'Personal Stuff'

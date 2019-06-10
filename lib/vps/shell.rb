@@ -7,14 +7,14 @@ module Shell
   end
 
   class SystemRunner
-    def execute(command)
-      system(command)
+    def execute(*args)
+      system(*args)
     end
   end
 
   class ReplaceProcessRunner
-    def execute(command)
-      exec(command)
+    def execute(*args)
+      exec(*args)
     end
   end
 end
