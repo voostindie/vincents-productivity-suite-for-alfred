@@ -65,7 +65,7 @@ describe OmniFocusPlugin, '#projects' do
           title: "Create note",
           arg: 'Foo',
           variables: {
-            action: 'create-markdown-note'
+            action: 'create-note'
           }
         },
         {

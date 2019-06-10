@@ -89,7 +89,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>66D7A9C1-49EE-44E2-A44A-94DBFC132274</string>
+				<string>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -451,7 +451,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>66D7A9C1-49EE-44E2-A44A-94DBFC132274</string>
+				<string>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1004,9 +1004,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>create-markdown-note</string>
+						<string>create-note</string>
 						<key>outputlabel</key>
-						<string>create-markdown-note</string>
+						<string>create-note</string>
 						<key>uid</key>
 						<string>CDC19DF2-E3E1-4C5C-AA1B-10D11442B021</string>
 					</dict>
@@ -1441,9 +1441,9 @@
 						<key>matchmode</key>
 						<integer>0</integer>
 						<key>matchstring</key>
-						<string>create-markdown-note</string>
+						<string>create-note</string>
 						<key>outputlabel</key>
-						<string>create-markdown-note</string>
+						<string>create-note</string>
 						<key>uid</key>
 						<string>C7141F08-4428-4611-BA60-CDE0F3B0B684</string>
 					</dict>

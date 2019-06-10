@@ -43,7 +43,7 @@ module Contacts
   def self.actions(contact, area: Config.load.focused_area)
     contacts = area[:contacts]
     raise 'Contacts is not enabled for the focused area' unless contacts
-    supports_notes = area[:markdown_notes] != nil
+    supports_notes = area[:markdown_notes] != nil || area[:bear] != nil
     actions = []
     actions.push(
       title: 'Open in Contacts',
@@ -57,7 +57,7 @@ module Contacts
         title: 'Create note',
         arg: contact[:name],
         variables: {
-          action: 'create-markdown-note'
+          action: 'create-note'
         }
       )
       actions.push(

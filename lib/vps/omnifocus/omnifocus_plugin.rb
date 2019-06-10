@@ -38,7 +38,7 @@ class OmniFocusPlugin < FocusPlugin
   def self.actions(project, area: Config.load.focused_area)
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
-    supports_notes = area[:markdown_notes] != nil
+    supports_notes = area[:markdown_notes] != nil || area[:bear] != nil
     supports_files = area[:project_files] != nil
     actions = []
     actions.push(
@@ -53,7 +53,7 @@ class OmniFocusPlugin < FocusPlugin
         title: 'Create note',
         arg: project[:name],
         variables: {
-          action: 'create-markdown-note'
+          action: 'create-note'
         }
       )
       actions.push(
