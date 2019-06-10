@@ -67,8 +67,9 @@ EOT
           file_template: <<EOT
 ---
 date: $day-$month-$year
+title: $title
 ---
-# $title
+
 
 EOT
         },

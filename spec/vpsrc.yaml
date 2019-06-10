@@ -36,6 +36,7 @@ areas:
         slug: $slug
         ---
         # $title
+
     omnifocus:
       folder: 'Professional life'
     contacts:
@@ -60,8 +61,8 @@ areas:
       # file-template: |
       #   ---
       #   date: $day-$month-$year
+      #   title: $title
       #   ---
-      #   # $title
       #
     omnifocus:
       # Nothing specified here, so the defaults apply:

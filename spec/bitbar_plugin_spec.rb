@@ -4,7 +4,7 @@ describe BitBarPlugin, '#change_focus' do
   context 'when using the default configuration' do
     it 'uses the default plugin name' do
       stub = BitBarStubRunner.new
-      BitBarPlugin.new(runner: stub).focus_changed({})
+      BitBarPlugin.new(runner: stub).focus_changed({}, {})
       expect(stub.command).to eq('open -g bitbar://refreshPlugin?name=focused-area.1d.rb')
     end
   end
@@ -17,7 +17,7 @@ describe BitBarPlugin, '#change_focus' do
 
     it 'uses the configured plugin name' do
       stub = BitBarStubRunner.new
-      BitBarPlugin.new(defaults, runner: stub).focus_changed({})
+      BitBarPlugin.new(defaults, runner: stub).focus_changed({}, {})
       expect(stub.command).to eq('open -g bitbar://refreshPlugin?name=plugin')
     end
   end
