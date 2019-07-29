@@ -23,7 +23,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    yard (0.9.16)
+    yard (0.9.20)
 
 PLATFORMS
   ruby
@@ -32,7 +32,7 @@ DEPENDENCIES
   rake
   rspec (~> 3.8)
   simplecov (~> 0.15.1)
-  yard
+  yard (>= 0.9.20)
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
