@@ -59,6 +59,9 @@ describe OmniFocusPlugin, '#projects' do
           arg: 'omnifocus://task/foo',
           variables: {
             action: 'open'
+          },
+          icon: {
+            path: 'icons/omnifocus.png'
           }
         },
         {
@@ -66,6 +69,9 @@ describe OmniFocusPlugin, '#projects' do
           arg: 'Foo',
           variables: {
             action: 'create-note'
+          },
+          icon: {
+            path: 'icons/bear.png'
           }
         },
         {
@@ -80,6 +86,9 @@ describe OmniFocusPlugin, '#projects' do
           arg: '/Area/Projects/Foo/Documents',
           variables: {
             action: 'browse-project-files'
+          },
+          icon: {
+            path: 'icons/finder.png'
           }
         },
         {
@@ -87,6 +96,9 @@ describe OmniFocusPlugin, '#projects' do
           arg: '/Area/Projects/Foo/Reference Material',
           variables: {
             action: 'browse-project-files'
+          },
+          icon: {
+            path: 'icons/finder.png'
           }
         },
         {

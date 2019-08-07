@@ -66,6 +66,9 @@ describe Contacts, '#people' do
           arg: 'Foo',
           variables: {
             action: 'create-note'
+          },
+          icon: {
+            path: 'icons/bear.png'
           }
         },
         {
@@ -83,6 +86,9 @@ describe Contacts, '#people' do
             id: 'foo',
             name: 'Foo',
             email: 'foo@example.com'
+          },
+          icon: {
+            path: 'icons/mail.png'
           }
         },
         {
