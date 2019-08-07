@@ -44,6 +44,7 @@ module Contacts
     contacts = area[:contacts]
     raise 'Contacts is not enabled for the focused area' unless contacts
     supports_notes = area[:markdown_notes] != nil || area[:bear] != nil
+    supports_markdown_notes = area[:markdown_notes] != nil
     actions = []
     actions.push(
       title: 'Open in Contacts',
@@ -58,8 +59,13 @@ module Contacts
         arg: contact[:name],
         variables: {
           action: 'create-note'
+        },
+        icon: {
+          path: "icons/bear.png"
         }
       )
+    end
+    if supports_markdown_notes
       actions.push(
         title: 'Search notes',
         arg: contact[:name],
@@ -76,6 +82,9 @@ module Contacts
         id: contact[:id],
         name: contact[:name],
         email: contact[:email]
+      },
+      icon: {
+        path: "icons/mail.png"
       }
     )
     actions.push(

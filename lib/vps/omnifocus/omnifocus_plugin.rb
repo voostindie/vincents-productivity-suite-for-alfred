@@ -39,6 +39,7 @@ class OmniFocusPlugin < FocusPlugin
     omnifocus = area[:omnifocus]
     raise 'OmniFocus is not enabled for the focused area' unless omnifocus
     supports_notes = area[:markdown_notes] != nil || area[:bear] != nil
+    supports_markdown_notes = area[:markdown_notes] != nil
     supports_files = area[:project_files] != nil
     actions = []
     actions.push(
@@ -46,6 +47,9 @@ class OmniFocusPlugin < FocusPlugin
       arg: "omnifocus://task/#{project[:id]}",
       variables: {
         action: 'open'
+      },
+      icon: {
+        path: "icons/omnifocus.png"
       }
     )
     if supports_notes
@@ -54,8 +58,13 @@ class OmniFocusPlugin < FocusPlugin
         arg: project[:name],
         variables: {
           action: 'create-note'
+        },
+        icon: {
+          path: "icons/bear.png"
         }
       )
+    end
+    if supports_markdown_notes
       actions.push(
         title: 'Search notes',
         arg: project[:name],
@@ -74,6 +83,9 @@ class OmniFocusPlugin < FocusPlugin
           arg: documents,
           variables: {
             action: 'browse-project-files'
+          },
+          icon: {
+            path: "icons/finder.png"
           }
         )
       end
@@ -84,8 +96,11 @@ class OmniFocusPlugin < FocusPlugin
           arg: reference,
           variables: {
             action: 'browse-project-files'
+          },
+          icon: {
+            path: "icons/finder.png"
           }
-        )
+       )
       end
     end
     actions.push(
