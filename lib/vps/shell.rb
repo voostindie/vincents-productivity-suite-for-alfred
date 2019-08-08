@@ -1,20 +1,22 @@
 # Exposes way to run external commands in a shell uniformly, in a testable manner.
-module Shell
-  class CaptureOutputRunner
-    def execute(command)
-      `#{command}`
+module VPS
+  module Shell
+    class CaptureOutputRunner
+      def execute(command)
+        `#{command}`
+      end
     end
-  end
 
-  class SystemRunner
-    def execute(*args)
-      system(*args)
+    class SystemRunner
+      def execute(*args)
+        system(*args)
+      end
     end
-  end
 
-  class ReplaceProcessRunner
-    def execute(*args)
-      exec(*args)
+    class ReplaceProcessRunner
+      def execute(*args)
+        exec(*args)
+      end
     end
   end
 end

@@ -8,7 +8,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-Alfred.action do
+VPS::Alfred.action do
   raise 'No path specified' if ARGV.empty?
-  Markdown.edit_note(ARGV[0].chomp)
+  VPS::Markdown.edit_note(ARGV[0].chomp)
 end

@@ -1,3 +1,5 @@
+module VPS; end
+
 # Libraries
 require 'yaml'
 require 'json'

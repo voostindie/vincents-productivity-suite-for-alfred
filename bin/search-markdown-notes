@@ -8,7 +8,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-Alfred.filter do
+VPS::Alfred.filter do
   raise 'No search criteria specified' if ARGV.empty?
-  Markdown.search_notes(ARGV.join(' '))
+  VPS::Markdown.search_notes(ARGV.join(' '))
 end

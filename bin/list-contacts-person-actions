@@ -6,12 +6,12 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-Alfred.filter do
+VPS::Alfred.filter do
   raise 'No contact specified' if ENV['id'].nil?
   contact = {
     id: ENV['id'],
     name: ENV['name'],
     email: ENV['email']
   }
-  Contacts.actions(contact)
+  VPS::Contacts.actions(contact)
 end

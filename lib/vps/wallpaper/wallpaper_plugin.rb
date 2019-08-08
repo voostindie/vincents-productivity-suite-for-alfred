@@ -15,19 +15,20 @@
 #     wallpaper:
 #       default: '/Library/Desktop Pictures/High Sierra.jpg' # default value, can be omitted
 #
-class WallpaperPlugin < FocusPlugin
+module VPS
+  class WallpaperPlugin < FocusPlugin
 
-  def initialize(defaults = {}, runner: Jxa::Runner.new(__FILE__))
-    @default_wallpaper = defaults['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
-    @runner = runner
+    def initialize(defaults = {}, runner: Jxa::Runner.new(__FILE__))
+      @default_wallpaper = defaults['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
+      @runner = runner
+    end
+
+    ##
+    # Changes the desktop wallpaper. It does so by invoking a JXA script.
+    def focus_changed(area, old_area_config)
+      wallpaper = area['wallpaper'] || {}
+      path = wallpaper['path'] || @default_wallpaper
+      @runner.execute('change-wallpaper', path)
+    end
   end
-
-  ##
-  # Changes the desktop wallpaper. It does so by invoking a JXA script.
-  def focus_changed(area, old_area_config)
-    wallpaper = area['wallpaper'] || {}
-    path = wallpaper['path'] || @default_wallpaper
-    @runner.execute('change-wallpaper', path)
-  end
-
 end

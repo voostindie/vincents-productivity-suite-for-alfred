@@ -9,7 +9,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-area = Config.load.focused_area
+area = VPS::Config.load.focused_area
 if area[:bear]
   print 'bear'
 elsif area[:markdown_notes]

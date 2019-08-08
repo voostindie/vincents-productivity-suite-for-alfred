@@ -8,7 +8,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-Alfred.action do
+VPS::Alfred.action do
   raise 'No area specified' if ARGV.empty?
-  Area.focus(ARGV[0])
+  VPS::Area.focus(ARGV[0])
 end

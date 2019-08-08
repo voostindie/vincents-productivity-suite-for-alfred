@@ -11,17 +11,18 @@
 #     bitbar:
 #       plugin: 'focused-area.1d.rb' # default value, can be omitted
 #
-class BitBarPlugin < FocusPlugin
+module VPS
+  class BitBarPlugin < FocusPlugin
 
-  def initialize(defaults = {}, runner: Shell::SystemRunner.new)
-    @plugin_name = defaults['plugin'] || 'focused-area.1d.rb'
-    @runner = runner
+    def initialize(defaults = {}, runner: Shell::SystemRunner.new)
+      @plugin_name = defaults['plugin'] || 'focused-area.1d.rb'
+      @runner = runner
+    end
+
+    ##
+    # Triggers the URL callback for BitBar to refresh our "focused-area" plugin.
+    def focus_changed(area, old_area_config)
+      @runner.execute("open -g bitbar://refreshPlugin?name=#{@plugin_name}")
+    end
   end
-
-  ##
-  # Triggers the URL callback for BitBar to refresh our "focused-area" plugin.
-  def focus_changed(area, old_area_config)
-    @runner.execute("open -g bitbar://refreshPlugin?name=#{@plugin_name}")
-  end
-
 end

@@ -6,9 +6,9 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-Alfred.filter do
+VPS::Alfred.filter do
   raise 'No project specified' if ENV['id'].nil?
-  OmniFocusPlugin.actions(
+  VPS::OmniFocusPlugin.actions(
     id: ENV['id'],
     name: ENV['name']
   )
