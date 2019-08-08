@@ -15,12 +15,21 @@ module VPS
       end
     end
 
-    def self.focus(key, config: Config.load, new_config: NewConfig.new)
-      config.focus(key)
+    def self.focus(key, config: Config.load)
+      area = config.focus(key)
       config.save
-      area = new_config.areas[key]
-      new_config.instantiate_actions.each { |a| a.focus_changed(area, config.area(key)) }
-      "#{config.area(key)[:name]} is now the focused area"
+      config.actions.each do |key|
+        action = instantiate_action(key)
+        action.focus_changed(area, config.action(key))
+      end
+      "#{area[:name]} is now the focused area"
+    end
+
+    def self.instantiate_action(key)
+      plugin = PLUGINS[key]
+      return if plugin.nil?
+      require_relative(plugin[:path])
+      Object.const_get(plugin[:class]).new
     end
   end
 end

@@ -13,7 +13,6 @@ require 'vps/alfred/alfred_helper'
 require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/config'
-require 'vps/new_config'
 require 'vps/jxa'
 
 # Abstract classes
@@ -27,3 +26,7 @@ require 'vps/bitbar/bitbar_plugin'
 require 'vps/contacts/contacts'
 require 'vps/omnifocus/omnifocus_plugin'
 require 'vps/wallpaper/wallpaper_plugin'
+
+# Main classes
+require 'vps/registry'
+require 'vps/cli'
