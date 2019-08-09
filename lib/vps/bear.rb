@@ -60,7 +60,7 @@ module VPS
 
       def create_context(arguments)
         date = DateTime.now
-        context = {
+        {
           year: date.strftime('%Y'),
           month: date.strftime('%m'),
           week: date.strftime('%V'),
@@ -106,7 +106,11 @@ module VPS
 
       def run(arguments, environment)
         project = manager_module(:project).details_for(arguments[0])
-        super([project['name']], environment)
+        super(project, environment)
+      end
+
+      def create_title(project)
+        strip_emojis(project['name'])
       end
     end
 

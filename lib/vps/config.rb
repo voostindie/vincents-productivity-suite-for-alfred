@@ -97,47 +97,12 @@ title: $title
 EOT
           }
         end
-        if area.has_key?('bear')
-          bear = area['bear'] || {}
-          areas[key][:bear] = {
-            tags: bear['tags'] || []
-          }
-        end
-        if area.has_key?('omnifocus')
-          omnifocus = area['omnifocus'] || {}
-          areas[key][:omnifocus] = {
-            folder: omnifocus['folder'] || name
-          }
-        end
-        if area.has_key?('contacts')
-          contacts = area['contacts'] || {}
-          mail = contacts['mail'] || {}
-          areas[key][:contacts] = {
-            group: contacts['group'] || name,
-            mail: {
-              client: mail['client'] || 'Mail',
-              from: mail['from'] || nil
-            }
-          }
-        end
         if area.has_key?('project-files')
           files = area['project-files'] || {}
           areas[key][:project_files] = {
             path: files['path'] || 'Projects',
             documents: files['documents'] || 'Documents',
             reference: files['reference'] || 'Reference Material'
-          }
-        end
-        if area.has_key?('bitbar')
-          bitbar = area['bitbar'] || {}
-          areas[key][:bitbar] = {
-            label: bitbar['label'] || area[:name]
-          }
-        end
-        if area.has_key?('wallpaper')
-          wallpaper = area['wallpaper'] || {}
-          areas[key][:wallpaper] = {
-            path: wallpaper['path'] || nil
           }
         end
       end
@@ -149,18 +114,6 @@ EOT
       actions = {}
       yaml['actions'].each_pair do |key, config|
         config = config || {}
-        case key
-        when 'wallpaper'
-          actions[:wallpaper] = {}
-          actions[:wallpaper][:default] = config['default'] || '/Library/Desktop Pictures/High Sierra.jpg'
-        when 'bitbar'
-          actions[:bitbar] = {}
-          actions[:bitbar][:plugin] = config['plugin'] || 'focused-area.1d.rb'
-        when 'omnifocus'
-          actions[:omnifocus] = {}
-        else
-          # Unknown key, we'll just ignore it.
-        end
       end
       actions
     end

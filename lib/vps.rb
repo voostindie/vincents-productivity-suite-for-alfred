@@ -26,6 +26,7 @@ require 'vps/area'
 require 'vps/bear'
 require 'vps/bitbar'
 require 'vps/contacts'
+require 'vps/files'
 require 'vps/omnifocus'
 require 'vps/wallpaper'
 

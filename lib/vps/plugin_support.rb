@@ -56,5 +56,25 @@ module VPS
         environment['TRIGGERED_AS_SNIPPET'] == 'true'
       end
     end
+
+    def strip_emojis(string)
+      # symbols & pics
+      regex = /[\u{1f300}-\u{1f5ff}]/
+      result = string.gsub(regex, '')
+
+      # enclosed chars
+      regex = /[\u{2500}-\u{2BEF}]/ # Exclude chinese characters
+      result = result.gsub(regex, '')
+
+      # emoticons
+      regex = /[\u{1f600}-\u{1f64f}]/
+      result = result.gsub(regex, '')
+
+      #dingbats
+      regex = /[\u{2702}-\u{27b0}]/
+      result = result.gsub(regex, '')
+
+      result.strip
+    end
   end
 end

@@ -1,6 +1,9 @@
-#!/usr/bin/env ruby -d
+#!/usr/bin/env ruby
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+Encoding::default_internal = Encoding::UTF_8
+Encoding::default_external = Encoding::UTF_8
 
 require 'vps'
 

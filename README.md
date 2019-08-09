@@ -80,7 +80,7 @@ areas:
    work:
         markdown-notes:
         omnifocus:
-        project-files:
+        files:
         contacts:
 ```
 
@@ -111,10 +111,8 @@ areas:
                 # $title
         omnifocus:
             folder: 'Work'
-        project-files:
+        files:
             path: 'Projects'
-            documents: 'Documents'
-            reference: 'Reference Material'
         contacts:
             group: 'Work'
             mail:
@@ -263,24 +261,20 @@ Projects are sorted in the order they appear in OmniFocus, but thanks to Alfred'
 
 ### Project files
 
-I like to store files for projects in a directory specific to that project. To that end, I've set up a directory under each area of focus, typically called `Projects` that has in turn a directory for each project I store files for. This directory in turn has two directories: a `Documents` directory for documents I created myself, and a `Reference Material` directory for documents that I receive from others.
+I like to store files for projects in a directory specific to that project. To that end, I've set up a directory under each area of focus, typically called `Projects` that has in turn a directory for each project I store files for. 
 
-By enabling the `project-files` feature on top of the OmniFocus feature, project files can be browsed after selecting a project in Alfred. For now that's it. The plan is to later extend this with more functionality, for example for filing files directly into the right folder.
+By enabling the `files` feature on top of the OmniFocus feature, project files can be browsed after selecting a project in Alfred. For now that's it. The plan is to later extend this with more functionality, for example for filing files directly into the right folder.
 
 The configuration looks as follows:
 
 ```yaml
-project-files:
+files:
     path:
-    documents:
-    reference:
 ```
 
 With:
 
 * `path` (optional): the subdirectory under the area's root directory to project files under. Defaults to `Projects`.
-* `documents` (optional): the subdirectory under the project files directory to store self-created documents under. Defaults to `Documents`.
-* `reference` (optional): the subdirectory under the project files directory to store reference material under. Defaults to `Reference Material`.
 
 ### Contacts
 

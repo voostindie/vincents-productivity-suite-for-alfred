@@ -64,6 +64,21 @@ module VPS
           }
         }
       },
+      files: {
+        manages: :file,
+        module: VPS::Files,
+        commands: {
+          browse: {
+            class: VPS::Files::Browse,
+            type: :single
+          },
+          project: {
+            class: VPS::Files::Project,
+            type: :single
+          }
+        },
+        collaborates: [:project]
+      },
       omnifocus: {
         manages: :project,
         module: VPS::OmniFocus,
@@ -87,11 +102,6 @@ module VPS
         module: VPS::Wallpaper,
         action: VPS::Wallpaper::Replace
       }
-      # mail: [:new],
-      # bear: [:new],
-      # markdown: [:new, :find],
-      # omnifocus: [:browse, :actions],
-      # contacts: [:browse, :actions]
     }
     private_constant :PLUGINS
 
