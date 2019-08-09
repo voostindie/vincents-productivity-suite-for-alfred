@@ -1102,7 +1102,7 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>exe/vps -a omnifocus commands $PROJECT_ID
+				<string>exe/vps -a project commands $PROJECT_ID
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>

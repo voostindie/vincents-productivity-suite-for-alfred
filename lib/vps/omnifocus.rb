@@ -83,7 +83,7 @@ module VPS
       end
 
       def run(arguments, environment, runner = Shell::SystemRunner.new)
-        runner.execute('open', "omnifocus:///task/#{arguments[0]}")
+        runner.execute("open omnifocus:///task/#{arguments[0]}")
         nil
       end
     end
@@ -116,7 +116,7 @@ module VPS
         commands << {
           uid: 'open',
           title: 'Open in OmniFocus',
-          arg: "omnifocus open '#{arguments[0]}'",
+          arg: "project open '#{arguments[0]}'",
           icon: {
             path: "icons/omnifocus.png"
           }
