@@ -27,8 +27,8 @@ module VPS
                  else
                    {}
                  end
-      area = settings[:area]
-      change_focus(area, configuration) unless area.nil?
+      area_name = settings[:area]
+      change_focus(area_name, configuration)
     end
 
     ##
@@ -36,10 +36,16 @@ module VPS
     # @param area_name [String] The name of the area to focus on
     # @param configuration [Configuration] The full configuration
     def change_focus(area_name, configuration)
-      @focus = if configuration.include_area?(area_name)
+      @focus = if area_name != nil && configuration.include_area?(area_name)
                  configuration.area(area_name)
                else
-                 nil
+                 # This is a 'null' area, used when the focus is empty or invalid
+                 {
+                   key: 'null',
+                   name: 'Null area. Please fix your configuration file!',
+                   root: nil,
+                   area: {}
+                 }
                end
     end
 

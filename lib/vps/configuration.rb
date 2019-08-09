@@ -40,6 +40,13 @@ module VPS
     def manager(area, type)
       Registry.managers(type).select { |key, _| area.has_key?(key)}.values[0]
     end
+
+    ##
+    # Returns all managers of all types within an area
+    def available_managers(area)
+      Registry.available_managers.select {|key, _| area.has_key?(key)}
+    end
+
     ##
     # Returns all collaborators. Possible types are +:project+
     def collaborators(area, type)
@@ -61,9 +68,10 @@ module VPS
         area = {
           key: key,
           name: name,
-          root: root
+          root: root,
+          area: {} # This plugin is hard-coded
         }
-        types = []
+        types = [:area]
         config.each_pair do |plugin_key, plugin_config|
           plugin = Registry::plugins[plugin_key.to_sym]
           if plugin.nil?

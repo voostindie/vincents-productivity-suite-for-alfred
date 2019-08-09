@@ -120,9 +120,9 @@ module VPS
             path: "icons/omnifocus.png"
           }
         }
-        collaborators = @configuration.collaborators(@state.focus, :projects)
+        collaborators = @configuration.collaborators(@state.focus, :project)
         collaborators.each_value do |collaborator|
-          commands << collaborator[:module].commands_for(:projects, project_id)
+          commands << collaborator[:module].commands_for(:project, project_id)
         end
         commands.flatten
       end

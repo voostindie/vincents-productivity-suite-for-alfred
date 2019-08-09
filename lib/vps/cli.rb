@@ -10,7 +10,7 @@ module VPS
 
     def option_parser
       OptionParser.new do |parser|
-        parser.banner = 'Usage: vps [options] <plugin> <command> [arguments]'
+        parser.banner = 'Usage: vps [options] <type> <command> [arguments]'
         parser.program_name = 'vps'
         parser.version = VPS::VERSION
         parser.on('-a', '--[no-]alfred', 'Generate output in Alfred format') do |alfred|
@@ -28,10 +28,10 @@ module VPS
           exit
         end
         parser.separator ''
-        parser.separator 'Where <plugin> and <command> are one of: '
+        parser.separator 'Where <type> and <command> are one of: '
         parser.separator ''
-        Registry.commands.each_pair do |plugin, definition|
-          parser.separator "  #{plugin.to_s}"
+        @configuration.available_managers(@state.focus).each_pair  do |_, definition|
+          parser.separator "  #{definition[:manages].to_s}"
           definition[:commands].each_pair do |command, definition|
             banner = if definition[:class].respond_to? 'option_parser'
                        definition[:class].option_parser.banner
@@ -42,7 +42,7 @@ module VPS
           end
         end
         parser.separator ''
-        parser.separator '  help <plugin> <command>: show help on a specific command'
+        parser.separator '  help <type> <command>: show help on a specific command'
         parser.separator ''
         parser.separator 'Note that the commands available depend on the configuration and the focused area.'
       end
@@ -54,18 +54,18 @@ module VPS
         puts @parser.help
         return
       end
-      plugin = arguments.shift
-      if plugin == 'help'
+      type = arguments.shift
+      if type == 'help'
         if arguments.size < 2
           puts @parser.help
           return
         end
-        plugin_def = plugin_definition(arguments.shift)
-        command_def = command_definition(plugin_def, arguments.shift)
+        type_def = type_definition(arguments.shift)
+        command_def = command_definition(type_def, arguments.shift)
         show_command_help(command_def)
       else
-        plugin_def = plugin_definition(plugin)
-        command_def = command_definition(plugin_def, arguments.shift)
+        type_def = type_definition(type)
+        command_def = command_definition(type_def, arguments.shift)
         run_command(command_def, arguments, environment)
       end
     end
@@ -96,25 +96,26 @@ module VPS
         output = @output_formatter.format { command.run(arguments, environment) }
         puts output unless output.nil?
       else
+        puts 'Command execution failed. Sorry!'
         exit(-1)
       end
     end
 
-    def plugin_definition(plugin_name)
-      plugin_def = Registry.commands[plugin_name.to_sym]
-      if plugin_def.nil?
-        $stderr.puts "Unsupported plugin: #{plugin_name}"
-        puts @parser.help
+    def type_definition(type)
+      type_def = @configuration.manager(@state.focus, type.to_sym)
+      if type_def.nil?
+        puts "Type '#{type}' is not supported in this area."
+        $stderr.puts @parser.help
         exit(-1)
       end
-      plugin_def
+      type_def
     end
 
-    def command_definition(plugin_definition, command_name)
-      command_def = plugin_definition[:commands][command_name.to_sym]
+    def command_definition(type_definition, command_name)
+      command_def = type_definition[:commands][command_name.to_sym]
       if command_def.nil?
-        $stderr.puts "Unsupported subcommand: #{command_name}"
-        puts @parser.help
+        puts "Unsupported command: #{command_name}"
+        $stderr.puts @parser.help
         exit(-1)
       end
       command_def

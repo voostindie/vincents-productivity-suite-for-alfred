@@ -14,7 +14,7 @@ module VPS
     end
 
     def is_plugin_enabled?(key)
-      if @state.focus[:key].nil?
+      if @state.focus[key].nil?
         $stderr.puts "Plugin #{key} is not enabled in area #{@state.focus[:name]}"
         false
       else

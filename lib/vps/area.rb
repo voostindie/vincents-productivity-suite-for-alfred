@@ -26,33 +26,6 @@ module VPS
       end
     end
 
-    class Commands
-      include PluginSupport
-
-      def self.option_parser
-        OptionParser.new do |parser|
-          parser.banner = 'List all available commands for the focused area'
-        end
-      end
-
-      def run(arguments, environment)
-        result = []
-        commands = Registry::commands
-        @state.focus.each_pair do |key,value|
-          next unless value.is_a? Hash
-          if commands[key]
-            commands[key][:commands].each_key do |command|
-              result << {
-                uid: "#{key} #{command}",
-                title: commands[key][:commands][command][:class].option_parser.banner
-              }
-            end
-          end
-        end
-        result
-      end
-    end
-
     class Focus
       include PluginSupport
 

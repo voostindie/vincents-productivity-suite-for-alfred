@@ -6,14 +6,11 @@ module VPS
   module Registry
     PLUGINS = {
       area: {
+        manages: :area,
         module: VPS::Area,
         commands: {
           list: {
             class: VPS::Area::List,
-            type: :list
-          },
-          commands: {
-            class: VPS::Area::Commands,
             type: :list
           },
           focus: {
@@ -24,8 +21,9 @@ module VPS
       },
       bear: {
         module: VPS::Bear,
+        manages: :note,
         commands: {
-          note: {
+          plain: {
             class: VPS::Bear::PlainNote,
             type: :single
           },
@@ -35,14 +33,14 @@ module VPS
           }
 
         },
-        collaborates: [:projects]
+        collaborates: [:project]
       },
       bitbar: {
         module: VPS::BitBar,
         action: VPS::BitBar::Refresh
       },
       omnifocus: {
-        manages: :projects,
+        manages: :project,
         module: VPS::OmniFocus,
         action: VPS::OmniFocus::Focus,
         commands: {
@@ -78,6 +76,12 @@ module VPS
 
     def self.plugins
       PLUGINS
+    end
+
+    def self.available_managers
+      PLUGINS.select do |_, definition|
+        definition.has_key?(:manages)
+      end
     end
 
     def self.managers(type)

@@ -9,7 +9,7 @@ module VPS
 
     def self.commands_for(type, id)
       case type
-      when :projects
+      when :project
         {
           uid: 'note',
           title: 'Create a note in Bear',
@@ -29,7 +29,7 @@ module VPS
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'Create a new, empty note, optionally with a title'
-          parser.separator 'Usage: bear note [title]'
+          parser.separator 'Usage: note plain [title]'
         end
       end
 
@@ -77,7 +77,7 @@ module VPS
 
       def can_run?(arguments, environment)
         if super(arguments, environment)
-          is_manager_available? :projects
+          is_manager_available? :project
         else
           false
         end
