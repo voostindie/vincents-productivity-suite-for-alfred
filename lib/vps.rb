@@ -23,14 +23,11 @@ require 'vps/cli'
 # Plugins
 require 'vps/plugin_support'
 require 'vps/area'
-require 'vps/bitbar'
-require 'vps/wallpaper'
-require 'vps/omnifocus'
-
-# Old plugins, to be removed...
 require 'vps/bear'
-require 'vps/markdown_notes'
+require 'vps/bitbar'
 require 'vps/contacts'
+require 'vps/omnifocus'
+require 'vps/wallpaper'
 
 # And finally, the plugin registry:
 require 'vps/registry'

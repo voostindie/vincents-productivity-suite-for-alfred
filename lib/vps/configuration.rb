@@ -38,13 +38,13 @@ module VPS
     ##
     # Returns all managers of a certain type within an area
     def manager(area, type)
-      Registry.managers(type).select { |key, _| area.has_key?(key)}.values[0]
+      Registry.managers(type).select { |key, _| area.has_key?(key) }.values[0]
     end
 
     ##
     # Returns all managers of all types within an area
     def available_managers(area)
-      Registry.available_managers.select {|key, _| area.has_key?(key)}
+      Registry.available_managers.select { |key, _| area.has_key?(key) }
     end
 
     ##
@@ -73,9 +73,12 @@ module VPS
         }
         types = [:area]
         config.each_pair do |plugin_key, plugin_config|
-          plugin = Registry::plugins[plugin_key.to_sym]
+          plugin_sym = plugin_key.to_sym
+          plugin = Registry::plugins[plugin_sym]
           if plugin.nil?
-            $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
+            if area[plugin_sym].nil?
+              $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
+            end
             next
           end
           type = plugin[:manages]
@@ -85,7 +88,7 @@ module VPS
               next
             end
           end
-          area[plugin_key.to_sym] = plugin[:module].read_area_configuration(area, plugin_config || {})
+          area[plugin_sym] = plugin[:module].read_area_configuration(area, plugin_config || {})
         end
         @areas[key] = area
       end
