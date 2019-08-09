@@ -13,7 +13,7 @@ module VPS
         {
           uid: 'note',
           title: 'Create a note in Bear',
-          arg: "bear project #{id}",
+          arg: "note project #{id}",
           icon: {
             path: "icons/bear.png"
           }

@@ -31,6 +31,7 @@ module VPS
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'List all available projects in this area'
+          parser.separator 'Usage: project list'
         end
       end
 
@@ -71,9 +72,9 @@ module VPS
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'Open the specified project in OmniFocus'
-          parser.separator 'Usage: omnifocus open <project>'
+          parser.separator 'Usage: project open <projectId>'
           parser.separator ''
-          parser.separator 'Where <project> is the ID of the project to open'
+          parser.separator 'Where <projectId> is the ID of the project to open'
         end
       end
 
@@ -93,7 +94,7 @@ module VPS
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'List all available commands for the specified project'
-          parser.separator 'Usage: omnifocus commands <project>'
+          parser.separator 'Usage: project commands <project>'
           parser.separator ''
           parser.separator 'Where <project> is the ID of the project to open'
         end
