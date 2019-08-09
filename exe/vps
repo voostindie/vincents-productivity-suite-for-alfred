@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby -d
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'vps'
+
+begin
+  VPS::Cli.new.run
+rescue Exception => e
+  if e.message != 'exit' # There's probably a better way to do this...
+    puts e.message
+    exit -1
+  end
+end
