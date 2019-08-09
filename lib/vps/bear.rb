@@ -24,10 +24,7 @@ module VPS
     end
 
     class PlainNote
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -37,11 +34,7 @@ module VPS
       end
 
       def can_run?(arguments, environment)
-        if @state.focus[:bear].nil?
-          $stderr.puts "Bear is not enabled in area #{@state.focus[:name]}"
-          return false
-        end
-        true
+        is_plugin_enabled? :bear
       end
 
       def run(arguments, environment, runner = Shell::SystemRunner.new)
@@ -75,7 +68,7 @@ module VPS
     class ProjectNote < PlainNote
       def self.option_parser
         OptionParser.new do |parser|
-          parser.banner = 'Create a new note for the specified project'
+          parser.banner = 'Create a new note for a project'
           parser.separator 'Usage: bear project <projectId>'
           parser.separator ''
           parser.separator 'Where <projectId> is the ID of the project to create a note for'
@@ -84,18 +77,14 @@ module VPS
 
       def can_run?(arguments, environment)
         if super(arguments, environment)
-          manager = @configuration.manager(@state.focus, :projects)
-          if manager.nil?
-            $stderr.puts "No manager found that supports projects"
-            false
-          end
+          is_manager_available? :projects
+        else
+          false
         end
-        true
       end
 
       def run(arguments, environment)
-        manager = @configuration.manager(@state.focus, :projects)
-        project = manager[:module].details_for(arguments[0])
+        project = manager_module.details_for(arguments[0])
         super([project['name']], environment)
       end
     end

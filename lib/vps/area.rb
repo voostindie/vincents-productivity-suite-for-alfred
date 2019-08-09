@@ -27,9 +27,7 @@ module VPS
     end
 
     class Commands
-      def initialize(configuration, state)
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -56,10 +54,7 @@ module VPS
     end
 
     class Focus
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|

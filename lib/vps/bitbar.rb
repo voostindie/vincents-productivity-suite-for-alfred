@@ -54,9 +54,7 @@ module VPS
     ##
     # Action that tells BitBar to refresh the plugin that shows the focused area.
     class Refresh
-      def initialize(configuration, state)
-        @configuration = configuration
-      end
+      include PluginSupport
 
       def run(environment, runner = Shell::SystemRunner.new)
         plugin = @configuration.actions[:bitbar][:plugin]

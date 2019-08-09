@@ -21,6 +21,7 @@ require 'vps/state'
 require 'vps/cli'
 
 # Plugins
+require 'vps/plugin_support'
 require 'vps/area'
 require 'vps/bitbar'
 require 'vps/wallpaper'

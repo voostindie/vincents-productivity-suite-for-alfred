@@ -16,20 +16,17 @@ module VPS
     end
 
     class Focus
-      def initialize(configuration, state)
-        @state = state
-      end
+      include PluginSupport
 
       def run(environment, runner = Jxa::Runner.new('omnifocus'))
-        runner.execute('set-focus', @state.focus[:omnifocus][:folder])
+        if @state.focus[:omnifocus]
+          runner.execute('set-focus', @state.focus[:omnifocus][:folder])
+        end
       end
     end
 
     class List
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -38,12 +35,7 @@ module VPS
       end
 
       def can_run?(arguments, environment)
-        if @state.focus[:omnifocus].nil?
-          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
-          false
-        else
-          true
-        end
+        is_plugin_enabled? :omnifocus
       end
 
       def run(arguments, environment, runner = Jxa::Runner.new('omnifocus'))
@@ -74,9 +66,7 @@ module VPS
     end
 
     class Open
-      def initialize(configuration, state)
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -88,28 +78,17 @@ module VPS
       end
 
       def can_run?(arguments, environment)
-        if @state.focus[:omnifocus].nil?
-          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
-          return false
-        end
-        if arguments.size != 1
-          $stderr.puts "The ID of the project to open must be passed as an argument"
-          return false
-        end
-        true
+        is_plugin_enabled?(:omnifocus) && has_arguments?(arguments)
       end
 
       def run(arguments, environment, runner = Shell::SystemRunner.new)
-        runner.execute("open omnifocus:///task/#{arguments[0]}")
+        runner.execute('open', "omnifocus:///task/#{arguments[0]}")
         nil
       end
     end
 
     class Commands
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -121,13 +100,11 @@ module VPS
       end
 
       def can_run?(arguments, environment)
-        if @state.focus[:omnifocus].nil?
-          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
-          return false
-        end
-        if arguments.size != 1
-          $stderr.puts "The ID of the project to open must be passed as an argument"
-          return false
+        if is_plugin_enabled? :omnifocus
+          if arguments.size != 1
+            $stderr.puts "The ID of the project to open must be passed as an argument"
+            return false
+          end
         end
         true
       end

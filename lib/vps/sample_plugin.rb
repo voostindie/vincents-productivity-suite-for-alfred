@@ -50,17 +50,7 @@ module VPS
     # 2. +:single+, in which case it must produce a single string
     #
     class SampleCommand
-      ##
-      # Creates a new command. This happens whenever the command is executed through the CLI.
-      #
-      # Every command MUST implement this initializer.
-      #
-      # @param configuration [Configuration] the application configuration
-      # @param state [State] the application state
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       ##
       # Returns an option parser. This is, at the moment, used only to produce help information
@@ -124,12 +114,7 @@ module VPS
     #   }
     #
     class SampleAction
-      ##
-      # Creates a new action; every action is created once, when the focus changes.
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       ##
       # Runs the action; this happens when the focus changes

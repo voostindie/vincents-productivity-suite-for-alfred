@@ -35,10 +35,7 @@ module VPS
     end
 
     class Replace
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def run(environment, runner = Jxa::Runner.new('wallpaper'))
         path = if @state.focus[:wallpaper]
