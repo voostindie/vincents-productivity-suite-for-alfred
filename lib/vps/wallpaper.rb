@@ -40,7 +40,7 @@ module VPS
         @state = state
       end
 
-      def run(runner = Jxa::Runner.new('wallpaper'))
+      def run(environment, runner = Jxa::Runner.new('wallpaper'))
         path = if @state.focus[:wallpaper]
                  @state.focus[:wallpaper][:path]
                else

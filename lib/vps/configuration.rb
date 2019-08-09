@@ -35,6 +35,17 @@ module VPS
       @actions
     end
 
+    ##
+    # Returns all managers of a certain type within an area
+    def manager(area, type)
+      Registry.managers(type).select { |key, _| area.has_key?(key)}.values[0]
+    end
+    ##
+    # Returns all collaborators. Possible types are +:project+
+    def collaborators(area, type)
+      Registry.collaborators(type).select { |key, _| area.has_key?(key) }
+    end
+
     private
 
     def extract_areas(hash)
@@ -52,13 +63,21 @@ module VPS
           name: name,
           root: root
         }
+        types = []
         config.each_pair do |plugin_key, plugin_config|
           plugin = Registry::plugins[plugin_key.to_sym]
           if plugin.nil?
             $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
-          area[plugin_key.to_sym] = plugin[:module].read_area_configuration(area, plugin_config)
+          type = plugin[:manages]
+          unless type.nil?
+            if types.include? type
+              $stderr.puts "WARNING: the area #{name} has multiple managers of type #{type.to_s}. Skipping plugin #{plugin_key}"
+              next
+            end
+          end
+          area[plugin_key.to_sym] = plugin[:module].read_area_configuration(area, plugin_config || {})
         end
         @areas[key] = area
       end
@@ -74,7 +93,7 @@ module VPS
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next
         end
-        @actions[key] = plugin[:module].read_action_configuration(config)
+        @actions[key] = plugin[:module].read_action_configuration(config || {})
       end
     end
   end

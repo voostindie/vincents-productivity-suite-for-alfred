@@ -37,7 +37,7 @@ module VPS
         result = yield
         if result.is_a? Array
           width = result.map { |entry| entry[:uid].size}.max
-          output = result.map do |entry|
+          result.map do |entry|
             "- #{entry[:uid].ljust(width)}: #{entry[:title]}"
           end.join("\n")
         else

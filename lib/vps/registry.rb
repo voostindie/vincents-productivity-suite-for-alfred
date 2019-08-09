@@ -22,9 +22,43 @@ module VPS
           }
         },
       },
+      bear: {
+        module: VPS::Bear,
+        commands: {
+          note: {
+            class: VPS::Bear::PlainNote,
+            type: :single
+          },
+          project: {
+            class: VPS::Bear::ProjectNote,
+            type: :single
+          }
+
+        },
+        collaborates: [:projects]
+      },
       bitbar: {
         module: VPS::BitBar,
         action: VPS::BitBar::Refresh
+      },
+      omnifocus: {
+        manages: :projects,
+        module: VPS::OmniFocus,
+        action: VPS::OmniFocus::Focus,
+        commands: {
+          list: {
+            class: VPS::OmniFocus::List,
+            type: :list
+          },
+          open: {
+            class: VPS::OmniFocus::Open,
+            type: :single
+          },
+          commands: {
+            class: VPS::OmniFocus::Commands,
+            type: :list
+          }
+        }
       },
       wallpaper: {
         module: VPS::Wallpaper,
@@ -44,6 +78,18 @@ module VPS
 
     def self.plugins
       PLUGINS
+    end
+
+    def self.managers(type)
+      PLUGINS.select do |_, definition|
+        definition.has_key?(:manages) && definition[:manages] == type
+      end
+    end
+
+    def self.collaborators(type)
+      PLUGINS.select do |_, definition|
+        definition.has_key?(:collaborates) && definition[:collaborates].include?(type)
+      end
     end
   end
 end

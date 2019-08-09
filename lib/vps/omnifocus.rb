@@ -1,40 +1,158 @@
 module VPS
-  class OmniFocusPlugin < FocusPlugin
-
-    def initialize(defaults = {}, runner: Jxa::Runner.new('omnifocus'))
-      @runner = runner
+  module OmniFocus
+    def self.read_area_configuration(area, hash)
+      {
+        folder: hash['folder'] || area[:name]
+      }
     end
 
-    def focus_changed(area, old_area_config)
-      omnifocus = old_area_config[:omnifocus]
-      return if omnifocus.nil?
-      puts omnifocus[:folder]
-      @runner.execute('set-focus', omnifocus[:folder])
+    def self.read_action_configuration(hash)
+      {
+      }
     end
 
-    def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new('omnifocus'))
-      omnifocus = area[:omnifocus]
-      raise 'OmniFocus is not enabled for the focused area' unless omnifocus
-      folder = omnifocus[:folder]
-      projects = runner.execute('list-projects', folder)
-      projects.map do |project|
-        {
-          uid: project['id'],
-          title: project['name'],
-          subtitle: if triggered_as_snippet
-                      "Paste '#{project['name']}' in the frontmost application"
-                    else
-                      "Select an action for '#{project['name']}'"
-                    end,
-          arg: project['name'],
-          variables: {
-            id: project['id'],
-            name: project['name']
-          },
-          autocomplete: project['name'],
-        }
+    def self.details_for(id, runner = Jxa::Runner.new('omnifocus'))
+      runner.execute('project-details', id)
+    end
+
+    class Focus
+      def initialize(configuration, state)
+        @state = state
+      end
+
+      def run(environment, runner = Jxa::Runner.new('omnifocus'))
+        runner.execute('set-focus', @state.focus[:omnifocus][:folder])
       end
     end
+
+    class List
+      def initialize(configuration, state)
+        @configuration = configuration
+        @state = state
+      end
+
+      def self.option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'List all available projects in this area'
+        end
+      end
+
+      def can_run?(arguments, environment)
+        if @state.focus[:omnifocus].nil?
+          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
+          false
+        else
+          true
+        end
+      end
+
+      def run(arguments, environment, runner = Jxa::Runner.new('omnifocus'))
+        triggered_as_snippet = if environment['TRIGGERED_AS_SNIPPET'].nil?
+                                 false
+                               else
+                                 environment['TRIGGERED_AS_SNIPPET'] == 'true'
+                               end
+        projects = runner.execute('list-projects', @state.focus[:omnifocus][:folder])
+        projects.map do |project|
+          {
+            uid: project['id'],
+            title: project['name'],
+            subtitle: if triggered_as_snippet
+                        "Paste '#{project['name']}' in the frontmost application"
+                      else
+                        "Select an action for '#{project['name']}'"
+                      end,
+            arg: project['name'],
+            variables: {
+              # Passed in the Alfred workflow as an argument to subsequent commands
+              PROJECT_ID: project['id']
+            },
+            autocomplete: project['name'],
+          }
+        end
+      end
+    end
+
+    class Open
+      def initialize(configuration, state)
+        @state = state
+      end
+
+      def self.option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'Open the specified project in OmniFocus'
+          parser.separator 'Usage: omnifocus open <project>'
+          parser.separator ''
+          parser.separator 'Where <project> is the ID of the project to open'
+        end
+      end
+
+      def can_run?(arguments, environment)
+        if @state.focus[:omnifocus].nil?
+          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
+          return false
+        end
+        if arguments.size != 1
+          $stderr.puts "The ID of the project to open must be passed as an argument"
+          return false
+        end
+        true
+      end
+
+      def run(arguments, environment, runner = Shell::SystemRunner.new)
+        runner.execute("open omnifocus:///task/#{arguments[0]}")
+        nil
+      end
+    end
+
+    class Commands
+      def initialize(configuration, state)
+        @configuration = configuration
+        @state = state
+      end
+
+      def self.option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'List all available commands for the specified project'
+          parser.separator 'Usage: omnifocus commands <project>'
+          parser.separator ''
+          parser.separator 'Where <project> is the ID of the project to open'
+        end
+      end
+
+      def can_run?(arguments, environment)
+        if @state.focus[:omnifocus].nil?
+          $stderr.puts "OmniFocus is not enabled in area #{@state.focus[:name]}"
+          return false
+        end
+        if arguments.size != 1
+          $stderr.puts "The ID of the project to open must be passed as an argument"
+          return false
+        end
+        true
+      end
+
+      def run(arguments, environment)
+        project_id = arguments[0]
+        commands = []
+        commands << {
+          uid: 'open',
+          title: 'Open in OmniFocus',
+          arg: "omnifocus open '#{arguments[0]}'",
+          icon: {
+            path: "icons/omnifocus.png"
+          }
+        }
+        collaborators = @configuration.collaborators(@state.focus, :projects)
+        collaborators.each_value do |collaborator|
+          commands << collaborator[:module].commands_for(:projects, project_id)
+        end
+        commands.flatten
+      end
+    end
+  end
+
+  class OmniFocusPlugin
 
     def self.actions(project, area: Config.load.focused_area)
       omnifocus = area[:omnifocus]
@@ -43,16 +161,6 @@ module VPS
       supports_markdown_notes = area[:markdown_notes] != nil
       supports_files = area[:project_files] != nil
       actions = []
-      actions.push(
-        title: 'Open in OmniFocus',
-        arg: "omnifocus://task/#{project[:id]}",
-        variables: {
-          action: 'open'
-        },
-        icon: {
-          path: "icons/omnifocus.png"
-        }
-      )
       if supports_notes
         actions.push(
           title: 'Create note',

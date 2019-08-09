@@ -51,7 +51,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</string>
+				<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -68,6 +68,19 @@
 				<string></string>
 				<key>sourceoutputuid</key>
 				<string>14A29F98-5C82-4067-8CA8-1579021C90F2</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>1E6815E6-601D-4507-8911-DB4C68D96DBB</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
 				<key>vitoclose</key>
 				<false/>
 			</dict>
@@ -177,7 +190,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</string>
+				<string>FC6B055A-D686-4E8F-93FA-3F2756565FEA</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -326,6 +339,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</key>
 		<array>
 			<dict>
@@ -434,6 +460,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1E6815E6-601D-4507-8911-DB4C68D96DBB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>E7410F2F-9E71-43DC-A97D-A2EFB2F7BBD7</key>
 		<array>
 			<dict>
@@ -510,11 +549,24 @@
 				<false/>
 			</dict>
 		</array>
+		<key>FC6B055A-D686-4E8F-93FA-3F2756565FEA</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+				<string>8B78E256-3CB5-40FD-A40A-43436919DCC7</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -540,13 +592,13 @@
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
-				<false/>
+				<true/>
 				<key>removeextension</key>
 				<false/>
 				<key>text</key>
 				<string>{query}</string>
 				<key>title</key>
-				<string></string>
+				<string>VPS</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.notification</string>
@@ -842,6 +894,29 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>exe/vps bear note $*</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>FC6B055A-D686-4E8F-93FA-3F2756565FEA</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argument</key>
 				<string>{var:title}</string>
 				<key>variables</key>
@@ -854,24 +929,6 @@
 			<string>alfred.workflow.utility.argument</string>
 			<key>uid</key>
 			<string>74451751-0935-4EC0-8599-D45A55F78033</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argument</key>
-				<string>{query}</string>
-				<key>variables</key>
-				<dict>
-					<key>title</key>
-					<string>{query}</string>
-				</dict>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.argument</string>
-			<key>uid</key>
-			<string>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -897,6 +954,47 @@
 			<string>D22D92F7-4500-4EAB-B2E4-2CCE8BCA35E9</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>exe/vps $*</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1E6815E6-601D-4507-8911-DB4C68D96DBB</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>variables</key>
+				<dict>
+					<key>title</key>
+					<string>{query}</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -977,6 +1075,166 @@
 			<string>71CBBD8E-F8A0-4DBF-9903-D60EEFC76CA6</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>exe/vps -a omnifocus commands $PROJECT_ID
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-project-actions</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>path</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.browseinalfred</string>
+			<key>uid</key>
+			<string>24A79444-1362-4640-8E06-24F875296BCE</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>project</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>exe/vps -a omnifocus list {var:TRIGGERED_AS_SNIPPET}
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-projects</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Select OmniFocus project {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>35</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>P</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>variables</key>
+				<dict>
+					<key>TRIGGERED_AS_SNIPPET</key>
+					<string>false</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>8B78E256-3CB5-40FD-A40A-43436919DCC7</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1067,19 +1325,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>path</key>
-				<string>{query}</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.browseinalfred</string>
-			<key>uid</key>
-			<string>24A79444-1362-4640-8E06-24F875296BCE</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -1123,86 +1368,6 @@
 			<string>D93C8908-B2AD-4CF8-BF17-615F184AD0D2</string>
 			<key>version</key>
 			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<true/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>keyword</key>
-				<string>project</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string></string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>bin/list-omnifocus-projects</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>Select OmniFocus project {query}</string>
-				<key>type</key>
-				<integer>8</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>0</integer>
-				<key>focusedappvariable</key>
-				<false/>
-				<key>focusedappvariablename</key>
-				<string></string>
-				<key>hotkey</key>
-				<integer>35</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>P</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</string>
-			<key>version</key>
-			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1689,7 +1854,16 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>575</integer>
 			<key>ypos</key>
-			<integer>695</integer>
+			<integer>690</integer>
+		</dict>
+		<key>1E6815E6-601D-4507-8911-DB4C68D96DBB</key>
+		<dict>
+			<key>note</key>
+			<string>Perform the selected action.</string>
+			<key>xpos</key>
+			<integer>1010</integer>
+			<key>ypos</key>
+			<integer>325</integer>
 		</dict>
 		<key>1EA1C2CE-E59A-4003-A62F-279C5E0E9B87</key>
 		<dict>
@@ -1811,6 +1985,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>780</integer>
 		</dict>
+		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
+		<dict>
+			<key>xpos</key>
+			<integer>250</integer>
+			<key>ypos</key>
+			<integer>615</integer>
+		</dict>
 		<key>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</key>
 		<dict>
 			<key>xpos</key>
@@ -1864,9 +2045,9 @@ See the README for more information.</string>
 		<key>C25B5434-E28C-4FE7-9E17-E3A748A89CCE</key>
 		<dict>
 			<key>xpos</key>
-			<integer>610</integer>
+			<integer>850</integer>
 			<key>ypos</key>
-			<integer>220</integer>
+			<integer>340</integer>
 		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
@@ -1914,9 +2095,18 @@ See the README for more information.</string>
 			<key>note</key>
 			<string>Lists all available actions for an OmniFocus project</string>
 			<key>xpos</key>
-			<integer>755</integer>
+			<integer>910</integer>
 			<key>ypos</key>
-			<integer>580</integer>
+			<integer>645</integer>
+		</dict>
+		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
+		<dict>
+			<key>note</key>
+			<string>Lists all available actions for an OmniFocus project</string>
+			<key>xpos</key>
+			<integer>760</integer>
+			<key>ypos</key>
+			<integer>510</integer>
 		</dict>
 		<key>E7410F2F-9E71-43DC-A97D-A2EFB2F7BBD7</key>
 		<dict>
@@ -1930,9 +2120,16 @@ See the README for more information.</string>
 		<key>EB061CDD-425A-4239-97C5-293A280BC388</key>
 		<dict>
 			<key>xpos</key>
-			<integer>990</integer>
+			<integer>995</integer>
 			<key>ypos</key>
-			<integer>540</integer>
+			<integer>625</integer>
+		</dict>
+		<key>FC6B055A-D686-4E8F-93FA-3F2756565FEA</key>
+		<dict>
+			<key>xpos</key>
+			<integer>545</integer>
+			<key>ypos</key>
+			<integer>200</integer>
 		</dict>
 		<key>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</key>
 		<dict>

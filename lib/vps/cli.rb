@@ -48,7 +48,7 @@ module VPS
       end
     end
 
-    def run(arguments = ARGV)
+    def run(arguments = ARGV, environment = ENV)
       @parser.order!(arguments)
       if arguments.size < 2
         puts @parser.help
@@ -66,7 +66,7 @@ module VPS
       else
         plugin_def = plugin_definition(plugin)
         command_def = command_definition(plugin_def, arguments.shift)
-        run_command(command_def, arguments)
+        run_command(command_def, arguments, environment)
       end
     end
 
@@ -85,15 +85,16 @@ module VPS
       end
     end
 
-    def run_command(command_definition, arguments)
+    def run_command(command_definition, arguments, environment)
       command = command_definition[:class].new(@configuration, @state)
       can_run = if command.respond_to?('can_run?')
-                  command.can_run?(arguments)
+                  command.can_run?(arguments, environment)
                 else
                   true
                 end
       if can_run
-        puts @output_formatter.format {command.run(arguments)}
+        output = @output_formatter.format { command.run(arguments, environment) }
+        puts output unless output.nil?
       else
         exit(-1)
       end

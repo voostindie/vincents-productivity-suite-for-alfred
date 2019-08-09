@@ -64,7 +64,8 @@ module VPS
 
       ##
       # Returns an option parser. This is, at the moment, used only to produce help information
-      # for the command.
+      # for the command. You could, of course, use it within your own +can_run?+ and/or +run+
+      # methods.
       #
       # Every comand MUST implement this initializer.
       def self.option_parser
@@ -84,7 +85,7 @@ module VPS
       # Implementing this method is optional. If you don't, +true+ is assumed.
       #
       # @param arguments All arguments passed to the command through the CLI.
-      def can_run?(arguments)
+      def can_run?(arguments, environment)
         true
       end
 
@@ -93,7 +94,7 @@ module VPS
       # are already verified by the +can_run?+ method that was executed earlier..
       #
       # @param arguments All arguments passed to the command through the CLI.
-      def run(arguments)
+      def run(arguments, environment)
         []
       end
     end
@@ -132,7 +133,7 @@ module VPS
 
       ##
       # Runs the action; this happens when the focus changes
-      def run
+      def run(environment)
 
       end
     end

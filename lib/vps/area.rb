@@ -12,7 +12,7 @@ module VPS
         end
       end
 
-      def run(arguments)
+      def run(arguments, environment)
         focus = @state.focus[:key]
         @configuration.areas.map do |area|
           postfix = area[:key].eql?(focus) ? ' (focused)' : ''
@@ -28,13 +28,30 @@ module VPS
 
     class Commands
       def initialize(configuration, state)
-
+        @state = state
       end
 
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'List all available commands for the focused area'
         end
+      end
+
+      def run(arguments, environment)
+        result = []
+        commands = Registry::commands
+        @state.focus.each_pair do |key,value|
+          next unless value.is_a? Hash
+          if commands[key]
+            commands[key][:commands].each_key do |command|
+              result << {
+                uid: "#{key} #{command}",
+                title: commands[key][:commands][command][:class].option_parser.banner
+              }
+            end
+          end
+        end
+        result
       end
     end
 
@@ -53,7 +70,7 @@ module VPS
         end
       end
 
-      def can_run?(arguments)
+      def can_run?(arguments, environment)
         if arguments.size != 1
           $stderr.puts "Exactly one argument required: the name of the area to focus on"
           return false
@@ -66,46 +83,15 @@ module VPS
         true
       end
 
-      def run(arguments)
+      def run(arguments, environment)
         area = @configuration.area(arguments[0])
         @state.change_focus(area[:key], @configuration)
         @state.persist
         @configuration.actions.each_key do |key|
-          Registry::plugins[key][:action].new(@configuration, @state).run
+          Registry::plugins[key][:action].new(@configuration, @state).run(environment)
         end
         "#{area[:name]} is now the focused area"
       end
-    end
-
-    def self.list(config: Config.load)
-      focus = config.focused_area[:key]
-      config.areas.map do |name|
-        area = config.area(name)
-        postfix = area[:key].eql?(focus) ? ' (focused)' : ''
-        {
-          uid: area[:key],
-          arg: area[:key],
-          title: area[:name] + postfix,
-          autocomplete: area[:name]
-        }
-      end
-    end
-
-    def self.focus(key, config: Config.load)
-      area = config.focus(key)
-      config.save
-      config.actions.each do |key|
-        action = instantiate_action(key)
-        action.focus_changed(area, config.action(key))
-      end
-      "#{area[:name]} is now the focused area"
-    end
-
-    def self.instantiate_action(key)
-      plugin = PLUGINS[key]
-      return if plugin.nil?
-      require_relative(plugin[:path])
-      Object.const_get(plugin[:class]).new
     end
   end
 end

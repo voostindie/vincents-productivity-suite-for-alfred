@@ -58,7 +58,7 @@ module VPS
         @configuration = configuration
       end
 
-      def run(runner = Shell::SystemRunner.new)
+      def run(environment, runner = Shell::SystemRunner.new)
         plugin = @configuration.actions[:bitbar][:plugin]
         runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
       end
