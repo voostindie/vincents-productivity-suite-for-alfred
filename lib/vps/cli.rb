@@ -1,10 +1,7 @@
 module VPS
   class Cli
 
-    DEFAULT_CONFIG_FILE = File.join(Dir.home, '.vpsrc').freeze
-    DEFAULT_STATE_FILE = (DEFAULT_CONFIG_FILE + '.state').freeze
-
-    def initialize(config_file = DEFAULT_CONFIG_FILE, state_file = DEFAULT_STATE_FILE)
+    def initialize(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
       @configuration = configuration = Configuration::load(config_file)
       @state = State::load(state_file, configuration)
       @output_formatter = OutputFormatter::Console
@@ -24,7 +21,7 @@ module VPS
                               end
         end
         parser.on('-f', '--focus [AREA]', 'Force the focus to the specified area temporarily') do |area|
-          @state.change_focus(area, configuration)
+          @state.change_focus(area, @configuration)
         end
         parser.on('-v', '--version', 'Show the version number and exit') do
           puts VPS::VERSION
@@ -91,14 +88,14 @@ module VPS
     def run_command(command_definition, arguments)
       command = command_definition[:class].new(@configuration, @state)
       can_run = if command.respond_to?('can_run?')
-                  command.can_run?
+                  command.can_run?(arguments)
                 else
                   true
                 end
       if can_run
         puts @output_formatter.format {command.run(arguments)}
       else
-        $stderr.puts "The command is not available in this context."
+        exit(-1)
       end
     end
 

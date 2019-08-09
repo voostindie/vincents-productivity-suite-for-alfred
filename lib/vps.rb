@@ -18,15 +18,14 @@ require 'vps/jxa'
 
 # Plugins
 require 'vps/bitbar'
+require 'vps/wallpaper'
 
 # Old plugins, to be removed...
 require 'vps/focus_plugin'
-require 'vps/bear/bear'
-require 'vps/markdown/markdown_notes'
-require 'vps/bitbar/bitbar_plugin'
-require 'vps/contacts/contacts'
-require 'vps/omnifocus/omnifocus_plugin'
-require 'vps/wallpaper/wallpaper_plugin'
+require 'vps/bear'
+require 'vps/markdown_notes'
+require 'vps/contacts'
+require 'vps/omnifocus'
 
 # Main classes
 require 'vps/version'

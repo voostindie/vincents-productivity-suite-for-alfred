@@ -561,15 +561,15 @@
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>0</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string></string>
+				<string>exe/vps -a area focus $*</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string>bin/focus-area</string>
 				<key>type</key>
-				<integer>8</integer>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
@@ -637,7 +637,8 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string></string>
+				<string>exe/vps -a area list
+</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -647,7 +648,7 @@
 				<key>title</key>
 				<string>Focus on area of responsiblity {query}</string>
 				<key>type</key>
-				<integer>8</integer>
+				<integer>0</integer>
 				<key>withspace</key>
 				<true/>
 			</dict>

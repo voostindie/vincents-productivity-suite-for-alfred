@@ -16,11 +16,5 @@ $LOAD_PATH.unshift VPS_ROOT
 
 require 'vps'
 
-area = VPS::Config.load.focused_area
-bitbar = area[:bitbar]
-label = unless bitbar.nil?
-  bitbar[:label]
-else
-  area[:name]
-end
-puts label
+$stderr.reopen(File.new('/dev/null', 'w'))
+puts VPS::BitBar::label

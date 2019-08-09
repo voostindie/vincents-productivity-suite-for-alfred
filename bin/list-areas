@@ -1,9 +1,0 @@
-#!/usr/bin/env ruby
-#
-# Lists all available areas of responsibility
-
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-
-require 'vps'
-
-puts VPS::OutputFormatter::Alfred.format { VPS::Area.list }

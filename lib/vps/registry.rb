@@ -23,7 +23,12 @@ module VPS
         },
       },
       bitbar: {
-        module: VPS::BitBar
+        module: VPS::BitBar,
+        action: VPS::BitBar::Refresh
+      },
+      wallpaper: {
+        module: VPS::Wallpaper,
+        action: VPS::Wallpaper::Replace
       }
       # mail: [:new],
       # bear: [:new],
