@@ -128,7 +128,6 @@ module VPS
         contact_id = arguments[0]
         commands = []
         commands << {
-          uid: 'open',
           title: 'Open in Contacts',
           arg: "contact open #{contact_id}",
           icon: {
@@ -140,7 +139,6 @@ module VPS
           commands << collaborator[:module].commands_for(:contact, contact_id)
         end
         commands << {
-          uid: 'email',
           title: 'Write email',
           arg: "contact email #{contact_id}",
           icon: {

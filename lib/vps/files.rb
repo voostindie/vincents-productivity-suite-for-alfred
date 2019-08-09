@@ -10,7 +10,6 @@ module VPS
       case type
       when :project
         {
-          uid: 'browse',
           title: 'Browse project files in Alfred',
           arg: "file project #{id}",
           icon: {

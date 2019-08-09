@@ -11,7 +11,6 @@ module VPS
       case type
       when :project
         {
-          uid: 'note',
           title: 'Create a note in Bear',
           arg: "note project #{id}",
           icon: {
@@ -20,7 +19,6 @@ module VPS
         }
       when :contact
         {
-          uid: 'note',
           title: 'Create a note in Bear',
           arg: "note contact #{id}",
           icon: {

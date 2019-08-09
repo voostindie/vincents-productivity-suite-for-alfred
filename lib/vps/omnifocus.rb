@@ -103,9 +103,8 @@ module VPS
         project_id = arguments[0]
         commands = []
         commands << {
-          uid: 'open',
           title: 'Open in OmniFocus',
-          arg: "project open '#{arguments[0]}'",
+          arg: "project open #{arguments[0]}",
           icon: {
             path: "icons/omnifocus.png"
           }
@@ -116,77 +115,6 @@ module VPS
         end
         commands.flatten
       end
-    end
-  end
-
-  class OmniFocusPlugin
-
-    def self.actions(project, area: Config.load.focused_area)
-      omnifocus = area[:omnifocus]
-      raise 'OmniFocus is not enabled for the focused area' unless omnifocus
-      supports_notes = area[:markdown_notes] != nil || area[:bear] != nil
-      supports_markdown_notes = area[:markdown_notes] != nil
-      supports_files = area[:project_files] != nil
-      actions = []
-      if supports_notes
-        actions.push(
-          title: 'Create note',
-          arg: project[:name],
-          variables: {
-            action: 'create-note'
-          },
-          icon: {
-            path: "icons/bear.png"
-          }
-        )
-      end
-      if supports_markdown_notes
-        actions.push(
-          title: 'Search notes',
-          arg: project[:name],
-          variables: {
-            action: 'search-markdown-notes'
-          }
-        )
-      end
-      if supports_files
-        files = area[:project_files]
-        path = File.join(area[:root], files[:path], FileSystem::safe_filename(project[:name]))
-        documents = File.join(path, files[:documents])
-        if FileSystem::exists?(documents)
-          actions.push(
-            title: 'Browse documents',
-            arg: documents,
-            variables: {
-              action: 'browse-project-files'
-            },
-            icon: {
-              path: "icons/finder.png"
-            }
-          )
-        end
-        reference = File.join(path, files[:reference])
-        if FileSystem::exists?(reference)
-          actions.push(
-            title: 'Browse reference material',
-            arg: reference,
-            variables: {
-              action: 'browse-project-files'
-            },
-            icon: {
-              path: "icons/finder.png"
-            }
-          )
-        end
-      end
-      actions.push(
-        title: 'Paste in frontmost application',
-        arg: project[:name],
-        variables: {
-          action: 'snippet'
-        }
-      )
-      actions
     end
   end
 end
