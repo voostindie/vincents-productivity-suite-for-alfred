@@ -3,10 +3,9 @@ module VPS
 
     def self.load(path)
       unless File.readable?(path)
-        puts 'ERROR: cannot read configuration file'
-        puts
-        puts 'VPS requires a configuration file at ' #{path}'"
-        # TODO: add an 'init' command to generate a new configuration file
+        $stderr.puts 'ERROR: cannot read configuration file'
+        $stderr.puts
+        $stderr.puts 'VPS requires a configuration file at ' #{path}'"
         raise 'Configuration file missing or unreadable'
       end
       Configuration.new(path)
@@ -32,7 +31,7 @@ module VPS
         config.each_pair do |plugin_key, plugin_config|
           plugin = Registry::plugins[plugin_key.to_sym]
           if plugin.nil?
-            puts "WARNING: no plugin found for key '#{plugin_key}'. Please check your configuration!"
+            $stderr.puts "WARNING: no plugin found for key '#{plugin_key}'. Please check your configuration!"
           else
             area[plugin_key.to_sym] = plugin[:module].read_configuration(area, plugin_config)
           end

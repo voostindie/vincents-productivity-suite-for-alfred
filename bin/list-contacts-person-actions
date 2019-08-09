@@ -6,7 +6,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-VPS::OutputFormatter::Alfred.format do
+puts VPS::OutputFormatter::Alfred.format {
   raise 'No contact specified' if ENV['id'].nil?
   contact = {
     id: ENV['id'],
@@ -14,4 +14,4 @@ VPS::OutputFormatter::Alfred.format do
     email: ENV['email']
   }
   VPS::Contacts.actions(contact)
-end
+}

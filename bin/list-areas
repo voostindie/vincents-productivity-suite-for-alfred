@@ -6,6 +6,4 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-VPS::OutputFormatter::Alfred.format do
-  VPS::Area.list
-end
+puts VPS::OutputFormatter::Alfred.format { VPS::Area.list }

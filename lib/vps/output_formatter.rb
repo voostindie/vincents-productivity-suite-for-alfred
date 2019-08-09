@@ -11,9 +11,10 @@ module VPS
   # So, you do this:
   #
   #   formatter = OutputFormatter::Console # console output
-  #   formatter do
+  #   output = formatter {
   #     # Code that produces output here
-  #   end
+  #   }
+  #   puts output
   #
   # Just replace Console with Alfred and Bob's your uncle.
   #
@@ -31,17 +32,16 @@ module VPS
     # Formatter for console output
     module Console
       ##
-      # Runs a block, captures its output, formats it for the console and prints it.
+      # Runs a block, captures its output, formats it for the console and returns it.
       def self.format
         result = yield
         if result.is_a? Array
           width = result.map { |entry| entry[:uid].size}.max
           output = result.map do |entry|
             "- #{entry[:uid].ljust(width)}: #{entry[:title]}"
-          end
-          puts output
+          end.join("\n")
         else
-          puts result
+          result
         end
       end
     end
@@ -50,16 +50,16 @@ module VPS
     # Formatter for Alfred output
     module Alfred
       ##
-      # Runs a block, captures its output, formats it for Alfred and prints it.
+      # Runs a block, captures its output, formats it for Alfred and returns it.
       def self.format
         result = yield
         if result.is_a? Array
           output = {
             items: result
           }
-          puts output.to_json
+          output.to_json
         else
-          puts result
+          result
         end
       end
     end

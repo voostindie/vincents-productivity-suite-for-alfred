@@ -6,7 +6,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-VPS::OutputFormatter::Alfred.format do
+puts VPS::OutputFormatter::Alfred.format {
   triggered_as_snippet = !ENV['TRIGGERED_AS_SNIPPET'].nil?
   VPS::Contacts.people(triggered_as_snippet)
-end
+}

@@ -18,9 +18,9 @@ module VPS
         parser.version = VPS::VERSION
         parser.on('-a', '--[no-]alfred', 'Generate output in Alfred format') do |alfred|
           @output_formatter = if alfred
-                      OutputFormatter::Alfred
+                                OutputFormatter::Alfred
                               else
-                      OutputFormatter::Console
+                                OutputFormatter::Console
                               end
         end
         parser.on('-f', '--focus [AREA]', 'Force the focus to the specified area temporarily') do |area|
@@ -78,13 +78,13 @@ module VPS
       if clazz.respond_to? 'option_parser'
         puts clazz.option_parser.help
       else
-        puts 'No help information is available for this command'
-        puts
-        puts 'Dear developer,'
-        puts
-        puts "Please implement the method 'option_parser' in class #{clazz}"
-        puts
-        puts 'The user of your software thanks you!'
+        $stderr.puts 'No help information is available for this command'
+        $stderr.puts
+        $stderr.puts 'Dear developer,'
+        $stderr.puts
+        $stderr.puts "Please implement the method 'option_parser' in class #{clazz}"
+        $stderr.puts
+        $stderr.puts 'The user of your software thanks you!'
       end
     end
 
@@ -96,19 +96,16 @@ module VPS
                   true
                 end
       if can_run
-        @output_formatter.format do
-          command.run(arguments)
-        end
+        puts @output_formatter.format {command.run(arguments)}
       else
-        puts "The command is not available in this context."
+        $stderr.puts "The command is not available in this context."
       end
     end
 
     def plugin_definition(plugin_name)
       plugin_def = Registry.commands[plugin_name.to_sym]
       if plugin_def.nil?
-        puts "Unsupported plugin: #{plugin_name}"
-        puts
+        $stderr.puts "Unsupported plugin: #{plugin_name}"
         puts @parser.help
         exit(-1)
       end
@@ -118,8 +115,7 @@ module VPS
     def command_definition(plugin_definition, command_name)
       command_def = plugin_definition[:commands][command_name.to_sym]
       if command_def.nil?
-        puts "Unsupported subcommand: #{command_name}"
-        puts
+        $stderr.puts "Unsupported subcommand: #{command_name}"
         puts @parser.help
         exit(-1)
       end
