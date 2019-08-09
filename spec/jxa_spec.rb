@@ -7,7 +7,7 @@ module VPS
         expected = {
           'echo' => ['foo', 'bar']
         }
-        result = Jxa::Runner.new(__FILE__).execute('echo', 'foo', 'bar')
+        result = Jxa::Runner.new(File.join('..', 'spec')).execute('echo', 'foo', 'bar')
         expect(result).to eq(expected)
       end
     end
@@ -23,7 +23,7 @@ module VPS
     context 'with a script that throws an error' do
       it 'raises an error' do
         expect do
-          Jxa::Runner.new(__FILE__).execute('error')
+          Jxa::Runner.new(File.join('..', 'spec')).execute('error')
         end.to raise_exception(/JXA script execution failed/)
       end
     end

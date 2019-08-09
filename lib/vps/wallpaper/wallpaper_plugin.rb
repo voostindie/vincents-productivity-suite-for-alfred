@@ -18,7 +18,7 @@
 module VPS
   class WallpaperPlugin < FocusPlugin
 
-    def initialize(defaults = {}, runner: Jxa::Runner.new(__FILE__))
+    def initialize(defaults = {}, runner: Jxa::Runner.new('wallpaper'))
       @default_wallpaper = defaults['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
       @runner = runner
     end

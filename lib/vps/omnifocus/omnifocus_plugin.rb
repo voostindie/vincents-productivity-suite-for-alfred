@@ -1,7 +1,7 @@
 module VPS
   class OmniFocusPlugin < FocusPlugin
 
-    def initialize(defaults = {}, runner: Jxa::Runner.new(__FILE__))
+    def initialize(defaults = {}, runner: Jxa::Runner.new('omnifocus'))
       @runner = runner
     end
 
@@ -12,7 +12,7 @@ module VPS
       @runner.execute('set-focus', omnifocus[:folder])
     end
 
-    def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
+    def self.projects(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new('omnifocus'))
       omnifocus = area[:omnifocus]
       raise 'OmniFocus is not enabled for the focused area' unless omnifocus
       folder = omnifocus[:folder]

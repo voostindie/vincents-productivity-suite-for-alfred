@@ -1,7 +1,7 @@
 module VPS
   module Contacts
 
-    def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
+    def self.create_email(address, area: Config.load.focused_area, runner: Jxa::Runner.new('contacts'))
       address_line = "#{address[:name]} <#{address[:email]}>"
       mail = area[:contacts][:mail]
       case mail[:client]
@@ -16,7 +16,7 @@ module VPS
       end
     end
 
-    def self.people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new(__FILE__))
+    def self.people(triggered_as_snippet = false, area: Config.load.focused_area, runner: Jxa::Runner.new('contacts'))
       contacts = area[:contacts]
       raise 'Contacts is not enabled for the focused area' unless contacts
       group = contacts[:group]
