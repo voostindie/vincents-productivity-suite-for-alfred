@@ -30,14 +30,39 @@ module VPS
           project: {
             class: VPS::Bear::ProjectNote,
             type: :single
+          },
+          contact: {
+            class: VPS::Bear::ContactNote,
+            type: :single
           }
-
         },
-        collaborates: [:project]
+        collaborates: [:project, :contact]
       },
       bitbar: {
         module: VPS::BitBar,
         action: VPS::BitBar::Refresh
+      },
+      contacts: {
+        manages: :contact,
+        module: VPS::Contacts,
+        commands: {
+          list: {
+            class: VPS::Contacts::List,
+            type: :list
+          },
+          open: {
+            class: VPS::Contacts::Open,
+            type: :single
+          },
+          email: {
+            class: VPS::Contacts::Email,
+            type: :single
+          },
+          commands: {
+            class: VPS::Contacts::Commands,
+            type: :list
+          }
+        }
       },
       omnifocus: {
         manages: :project,

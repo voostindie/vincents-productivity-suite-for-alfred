@@ -46,7 +46,15 @@ module VPS
     end
 
     def manager_module(type)
-      @configuration.manager(@state.focus, :type)[:module]
+      @configuration.manager(@state.focus, type)[:module]
+    end
+
+    def triggered_as_snippet?(environment)
+      if environment['TRIGGERED_AS_SNIPPET'].nil?
+        false
+      else
+        environment['TRIGGERED_AS_SNIPPET'] == 'true'
+      end
     end
   end
 end

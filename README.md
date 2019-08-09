@@ -71,10 +71,6 @@ Using the shared prefix `;` and no suffix for snippets:
 - `;c`: copies a contact's name into the frontmost application.
 - `;p`: copies a project's name into the frontmost application.
 
-### Contact action
-
-The workflow contains a Contact action *Write e-mail using the focused area's preferred mail client'* that you can link to the *Email* field in Alfred's Contacts feature. Once done, after selecting an e-mail address in Alfred Contact Viewer, pressing ↵ will create a new blank message using the the e-mail client that is configured for the focused area. Additionally, for Apple Mail, it's possible to configure the sender address per area. See the documentation of the Contacts feature below.
-
 ## How to configure
 
 Create a file `.vpsrc` in your home folder and put something like this in there:

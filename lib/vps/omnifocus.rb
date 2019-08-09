@@ -40,17 +40,12 @@ module VPS
       end
 
       def run(arguments, environment, runner = Jxa::Runner.new('omnifocus'))
-        triggered_as_snippet = if environment['TRIGGERED_AS_SNIPPET'].nil?
-                                 false
-                               else
-                                 environment['TRIGGERED_AS_SNIPPET'] == 'true'
-                               end
         projects = runner.execute('list-projects', @state.focus[:omnifocus][:folder])
         projects.map do |project|
           {
             uid: project['id'],
             title: project['name'],
-            subtitle: if triggered_as_snippet
+            subtitle: if triggered_as_snippet?(environment)
                         "Paste '#{project['name']}' in the frontmost application"
                       else
                         "Select an action for '#{project['name']}'"
@@ -94,20 +89,14 @@ module VPS
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'List all available commands for the specified project'
-          parser.separator 'Usage: project commands <project>'
+          parser.separator 'Usage: project commands <projectId>'
           parser.separator ''
-          parser.separator 'Where <project> is the ID of the project to open'
+          parser.separator 'Where <projectId> is the ID of the project to act upon'
         end
       end
 
       def can_run?(arguments, environment)
-        if is_plugin_enabled? :omnifocus
-          if arguments.size != 1
-            $stderr.puts "The ID of the project to open must be passed as an argument"
-            return false
-          end
-        end
-        true
+        is_plugin_enabled?(:omnifocus) && has_arguments?(arguments)
       end
 
       def run(arguments, environment)
