@@ -10,7 +10,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-VPS::Output::Alfred.format do
+VPS::OutputFormatter::Alfred.format do
   raise 'No email address specified' if ENV['name'].nil? || ENV['email'].nil?
   VPS::Contacts.create_email(name: ENV['name'], email: ENV['email'])
 end

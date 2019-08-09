@@ -10,8 +10,7 @@ require 'erb'
 require 'optparse'
 
 # Support code
-require 'vps/output'
-require 'vps/console'
+require 'vps/output_formatter'
 require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/config'

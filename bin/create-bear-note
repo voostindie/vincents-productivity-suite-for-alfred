@@ -10,7 +10,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'vps'
 
-VPS::Output::Alfred.format do
+VPS::OutputFormatter::Alfred.format do
   note = VPS::Bear::Note.new(ARGV.join(' '))
   note.create_file
 end

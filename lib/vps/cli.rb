@@ -7,7 +7,7 @@ module VPS
     def initialize(config_file = DEFAULT_CONFIG_FILE, state_file = DEFAULT_STATE_FILE)
       @configuration = configuration = Configuration::load(config_file)
       @state = State::load(state_file, configuration)
-      @output = Output::Console
+      @output_formatter = OutputFormatter::Console
       @parser = option_parser
     end
 
@@ -17,11 +17,11 @@ module VPS
         parser.program_name = 'vps'
         parser.version = VPS::VERSION
         parser.on('-a', '--[no-]alfred', 'Generate output in Alfred format') do |alfred|
-          @output = if alfred
-                      Output::Alfred
-                    else
-                      Output::Console
-                    end
+          @output_formatter = if alfred
+                      OutputFormatter::Alfred
+                              else
+                      OutputFormatter::Console
+                              end
         end
         parser.on('-f', '--focus [AREA]', 'Force the focus to the specified area temporarily') do |area|
           @state.change_focus(area, configuration)
@@ -96,7 +96,7 @@ module VPS
                   true
                 end
       if can_run
-        @output.format do
+        @output_formatter.format do
           command.run(arguments)
         end
       else
