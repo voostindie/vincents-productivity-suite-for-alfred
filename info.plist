@@ -214,32 +214,6 @@
 				<false/>
 			</dict>
 		</array>
-		<key>A449F59E-C116-447A-925B-8D0A2D663F63</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>B284211E-632B-4534-9254-D7CB4F81C048</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>ADAF4EF4-9ECD-4AC2-AC03-52337B710580</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>A449F59E-C116-447A-925B-8D0A2D663F63</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<array>
 			<dict>
@@ -1042,76 +1016,6 @@ ruby exe/vps -a contact commands
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alignment</key>
-				<integer>0</integer>
-				<key>backgroundcolor</key>
-				<string></string>
-				<key>fadespeed</key>
-				<integer>0</integer>
-				<key>fillmode</key>
-				<integer>0</integer>
-				<key>font</key>
-				<string></string>
-				<key>largetypetext</key>
-				<string>{query}</string>
-				<key>textcolor</key>
-				<string></string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.largetype</string>
-			<key>uid</key>
-			<string>B284211E-632B-4534-9254-D7CB4F81C048</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>version</string>
-				<key>subtext</key>
-				<string></string>
-				<key>text</key>
-				<string></string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>ADAF4EF4-9ECD-4AC2-AC03-52337B710580</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>PATH=$RUBY_PATH:$PATH
-ruby -v</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>A449F59E-C116-447A-925B-8D0A2D663F63</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -1416,20 +1320,6 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>480</integer>
 		</dict>
-		<key>A449F59E-C116-447A-925B-8D0A2D663F63</key>
-		<dict>
-			<key>xpos</key>
-			<integer>710</integer>
-			<key>ypos</key>
-			<integer>780</integer>
-		</dict>
-		<key>ADAF4EF4-9ECD-4AC2-AC03-52337B710580</key>
-		<dict>
-			<key>xpos</key>
-			<integer>560</integer>
-			<key>ypos</key>
-			<integer>780</integer>
-		</dict>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<dict>
 			<key>xpos</key>
@@ -1445,13 +1335,6 @@ See the README for more information.</string>
 			<integer>750</integer>
 			<key>ypos</key>
 			<integer>40</integer>
-		</dict>
-		<key>B284211E-632B-4534-9254-D7CB4F81C048</key>
-		<dict>
-			<key>xpos</key>
-			<integer>860</integer>
-			<key>ypos</key>
-			<integer>780</integer>
 		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
