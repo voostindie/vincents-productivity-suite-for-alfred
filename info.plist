@@ -318,6 +318,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>FAB85A5B-C66E-46A0-A2CB-06EA8852E590</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>3B89983B-B77A-4B9C-A813-3F077219E15C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>FC6B055A-D686-4E8F-93FA-3F2756565FEA</key>
 		<array>
 			<dict>
@@ -1177,6 +1190,87 @@ ruby exe/vps -a event list</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>11</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>B</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>FAB85A5B-C66E-46A0-A2CB-06EA8852E590</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>browse</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a file browse</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-contacts-people</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Browse area files</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>3B89983B-B77A-4B9C-A813-3F077219E15C</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>This is Vincent's Productivity Suite for Alfred.
@@ -1263,6 +1357,15 @@ See the README for more information.</string>
 			<integer>370</integer>
 			<key>ypos</key>
 			<integer>350</integer>
+		</dict>
+		<key>3B89983B-B77A-4B9C-A813-3F077219E15C</key>
+		<dict>
+			<key>note</key>
+			<string>Lists events</string>
+			<key>xpos</key>
+			<integer>370</integer>
+			<key>ypos</key>
+			<integer>990</integer>
 		</dict>
 		<key>492E4749-88F2-46BC-A846-A6EF34121962</key>
 		<dict>
@@ -1383,6 +1486,13 @@ See the README for more information.</string>
 			<integer>745</integer>
 			<key>ypos</key>
 			<integer>350</integer>
+		</dict>
+		<key>FAB85A5B-C66E-46A0-A2CB-06EA8852E590</key>
+		<dict>
+			<key>xpos</key>
+			<integer>60</integer>
+			<key>ypos</key>
+			<integer>990</integer>
 		</dict>
 		<key>FC6B055A-D686-4E8F-93FA-3F2756565FEA</key>
 		<dict>
