@@ -1,3 +1,5 @@
+# This code can be removed once all functionality has been migrated.
+# It's not used at all, at the moment!
 module VPS
   class Config
 

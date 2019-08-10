@@ -48,7 +48,7 @@ module VPS
     def self.label(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
       configuration = VPS::Configuration::load(config_file)
       state = VPS::State::load(state_file, configuration)
-      state.focus[:bitbar][:label]
+      state.focus['bitbar'][:label]
     end
 
     ##
@@ -56,10 +56,14 @@ module VPS
     class Refresh
       include PluginSupport
 
-      def run(environment, runner = Shell::SystemRunner.new)
-        plugin = @configuration.actions[:bitbar][:plugin]
+      def run(runner = Shell::SystemRunner.new)
+        plugin = @context.configuration.actions['bitbar'][:plugin]
         runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
       end
+    end
+
+    Registry.register(BitBar) do |plugin|
+      plugin.with_action(Refresh)
     end
   end
 end

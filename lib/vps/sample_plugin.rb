@@ -9,7 +9,7 @@ module VPS
   #
   # To create a plugin, do two things:
   # 1. Implement it, like below.
-  # 2. Define it in the +Registry+
+  # 2. Requitre it in `lib/vps.rb`
   #
   # Plugins are configured through the program configuration.
   #
@@ -70,12 +70,14 @@ module VPS
       # Returns whether this command can actually run. This is where you check input arguments,
       # the current context, and whatever else is needed to run the command successfully.
       #
-      # This is also where you can write warnings and/or errors to +$stdout+.
+      # This is also where you can write warnings and/or errors to +$stderr+.
       #
       # Implementing this method is optional. If you don't, +true+ is assumed.
       #
+      # Access +@context+ to get information about the environment, it's a +Context+.
+      #
       # @param arguments All arguments passed to the command through the CLI.
-      def can_run?(arguments, environment)
+      def can_run?
         true
       end
 
@@ -83,8 +85,10 @@ module VPS
       # Run the command. Raising exceptions should never be needed, since all prerequisites
       # are already verified by the +can_run?+ method that was executed earlier..
       #
+      # Access +@context+ to get information about the environment, it's a +Context+.
+      #
       # @param arguments All arguments passed to the command through the CLI.
-      def run(arguments, environment)
+      def run
         []
       end
     end
@@ -121,6 +125,11 @@ module VPS
       def run(environment)
 
       end
+    end
+
+    Registry.register(SamplePlugin) do |plugin|
+      plugin.add_command(SampleCommand, :single)
+      plugin.add_action(SampleAction)
     end
   end
 end

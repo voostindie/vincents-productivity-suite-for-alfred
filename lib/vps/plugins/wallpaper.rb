@@ -37,14 +37,18 @@ module VPS
     class Replace
       include PluginSupport
 
-      def run(environment, runner = Jxa::Runner.new('wallpaper'))
-        path = if @state.focus[:wallpaper]
-                 @state.focus[:wallpaper][:path]
+      def run(runner = Jxa::Runner.new('wallpaper'))
+        path = if @context.focus['wallpaper']
+                 @context.focus['wallpaper'][:path]
                else
                  nil
-               end || @configuration.actions[:wallpaper][:path]
+               end || @context.configuration.actions['wallpaper'][:path]
         runner.execute('change-wallpaper', path)
       end
+    end
+
+    Registry.register(Wallpaper) do |plugin|
+      plugin.with_action(Replace)
     end
   end
 end

@@ -6,18 +6,17 @@ module VPS
       }
     end
 
-    def self.commands_for(type, id)
-      case type
-      when :project
+    def self.commands_for(entity)
+      if entity.is_a?(Entities::Project)
         {
           title: 'Browse project files in Alfred',
-          arg: "file project #{id}",
+          arg: "file project #{entity.id}",
           icon: {
             path: 'icons/folder.png'
           }
         }
       else
-        raise "Unsupported type for collaboration: #{type}"
+        raise "Unsupported entity type for collaboration: #{entity.class}"
       end
     end
 
@@ -31,13 +30,9 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        is_plugin_enabled?(:files)
-      end
-
-      def run(arguments, environment, runner = Jxa::Runner.new('alfred'))
-        area = @state.focus
-        path = File.join(area[:root], area[:files][:path]) + '/'
+      def run(runner = Jxa::Runner.new('alfred'))
+        area = @context.focus
+        path = File.join(area[:root], area['files'][:path]) + '/'
         runner.execute('browse', path)
         "Opened Alfred for directory '#{path}'"
       end
@@ -55,18 +50,25 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        is_plugin_enabled?(:files) && has_arguments?(arguments) && is_manager_available?(:project)
+      def can_run?
+        is_entity_present?(Entities::Project) && is_entity_manager_available?(Entities::Project)
       end
 
-      def run(arguments, environment, runner = Jxa::Runner.new('alfred'))
-        project = manager_module(:project).details_for(arguments[0])
-        area = @state.focus
-        folder = strip_emojis(project['name'])
-        path = File.join(area[:root], area[:files][:path], folder) + '/'
+      def run(runner = Jxa::Runner.new('alfred'))
+        project = @context.load_entity(Entities::Project)
+        area = @context.focus
+        folder = strip_emojis(project.name)
+        path = File.join(area[:root], area['files'][:path], folder) + '/'
         runner.execute('browse', path)
         "Opened Alfred for directory '#{path}'"
       end
+    end
+
+    Registry.register(Files) do |plugin|
+      plugin.for_entity(Entities::File)
+      plugin.add_command(Browse, :single)
+      plugin.add_command(Project, :single)
+      plugin.add_collaboration(Entities::Project)
     end
   end
 end

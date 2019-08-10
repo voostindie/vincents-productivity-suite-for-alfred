@@ -7,30 +7,29 @@ module VPS
       }
     end
 
-    def self.commands_for(type, id)
-      case type
-      when :project
+    def self.commands_for(entity)
+      if entity.is_a?(Entities::Project)
         {
           title: 'Create a note in Bear',
-          arg: "note project #{id}",
+          arg: "note project #{entity.id}",
           icon: {
             path: "icons/bear.png"
           }
         }
-      when :contact
+      elsif entity.is_a?(Entities::Contact)
         {
           title: 'Create a note in Bear',
-          arg: "note contact #{id}",
+          arg: "note contact #{entity.id}",
           icon: {
             path: "icons/bear.png"
           }
         }
       else
-        raise "Unsupported type for collaboration: #{type}"
+        raise "Unsupported entity class for collaboration: #{entity.class}"
       end
     end
 
-    class PlainNote
+    class Plain
       include PluginSupport
 
       def self.option_parser
@@ -40,39 +39,35 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        is_plugin_enabled? :bear
-      end
-
-      def run(arguments, environment, runner = Shell::SystemRunner.new)
-        context = create_context(arguments)
+      def run(runner = Shell::SystemRunner.new)
+        context = create_context
         title = ERB::Util.url_encode(context[:title])
-        tags = create_tags(arguments)
+        tags = create_tags
                  .map { |t| merge_template(t, context) }
                  .map { |t| ERB::Util.url_encode(t) }
                  .join(',')
         callback = "bear://x-callback-url/create?title=#{title}&tags=#{tags}"
         runner.execute('open', callback)
-        "Created a new note in Bear with title '#{title}'"
+        "Created a new note in Bear with title '#{context[:title]}'"
       end
 
-      def create_context(arguments)
+      def create_context
         date = DateTime.now
         {
           year: date.strftime('%Y'),
           month: date.strftime('%m'),
           week: date.strftime('%V'),
           day: date.strftime('%d'),
-          title: create_title(arguments),
+          title: create_title,
         }
       end
 
-      def create_title(arguments)
-        arguments.join(' ')
+      def create_title
+        @context.arguments.join(' ')
       end
 
-      def create_tags(arguments)
-        @state.focus[:bear][:tags]
+      def create_tags
+        @context.focus['bear'][:tags]
       end
 
       def merge_template(template, context)
@@ -84,7 +79,7 @@ module VPS
       end
     end
 
-    class ProjectNote < PlainNote
+    class Project < Plain
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'Create a new note for a project'
@@ -94,25 +89,21 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        if super(arguments, environment)
-          is_manager_available? :project
-        else
-          false
-        end
+      def can_run?
+        is_entity_present?(Entities::Project) && is_entity_manager_available?(Entities::Project)
       end
 
-      def run(arguments, environment)
-        project = manager_module(:project).details_for(arguments[0])
-        super(project, environment)
+      def run
+        @project = @context.load_entity(Entities::Project)
+        super
       end
 
-      def create_title(project)
-        strip_emojis(project['name'])
+      def create_title
+        strip_emojis(@project.name)
       end
     end
 
-    class ContactNote < PlainNote
+    class Contact < Plain
       def self.option_parser
         OptionParser.new do |parser|
           parser.banner = 'Create a new note for a contact'
@@ -122,26 +113,31 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        if super(arguments, environment)
-          is_manager_available? :contact
-        else
-          false
-        end
+      def can_run?
+        is_entity_present?(Entities::Contact) && is_entity_manager_available?(Entities::Contact)
       end
 
-      def run(arguments, environment)
-        contact = manager_module(:contact).details_for(arguments[0])
-        super(contact, environment)
+      def run
+        @contact = @context.load_entity(Entities::Contact)
+        super
       end
 
-      def create_title(contact)
-        contact['name']
+      def create_title
+        @contact.name
       end
 
-      def create_tags(contact)
-        super(contact) << "#{@state.focus[:name]}/Contacts/#{contact['name']}"
+      def create_tags
+        super << "#{@context.focus[:name]}/Contacts/#{@contact.name}"
       end
+    end
+
+    Registry.register(Bear) do |plugin|
+      plugin.for_entity(Entities::Note)
+      plugin.add_command(Plain, :single)
+      plugin.add_command(Project, :single)
+      plugin.add_command(Contact, :single)
+      plugin.add_collaboration(Entities::Project)
+      plugin.add_collaboration(Entities::Contact)
     end
   end
 end

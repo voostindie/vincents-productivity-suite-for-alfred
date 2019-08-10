@@ -36,9 +36,14 @@ module VPS
       def self.format
         result = yield
         if result.is_a? Array
-          width = result.map { |entry| entry[:arg].size}.max
+          id = if result.size > 0 && result[0][:uid].nil?
+                 :arg
+               else
+                 :uid
+               end
+          width = result.map { |entry| entry[id].size}.max
           result.map do |entry|
-            "- #{entry[:arg].ljust(width)}: #{entry[:title]}"
+            "- #{entry[id].ljust(width)}: #{entry[:title]}"
           end.join("\n")
         else
           result

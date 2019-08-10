@@ -6,75 +6,52 @@ module VPS
     #
     # Every command MUST implement this initializer.
     #
-    # @param configuration [Configuration] the application configuration
-    # @param state [State] the application state
-    def initialize(configuration, state)
-      @configuration = configuration
-      @state = state
+    # @param context [Context] the application context
+    def initialize(context)
+      @context = context
     end
 
-    def is_plugin_enabled?(key)
-      if @state.focus[key].nil?
-        $stderr.puts "Plugin #{key} is not enabled in area #{@state.focus[:name]}"
+    def is_entity_present?(entity_class)
+      entity_name = entity_class.name.split('::').last
+      variable = entity_name.upcase + '_ID'
+      if @context.environment[variable].nil?
+        if @context.arguments.size != 1
+          $stderr.puts "Missing ID to the #{entity_name}. This must be passed as the one and only argument"
+          $stderr.puts
+          $stderr.puts "Here are the help notes for this command:"
+          $stderr.puts
+          $stderr.puts self.class.option_parser.help
+          return false
+        end
+      end
+      true
+    end
+
+    def is_entity_manager_available?(entity_class)
+      plugin = @context.configuration.entity_manager_for_class(@context.focus, entity_class)
+      if plugin.nil?
+        $stderr.puts "No manager found that supports #{entity_class}"
         false
       else
         true
       end
     end
 
-    def has_arguments?(arguments, count_required = 1)
-      if arguments.size != count_required
-        $stderr.puts "Invalid number of arguments"
-        $stderr.puts
-        $stderr.puts "Here are the help notes for this command:"
-        $stderr.puts
-        $stderr.puts self.class.option_parser.help
-        false
-      else
-        true
-      end
+    def entity_manager_for(entity_class)
+      @context.configuration.entity_manager_for_class(@context.focus, entity_class)
     end
 
-    def is_manager_available?(type)
-      manager = @configuration.manager(@state.focus, type)
-      if manager.nil?
-        $stderr.puts "No manager found that supports #{type}"
+    def triggered_as_snippet?
+      if @context.environment['TRIGGERED_AS_SNIPPET'].nil?
         false
       else
-        true
-      end
-    end
-
-    def manager_module(type)
-      @configuration.manager(@state.focus, type)[:module]
-    end
-
-    def triggered_as_snippet?(environment)
-      if environment['TRIGGERED_AS_SNIPPET'].nil?
-        false
-      else
-        environment['TRIGGERED_AS_SNIPPET'] == 'true'
+        @context.environment['TRIGGERED_AS_SNIPPET'] == 'true'
       end
     end
 
     def strip_emojis(string)
-      # symbols & pics
-      regex = /[\u{1f300}-\u{1f5ff}]/
-      result = string.gsub(regex, '')
-
-      # enclosed chars
-      regex = /[\u{2500}-\u{2BEF}]/ # Exclude chinese characters
-      result = result.gsub(regex, '')
-
-      # emoticons
-      regex = /[\u{1f600}-\u{1f64f}]/
-      result = result.gsub(regex, '')
-
-      #dingbats
-      regex = /[\u{2702}-\u{27b0}]/
-      result = result.gsub(regex, '')
-
-      result.strip
+      # Not doing anything yet...
+      string
     end
   end
 end

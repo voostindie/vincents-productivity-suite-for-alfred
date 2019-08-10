@@ -1,10 +1,7 @@
 module VPS
   module Area
     class List
-      def initialize(configuration, state)
-        @configuration = configuration
-        @state = state
-      end
+      include PluginSupport
 
       def self.option_parser
         OptionParser.new do |parser|
@@ -12,9 +9,9 @@ module VPS
         end
       end
 
-      def run(arguments, environment)
-        focus = @state.focus[:key]
-        @configuration.areas.map do |area|
+      def run
+        focus = @context.focus[:key]
+        @context.configuration.areas.map do |area|
           postfix = area[:key].eql?(focus) ? ' (focused)' : ''
           {
             uid: area[:key],
@@ -38,28 +35,34 @@ module VPS
         end
       end
 
-      def can_run?(arguments, environment)
-        if arguments.size != 1
+      def can_run?
+        if @context.arguments.size != 1
           $stderr.puts "Exactly one argument required: the name of the area to focus on"
           return false
         end
-        area = @configuration.area(arguments[0])
+        area = @context.configuration.area(@context.arguments[0])
         if area.nil?
-          $stderr.puts "Unknown area: #{arguments[0]}"
+          $stderr.puts "Unknown area: #{@context.arguments[0]}"
           return false
         end
         true
       end
 
-      def run(arguments, environment)
-        area = @configuration.area(arguments[0])
-        @state.change_focus(area[:key], @configuration)
-        @state.persist
-        @configuration.actions.each_key do |key|
-          Registry::plugins[key][:action].new(@configuration, @state).run(environment)
+      def run
+        area = @context.configuration.area(@context.arguments[0])
+        @context.state.change_focus(area[:key], @context.configuration)
+        @context.state.persist
+        @context.configuration.actions.each_key do |key|
+          Registry::plugins[key].action_class.new(@context).run
         end
         "#{area[:name]} is now the focused area"
       end
+    end
+
+    Registry.register(Area) do |plugin|
+      plugin.for_entity(Entities::Area)
+      plugin.add_command(List, :list)
+      plugin.add_command(Focus, :single)
     end
   end
 end
