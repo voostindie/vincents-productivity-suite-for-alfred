@@ -2,16 +2,25 @@ module VPS
   module Calendar
     def self.read_area_configuration(area, hash)
       {
-        name: hash['name'] || nil
+        name: hash['name'] || nil,
+        me: hash['me'] || nil
       }
     end
 
-    def self.load_entity
-      if context.environment['EVENT_ID'].nil?
-        raise 'Not yet implemented (for the CLI)!'
-      else
-        Entities::Event.from_env(context.environment)
+    def self.load_entity(context)
+      database = CalendarDatabase.new(context.focus['calendar'][:name])
+      id = if context.environment['EVENT_ID'].nil?
+             context.arguments[0]
+           else
+             context.environment['EVENT_ID']
+           end
+      record = database.event_by_id(id)
+      event = Entities::Event.new do |e|
+        e.id = record.primary_key.to_s
+        e.title = record.title
       end
+      event.people = record.people.map {|p|p.name}.reject {|n|n == context.focus['calendar'][:me]}
+      event
     end
 
     class List
@@ -25,13 +34,13 @@ module VPS
       end
 
       def run
-        events_today.map do |record|
+        database = CalendarDatabase.new(@context.focus['calendar'][:name])
+        database.all_events_for(Date.today).map do |record|
           event = Entities::Event.new do |e|
             e.id = record.primary_key.to_s
             e.title = record.title
           end
           {
-            uid: event.id,
             title: event.title,
             subtitle: "Select an action for '#{event.title}'",
             arg: event.title,
@@ -39,12 +48,6 @@ module VPS
             variables: event.to_env
           }
         end
-      end
-
-      def events_today
-        database = CalendarDatabase.new(@context.focus['calendar'][:name])
-        database.all_events_for(Date.today)
-        # database.all_events_for(Date.new(2019,7,11))
       end
     end
 
@@ -61,28 +64,20 @@ module VPS
       end
 
       def can_run?
-        is_plugin_enabled?(:calendar) && has_id?(:event)
+        is_entity_present?(Entities::Event)
       end
 
       def run
-        event = Calendar::details_for(arguments, environment)
+        event = Calendar::load_entity(@context)
         commands = []
-        # commands << {
-        #   title: 'Open in Calendar',
-        #   arg: "event open #{arguments[0]}",
-        #   icon: {
-        #     path: "icons/calendar.png"
-        #   }
-        # }
-        commands << @context.collaborator_commands(:event, event)
-        commands.flatten
+        commands + @context.collaborator_commands(event)
       end
     end
 
     Registry.register(Calendar) do |plugin|
       plugin.for_entity(Entities::Event)
       plugin.add_command(List, :list)
-      # plugin.add_command(Commands, :list) # Work in progress..
+      plugin.add_command(Commands, :list) # Work in progress..
     end
 
     class CalendarDatabase
@@ -105,22 +100,22 @@ module VPS
         start_date = (Time.mktime(date.year, date.month, date.day, 0, 0, 0) - TIME_DIFF).to_f
         end_date = (Time.mktime(date.year, date.month, date.day, 23, 59, 59) - TIME_DIFF).to_f
         query = <<-EOS
-      SELECT CI.Z_PK,
-             CI.ZLOCALUID,
-             CI.ZTITLE,
-             CI.ZSTARTDATE,
-             CI.ZENDDATE,
-             CI.ZISDETACHED,
-             CI.ZMYATTENDEESTATUS,
-             CI.ZORGANIZERCOMMONNAME,
-             CI.ZORGANIZERADDRESSSTRING
-      FROM ZCALENDARITEM CI
-      JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
-      WHERE CA.ZTITLE = '#{@calendar_name}'
-      AND ZSTARTDATE >= #{start_date} AND ZSTARTDATE <= #{end_date}
-      AND ZRECURRENCERULE IS NULL
-      AND ZISALLDAY = 0
-      ORDER BY ZSTARTDATE
+        SELECT CI.Z_PK,
+               CI.ZLOCALUID,
+               CI.ZTITLE,
+               CI.ZSTARTDATE,
+               CI.ZENDDATE,
+               CI.ZISDETACHED,
+               CI.ZMYATTENDEESTATUS,
+               CI.ZORGANIZERCOMMONNAME,
+               CI.ZORGANIZERADDRESSSTRING
+        FROM ZCALENDARITEM CI
+        JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
+        WHERE CA.ZTITLE = '#{@calendar_name}'
+        AND ZSTARTDATE >= #{start_date} AND ZSTARTDATE <= #{end_date}
+        AND ZRECURRENCERULE IS NULL
+        AND ZISALLDAY = 0
+        ORDER BY ZSTARTDATE
         EOS
         @database.execute(query).map { |row| SingleEvent.new(*row) }
       end
@@ -128,22 +123,22 @@ module VPS
       def recurrent_events_for(date)
         start_date = (Time.mktime(date.year, date.month, date.day, 0, 0, 0) - CalendarDatabase::TIME_DIFF).to_f
         query = <<-EOS
-      SELECT CI.Z_PK,
-           CI.ZLOCALUID,
-           CI.ZTITLE,
-           CI.ZSTARTDATE,
-           CI.ZENDDATE,
-           CI.ZRECURRENCERULE,
-           CI.ZMYATTENDEESTATUS,
-           CI.ZORGANIZERCOMMONNAME,
-           CI.ZORGANIZERADDRESSSTRING
-      FROM ZCALENDARITEM CI
-      JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
-      WHERE CA.ZTITLE = '#{@calendar_name}'
-      AND (ZRECURRENCEENDDATE IS NULL
-              OR ZRECURRENCEENDDATE >= #{start_date})
-      AND ZRECURRENCERULE IS NOT NULL
-      ORDER BY ZSTARTDATE
+          SELECT CI.Z_PK,
+               CI.ZLOCALUID,
+               CI.ZTITLE,
+               CI.ZSTARTDATE,
+               CI.ZENDDATE,
+               CI.ZRECURRENCERULE,
+               CI.ZMYATTENDEESTATUS,
+               CI.ZORGANIZERCOMMONNAME,
+               CI.ZORGANIZERADDRESSSTRING
+          FROM ZCALENDARITEM CI
+          JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
+          WHERE CA.ZTITLE = '#{@calendar_name}'
+          AND (ZRECURRENCEENDDATE IS NULL
+                  OR ZRECURRENCEENDDATE >= #{start_date})
+          AND ZRECURRENCERULE IS NOT NULL
+          ORDER BY ZSTARTDATE
         EOS
         @database.execute(query).map { |row| RecurringEvent.new(*row) }.filter { |e| e.is_active(date) }
       end
@@ -166,10 +161,40 @@ module VPS
         end
         events = events + single_events.reject { |e| e.is_detached }
         events.sort_by! { |e| e.start_time }
-        enrich_events_with_attendees(events)
         events
       end
 
+      def event_by_id(id)
+        query = <<-EOS
+          SELECT CI.Z_PK,
+                 CI.ZLOCALUID,
+                 CI.ZTITLE,
+                 CI.ZSTARTDATE,
+                 CI.ZENDDATE,
+                 CI.ZISDETACHED,
+                 CI.ZMYATTENDEESTATUS,
+                 CI.ZORGANIZERCOMMONNAME,
+                 CI.ZORGANIZERADDRESSSTRING
+          FROM ZCALENDARITEM CI
+          WHERE CI.Z_PK = ?
+        EOS
+        event = @database.execute(query, id).map { |row| SingleEvent.new(*row) }.first
+        enrich_event_with_attendees(event)
+      end
+
+      private
+
+      def enrich_event_with_attendees(event)
+        query = <<-EOS
+          SELECT DISTINCT ZCOMMONNAME, ZADDRESSSTRING
+          FROM ZATTENDEE
+          WHERE ZEVENT = ?
+        EOS
+        @database.execute(query, event.primary_key).map do |row|
+          event.people << Person.new(*row)
+        end
+        event
+      end
 
       def self.to_date(int)
         Time.strptime(int.to_s, '%s') + CalendarDatabase::TIME_DIFF
@@ -178,23 +203,6 @@ module VPS
       def self.to_boolean(bool)
         bool == 1
       end
-
-      private
-
-      def enrich_events_with_attendees(events)
-        query = <<-EOS
-      SELECT DISTINCT ZEVENT, ZCOMMONNAME, ZADDRESSSTRING
-      FROM ZATTENDEE
-      WHERE ZEVENT IN (#{events.map { |_| '?' }.join(', ')})
-        EOS
-        @database.execute(query, events.map { |e| e.primary_key }).map do |row|
-          primary_key = row.shift
-          event = events.find { |e| e.primary_key == primary_key }
-          event.people << Person.new(*row)
-        end
-        events.each { |e| e.people.sort_by! { |p| p.name } }
-      end
-
     end
 
     class Event

@@ -132,7 +132,7 @@ module VPS
             path: "icons/contacts.png"
           }
         }
-        commands << @context.collaborator_commands(contact)
+        commands += @context.collaborator_commands(contact)
         commands << {
           title: 'Write email',
           arg: "contact email #{contact.id}",

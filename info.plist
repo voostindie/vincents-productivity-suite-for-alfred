@@ -47,6 +47,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1E6815E6-601D-4507-8911-DB4C68D96DBB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>19A1C1A7-8B05-44A8-8700-C87E81B7ECB5</key>
 		<array>
 			<dict>
@@ -90,6 +103,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>88E6859F-DDAF-4711-95D0-FB44354A461D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>22D4F09F-F01A-478C-BE58-D38C10C03D5D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1016,6 +1042,55 @@ ruby exe/vps -a contact commands
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a event commands
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-project-actions</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -1202,6 +1277,15 @@ See the README for more information.</string>
 			<integer>250</integer>
 			<key>ypos</key>
 			<integer>760</integer>
+		</dict>
+		<key>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</key>
+		<dict>
+			<key>note</key>
+			<string>Lists all available actions for an event</string>
+			<key>xpos</key>
+			<integer>740</integer>
+			<key>ypos</key>
+			<integer>855</integer>
 		</dict>
 		<key>19A1C1A7-8B05-44A8-8700-C87E81B7ECB5</key>
 		<dict>

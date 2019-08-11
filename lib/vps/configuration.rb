@@ -38,7 +38,7 @@ module VPS
     ##
     # Returns the manager for a specified entity name in an area
     def entity_manager_for(area, entity_name)
-      list = Registry.entity_managers_for(entity_name).select do |plugin|
+      Registry.entity_managers_for(entity_name).select do |plugin|
         area.has_key?(plugin.name)
       end.first
     end

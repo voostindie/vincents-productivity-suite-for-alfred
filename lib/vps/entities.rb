@@ -84,7 +84,7 @@ module VPS
 
     class Event
 
-      attr_accessor :id, :title
+      attr_accessor :id, :title, :people
 
       def initialize
         yield self
@@ -103,7 +103,6 @@ module VPS
           EVENT_TITLE: @title
         }
       end
-
 
     end
 

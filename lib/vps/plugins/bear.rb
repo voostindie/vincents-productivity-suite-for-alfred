@@ -24,6 +24,14 @@ module VPS
             path: "icons/bear.png"
           }
         }
+      elsif entity.is_a?(Entities::Event)
+        {
+          title: 'Create a note in Bear',
+          arg: "note event #{entity.id}",
+          icon: {
+            path: "icons/bear.png"
+          }
+        }
       else
         raise "Unsupported entity class for collaboration: #{entity.class}"
       end
@@ -131,13 +139,45 @@ module VPS
       end
     end
 
+    class Event < Plain
+      def self.option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'Create a new note for an event'
+          parser.separator 'Usage: note event <eventId>'
+          parser.separator ''
+          parser.separator 'Where <eventId> is the ID of the event to create a note for'
+        end
+      end
+
+      def can_run?
+        is_entity_present?(Entities::Event) && is_entity_manager_available?(Entities::Event)
+      end
+
+      def run
+        @event = @context.load_entity(Entities::Event)
+        super
+      end
+
+      def create_title
+        @event.title
+      end
+
+      def create_tags
+        focus = @context.focus[:name]
+        tags = @event.people.map { |p| "#{focus}/Contacts/#{p}" }
+        super + tags
+      end
+    end
+
     Registry.register(Bear) do |plugin|
       plugin.for_entity(Entities::Note)
       plugin.add_command(Plain, :single)
       plugin.add_command(Project, :single)
       plugin.add_command(Contact, :single)
+      plugin.add_command(Event, :single)
       plugin.add_collaboration(Entities::Project)
       plugin.add_collaboration(Entities::Contact)
+      plugin.add_collaboration(Entities::Event)
     end
   end
 end

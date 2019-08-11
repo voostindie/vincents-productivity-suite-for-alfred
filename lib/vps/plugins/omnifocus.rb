@@ -97,8 +97,7 @@ module VPS
             path: "icons/omnifocus.png"
           }
         }
-        commands << @context.collaborator_commands(project)
-        commands.flatten
+        commands += @context.collaborator_commands(project)
       end
     end
 
