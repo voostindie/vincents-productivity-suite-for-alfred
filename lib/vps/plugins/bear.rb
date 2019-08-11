@@ -135,6 +135,7 @@ module VPS
       end
 
       def create_tags
+        ## TODO: make the contact tags configurable.
         super << "#{@context.focus[:name]}/Contacts/#{@contact.name}"
       end
     end
@@ -163,6 +164,7 @@ module VPS
       end
 
       def create_tags
+        ## TODO: make the contact tags configurable.
         focus = @context.focus[:name]
         tags = @event.people.map { |p| "#{focus}/Contacts/#{p}" }
         super + tags

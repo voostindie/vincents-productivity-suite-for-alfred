@@ -41,7 +41,7 @@ module VPS
         env = {}
         prefix = env_prefix
         self.instance_variables.each do |symbol|
-          var = prefix + symbol[1..].to_s.upcase
+          var = prefix + symbol[1..-1].to_s.upcase
           value = self.instance_variable_get(symbol)
           env[var] = value unless value.nil?
         end
@@ -57,7 +57,7 @@ module VPS
           prefix = entity.env_prefix
           index = prefix.size
           env.select {|key, _| key.start_with?(prefix)}.each_pair do |key, value|
-            variable = "@#{key[index..].downcase}".to_sym
+            variable = "@#{key[index..-1].downcase}".to_sym
             entity.instance_variable_set(variable, value)
           end
         end

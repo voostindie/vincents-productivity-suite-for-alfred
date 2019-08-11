@@ -2,6 +2,8 @@
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
+# We shouldn't be doing this, but otherwise the sqlite3 code barfs.
+# I really should find out how to configure sqlite3 separately...
 Encoding::default_internal = Encoding::UTF_8
 Encoding::default_external = Encoding::UTF_8
 
