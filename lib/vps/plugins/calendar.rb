@@ -33,9 +33,9 @@ module VPS
         end
       end
 
-      def run
+      def run(date = Date.today)
         database = CalendarDatabase.new(@context.focus['calendar'][:name])
-        database.all_events_for(Date.today).map do |record|
+        database.all_events_for(date).map do |record|
           event = Entities::Event.new do |e|
             e.id = record.primary_key.to_s
             e.title = record.title
