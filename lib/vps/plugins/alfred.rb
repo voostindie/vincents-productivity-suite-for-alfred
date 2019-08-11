@@ -1,5 +1,5 @@
 module VPS
-  module Files
+  module Alfred
     def self.read_area_configuration(area, hash)
       {
         path: hash['path'] || 'Projects',
@@ -32,7 +32,7 @@ module VPS
 
       def run(runner = Jxa::Runner.new('alfred'))
         area = @context.focus
-        path = File.join(area[:root], area['files'][:path]) + '/'
+        path = File.join(area[:root], area['alfred'][:path]) + '/'
         runner.execute('browse', path)
         "Opened Alfred for directory '#{path}'"
       end
@@ -58,13 +58,13 @@ module VPS
         project = @context.load_entity(Entities::Project)
         area = @context.focus
         folder = strip_emojis(project.name)
-        path = File.join(area[:root], area['files'][:path], folder) + '/'
+        path = File.join(area[:root], area['alfred'][:path], folder) + '/'
         runner.execute('browse', path)
         "Opened Alfred for directory '#{path}'"
       end
     end
 
-    Registry.register(Files) do |plugin|
+    Registry.register(Alfred) do |plugin|
       plugin.for_entity(Entities::File)
       plugin.add_command(Browse, :single)
       plugin.add_command(Project, :single)
