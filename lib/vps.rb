@@ -1,4 +1,6 @@
-module VPS; end
+module VPS
+  ;
+end
 
 # Libraries
 require 'yaml'
@@ -26,13 +28,5 @@ require 'vps/cli'
 require 'vps/plugin_support'
 
 # Plugins
-require 'vps/plugins/area'
-require 'vps/plugins/bear'
-require 'vps/plugins/bitbar'
-require 'vps/plugins/calendar'
-require 'vps/plugins/contacts'
-require 'vps/plugins/files'
-require 'vps/plugins/mail'
-require 'vps/plugins/omnifocus'
-require 'vps/plugins/paste'
-require 'vps/plugins/wallpaper'
+files = Dir.glob(File.join(File.dirname(__FILE__), 'vps/plugins/**.rb')).sort
+files.each {|f| require f}
