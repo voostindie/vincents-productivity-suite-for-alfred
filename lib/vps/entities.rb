@@ -106,6 +106,10 @@ module VPS
 
     end
 
+    class Paste
+      include EntitySupport
+    end
+
     class Note
       include EntitySupport
 

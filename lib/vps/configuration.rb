@@ -83,11 +83,12 @@ module VPS
           name: name,
           root: root
         }
-        # The area plugin is added to every area, so that:
-        # - the area command is always available
-        # - no other plugin that supports areas can be added
+        # The area and paste plugins are added to every area, so that:
+        # - these commands are always available
+        # - no overriding configuration can be provided
         area['area'] = {}
-        entity_classes = [Entities::Area]
+        area['paste'] = {}
+        entity_classes = [Entities::Area, Entities::Paste]
         config.each_pair do |plugin_key, plugin_config|
           plugin = Registry::plugins[plugin_key]
           if plugin.nil?

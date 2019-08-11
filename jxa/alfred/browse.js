@@ -13,4 +13,5 @@ function run(arguments) {
     var folder = arguments[0];
 
     Application('Alfred 4').browse(folder);
+    return true;
 }
