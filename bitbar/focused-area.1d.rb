@@ -20,4 +20,4 @@ $LOAD_PATH.unshift VPS_ROOT
 require 'vps'
 
 $stderr.reopen(File.new('/dev/null', 'w'))
-puts VPS::BitBar::label
+puts VPS::Plugins::BitBar::label
