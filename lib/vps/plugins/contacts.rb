@@ -2,13 +2,8 @@ module VPS
   module Contacts
 
     def self.read_area_configuration(area, hash)
-      mail = hash['mail'] || {}
       {
         group: hash['group'] || area[:name],
-        mail: {
-          client: mail['client'] || 'Mail',
-          from: mail['from'] || nil
-        }
       }
     end
 
@@ -72,40 +67,6 @@ module VPS
       end
     end
 
-    class Email
-      include PluginSupport
-
-      def self.option_parser
-        OptionParser.new do |parser|
-          parser.banner = 'Prepare an email to the specified contact'
-          parser.separator 'Usage: contact email <contactId>'
-          parser.separator ''
-          parser.separator 'Where <contactId> is the ID of the contact to write a mail to'
-        end
-      end
-
-      def can_run?
-        is_entity_present?(Entities::Contact)
-      end
-
-      def run(runner = Jxa::Runner.new('contacts'))
-        contact = Contacts::load_entity(@context)
-        address_line = "#{contact.name} <#{contact.email}>"
-        mail = @context.focus['contacts'][:mail]
-        case mail[:client]
-        when 'Mail'
-          runner.execute('create-mail-message', address_line, mail[:from])
-        when 'Microsoft Outlook'
-          # Note, the "from" address is not supported for Outlook.
-          # I don't need it, so I don't care right now.
-          runner.execute('create-outlook-message', address_line)
-        else
-          raise "Unsupported mail client: #{mail[:client]}"
-        end
-        nil
-      end
-    end
-
     class Commands
       include PluginSupport
 
@@ -132,13 +93,6 @@ module VPS
             path: "icons/contacts.png"
           }
         }
-        commands << {
-          title: 'Write email',
-          arg: "contact email #{contact.id}",
-          icon: {
-            path: "icons/mail.png"
-          }
-        }
         commands += @context.collaborator_commands(contact)
         commands.flatten
       end
@@ -148,7 +102,6 @@ module VPS
       plugin.for_entity(Entities::Contact)
       plugin.add_command(List, :list)
       plugin.add_command(Open, :single)
-      plugin.add_command(Email, :single)
       plugin.add_command(Commands, :list)
     end
   end

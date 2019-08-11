@@ -107,13 +107,12 @@ module VPS
     end
 
     class Paste
-      include EntitySupport
     end
 
     class Note
-      include EntitySupport
+    end
 
-      attr_reader :title
+    class Mail
     end
   end
 end
