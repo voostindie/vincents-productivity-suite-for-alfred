@@ -120,7 +120,7 @@ module VPS
     class Note
     end
 
-    class Paste
+    class Text
     end
   end
 end

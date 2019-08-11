@@ -88,7 +88,7 @@ module VPS
         # - no overriding configuration can be provided
         area['area'] = {}
         area['paste'] = {}
-        entity_classes = [Entities::Area, Entities::Paste]
+        entity_classes = [Entities::Area, Entities::Text]
         config.each_pair do |plugin_key, plugin_config|
           plugin = Registry::plugins[plugin_key]
           if plugin.nil?
