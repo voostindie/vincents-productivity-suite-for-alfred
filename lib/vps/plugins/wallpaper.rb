@@ -48,7 +48,7 @@ module VPS
         end
       end
 
-      Registry.register(Wallpaper) do |plugin|
+      def self.register(plugin)
         plugin.with_action(Replace)
       end
     end

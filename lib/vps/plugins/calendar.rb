@@ -75,7 +75,7 @@ module VPS
         end
       end
 
-      Registry.register(Calendar) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::Event)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list) # Work in progress..

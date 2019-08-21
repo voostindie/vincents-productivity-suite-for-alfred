@@ -2,6 +2,15 @@ module VPS
   module Plugins
 
     module OmniFocus
+
+      def self.register(plugin)
+        plugin.for_entity(Entities::Project)
+        plugin.add_command(List, :list)
+        plugin.add_command(Open, :single)
+        plugin.add_command(Commands, :list)
+        plugin.with_action(Focus)
+      end
+
       def self.read_area_configuration(area, hash)
         {
           folder: hash['folder'] || area[:name]
@@ -113,7 +122,7 @@ module VPS
         end
       end
 
-      Registry.register(OmniFocus) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::Project)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)

@@ -114,7 +114,7 @@ module VPS
         end
       end
 
-      Registry.register(Paste) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::Text)
         plugin.add_command(Project, :single)
         plugin.add_command(Contact, :single)

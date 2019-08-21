@@ -51,16 +51,17 @@ module VPS
 
         def run
           area = @context.configuration.area(@context.arguments[0])
+          plugins = @context.configuration.registry.plugins
           @context.state.change_focus(area[:key], @context.configuration)
           @context.state.persist
           @context.configuration.actions.each_key do |key|
-            Registry::plugins[key].action_class.new(@context).run
+            plugins[key].action_class.new(@context).run
           end
           "#{area[:name]} is now the focused area"
         end
       end
 
-      Registry.register(Area) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::Area)
         plugin.add_command(List, :list)
         plugin.add_command(Focus, :single)

@@ -63,7 +63,7 @@ module VPS
         end
       end
 
-      Registry.register(BitBar) do |plugin|
+      def self.register(plugin)
         plugin.with_action(Refresh)
       end
     end

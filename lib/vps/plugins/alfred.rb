@@ -65,7 +65,7 @@ module VPS
         end
       end
 
-      Registry.register(Alfred) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::File)
         plugin.add_command(Browse, :single)
         plugin.add_command(Project, :single)

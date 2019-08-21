@@ -1,6 +1,8 @@
 module VPS
   class Configuration
 
+    attr_reader :registry
+
     DEFAULT_FILE = File.join(Dir.home, '.vpsrc').freeze
 
     def self.load(path)
@@ -14,6 +16,7 @@ module VPS
     end
 
     def initialize(path)
+      @registry = Registry.new
       hash = YAML.load_file(path)
       extract_areas(hash)
       extract_actions(hash)
@@ -38,7 +41,7 @@ module VPS
     ##
     # Returns the manager for a specified entity name in an area
     def entity_manager_for(area, entity_name)
-      Registry.entity_managers_for(entity_name).select do |plugin|
+      @registry.entity_managers_for(entity_name).select do |plugin|
         area.has_key?(plugin.name)
       end.first
     end
@@ -53,7 +56,7 @@ module VPS
     ##
     # Returns all entity managers that are enabled within an area
     def entity_managers(area)
-      Registry.entity_managers.select do |plugin|
+      @registry.entity_managers.select do |plugin|
         area.has_key?(plugin.name)
       end
     end
@@ -61,7 +64,7 @@ module VPS
     ##
     # Returns all collaborators. Possible types are +:project+
     def collaborators(area, entity_class)
-      Registry.collaborators(entity_class).select do |plugin|
+      @registry.collaborators(entity_class).select do |plugin|
         area.has_key?(plugin.name)
       end
     end
@@ -90,9 +93,9 @@ module VPS
         area['paste'] = {}
         entity_classes = [Entities::Area, Entities::Text]
         config.each_pair do |plugin_key, plugin_config|
-          plugin = Registry::plugins[plugin_key]
+          plugin = @registry.plugins[plugin_key]
           if plugin.nil?
-            unless ['key', 'name', 'root'].include?(plugin_key)
+            unless %w(key name root).include?(plugin_key)
               $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             end
             next
@@ -113,7 +116,7 @@ module VPS
     def extract_actions(hash)
       @actions = {}
       hash['actions'].each_pair do |key, config|
-        plugin = Registry::plugins[key]
+        plugin = @registry.plugins[key]
         if plugin.nil? || plugin.action_class.nil?
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next

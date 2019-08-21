@@ -172,7 +172,7 @@ module VPS
         end
       end
 
-      Registry.register(Bear) do |plugin|
+      def self.register(plugin)
         plugin.for_entity(Entities::Note)
         plugin.add_command(Plain, :single)
         plugin.add_command(Project, :single)

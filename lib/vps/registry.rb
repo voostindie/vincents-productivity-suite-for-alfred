@@ -2,7 +2,7 @@ module VPS
   ##
   # Registration of all plugins, the commands they support, and so on.
   # Any new plugin needs to be added here.
-  module Registry
+  class Registry
 
     module WithName
       def to_short_name(clazz)
@@ -69,38 +69,30 @@ module VPS
       end
     end
 
-    @@plugins = {}
+    attr_reader :plugins
 
-    def self.register(plugin_module)
-      plugin = Plugin.new(plugin_module)
-      yield plugin
-      @@plugins[plugin.name] = plugin
+    def initialize
+      @plugins = VPS::Plugins.constants(false)
+                   .map { |c| VPS::Plugins.const_get(c) }
+                   .select { |c| c.is_a?(Module) && c.singleton_methods(false).include?(:register) }
+                   .map { |m| p = Plugin.new(m); m.register(p); [p.name, p] }
+                   .to_h
     end
 
-    def self.commands
-      @@plugins.reject do |_, plugin|
-        plugin.commands.empty?
-      end
-    end
-
-    def self.plugins
-      @@plugins
-    end
-
-    def self.entity_managers
-      @@plugins.values.reject do |plugin|
+    def entity_managers
+      @plugins.values.reject do |plugin|
         plugin.entity_class.nil?
       end
     end
 
-    def self.entity_managers_for(entity_name)
-      @@plugins.values.select do |plugin|
+    def entity_managers_for(entity_name)
+      @plugins.values.select do |plugin|
         plugin.entity_class != nil && plugin.entity_class_name == entity_name
       end
     end
 
-    def self.collaborators(entity_class)
-      @@plugins.values.select do |plugin|
+    def collaborators(entity_class)
+      @plugins.values.select do |plugin|
         plugin.collaborates_with.include?(entity_class)
       end
     end
