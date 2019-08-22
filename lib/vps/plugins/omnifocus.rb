@@ -1,9 +1,9 @@
 module VPS
   module Plugins
-
     module OmniFocus
-
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.add_repository(Entities::Project, ProjectRepository.new)
         plugin.for_entity(Entities::Project)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)
@@ -11,15 +11,22 @@ module VPS
         plugin.with_action(Focus)
       end
 
-      def self.read_area_configuration(area, hash)
-        {
-          folder: hash['folder'] || area[:name]
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            folder: hash['folder'] || area[:name]
+          }
+        end
       end
 
-      def self.read_action_configuration(hash)
-        {
-        }
+      class ProjectRepository < PluginSupport::Repository
+        def load_entity(context, runner = Jxa::Runner.new('omnifocus'))
+          if context.environment['PROJECT_ID'].nil?
+            Entities::Project.from_hash(runner.execute('project-details', context.arguments[0]))
+          else
+            Entities::Project.from_env(context.environment)
+          end
+        end
       end
 
       def self.load_entity(context, runner = Jxa::Runner.new('omnifocus'))
@@ -120,14 +127,6 @@ module VPS
             runner.execute('set-focus', @context.focus['omnifocus'][:folder])
           end
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Project)
-        plugin.add_command(List, :list)
-        plugin.add_command(Open, :single)
-        plugin.add_command(Commands, :list)
-        plugin.with_action(Focus)
       end
     end
   end

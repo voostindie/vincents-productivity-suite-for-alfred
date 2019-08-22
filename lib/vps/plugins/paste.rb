@@ -1,6 +1,15 @@
 module VPS
   module Plugins
     module Paste
+      def self.configure_plugin(plugin)
+        plugin.for_entity(Entities::Text)
+        plugin.add_command(Project, :single)
+        plugin.add_command(Contact, :single)
+        plugin.add_command(Event, :single)
+        plugin.add_collaboration(Entities::Project)
+        plugin.add_collaboration(Entities::Contact)
+        plugin.add_collaboration(Entities::Event)
+      end
 
       def self.commands_for(entity)
         if entity.is_a?(Entities::Project)
@@ -112,16 +121,6 @@ module VPS
         def text_from(event)
           event.title
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Text)
-        plugin.add_command(Project, :single)
-        plugin.add_command(Contact, :single)
-        plugin.add_command(Event, :single)
-        plugin.add_collaboration(Entities::Project)
-        plugin.add_collaboration(Entities::Contact)
-        plugin.add_collaboration(Entities::Event)
       end
     end
   end

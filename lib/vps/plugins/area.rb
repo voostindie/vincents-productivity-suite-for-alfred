@@ -1,6 +1,12 @@
 module VPS
   module Plugins
     module Area
+      def self.configure_plugin(plugin)
+        plugin.for_entity(Entities::Area)
+        plugin.add_command(List, :list)
+        plugin.add_command(Focus, :single)
+      end
+
       class List
         include PluginSupport
 
@@ -59,12 +65,6 @@ module VPS
           end
           "#{area[:name]} is now the focused area"
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Area)
-        plugin.add_command(List, :list)
-        plugin.add_command(Focus, :single)
       end
     end
   end

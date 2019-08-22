@@ -5,6 +5,7 @@ module VPS
 
     it 'registers all plugins under the Plugins module' do
       r = Registry.new
+      pp r
       expect(r.plugins['omnifocus']).to be_a(VPS::Registry::Plugin)
       expect(r.plugins['bear']).to be_a(VPS::Registry::Plugin)
       expect(r.plugins['mail']).to be_a(VPS::Registry::Plugin)

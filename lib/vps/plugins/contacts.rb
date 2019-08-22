@@ -1,11 +1,20 @@
 module VPS
   module Plugins
     module Contacts
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.for_entity(Entities::Contact)
+        plugin.add_command(List, :list)
+        plugin.add_command(Open, :single)
+        plugin.add_command(Commands, :list)
+      end
 
-      def self.read_area_configuration(area, hash)
-        {
-          group: hash['group'] || area[:name],
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            group: hash['group'] || area[:name],
+          }
+        end
       end
 
       def self.load_entity(context, runner = Jxa::Runner.new('contacts'))
@@ -97,13 +106,6 @@ module VPS
           commands += @context.collaborator_commands(contact)
           commands.flatten
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Contact)
-        plugin.add_command(List, :list)
-        plugin.add_command(Open, :single)
-        plugin.add_command(Commands, :list)
       end
     end
   end

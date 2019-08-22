@@ -18,21 +18,27 @@
 module VPS
   module Plugins
     module Wallpaper
-
-      def self.read_area_configuration(area, hash)
-        if hash['path'].nil?
-          {}
-        else
-          {
-            path: hash['path']
-          }
-        end
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.with_action(Replace)
       end
 
-      def self.read_action_configuration(hash)
-        {
-          path: hash['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          if hash['path'].nil?
+            {}
+          else
+            {
+              path: hash['path']
+            }
+          end
+        end
+
+        def read_action_configuration(hash)
+          {
+            path: hash['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
+          }
+        end
       end
 
       class Replace
@@ -46,10 +52,6 @@ module VPS
                  end || @context.configuration.actions['wallpaper'][:path]
           runner.execute('change-wallpaper', path)
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.with_action(Replace)
       end
     end
   end

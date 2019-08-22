@@ -1,11 +1,20 @@
 module VPS
   module Plugins
     module Calendar
-      def self.read_area_configuration(area, hash)
-        {
-          name: hash['name'] || nil,
-          me: hash['me'] || nil
-        }
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.for_entity(Entities::Event)
+        plugin.add_command(List, :list)
+        plugin.add_command(Commands, :list) # Work in progress..
+      end
+
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            name: hash['name'] || nil,
+            me: hash['me'] || nil
+          }
+        end
       end
 
       def self.load_entity(context)
@@ -73,12 +82,6 @@ module VPS
           commands = []
           commands + @context.collaborator_commands(event)
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Event)
-        plugin.add_command(List, :list)
-        plugin.add_command(Commands, :list) # Work in progress..
       end
 
       class CalendarDatabase

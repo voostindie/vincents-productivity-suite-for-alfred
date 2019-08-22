@@ -1,11 +1,24 @@
 module VPS
   module Plugins
     module Bear
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.for_entity(Entities::Note)
+        plugin.add_command(Plain, :single)
+        plugin.add_command(Project, :single)
+        plugin.add_command(Contact, :single)
+        plugin.add_command(Event, :single)
+        plugin.add_collaboration(Entities::Project)
+        plugin.add_collaboration(Entities::Contact)
+        plugin.add_collaboration(Entities::Event)
+      end
 
-      def self.read_area_configuration(area, hash)
-        {
-          tags: hash['tags'] || []
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            tags: hash['tags'] || []
+          }
+        end
       end
 
       def self.commands_for(entity)
@@ -170,17 +183,6 @@ module VPS
           tags = @event.people.map { |p| "#{focus}/Contacts/#{p}" }
           super + tags
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Note)
-        plugin.add_command(Plain, :single)
-        plugin.add_command(Project, :single)
-        plugin.add_command(Contact, :single)
-        plugin.add_command(Event, :single)
-        plugin.add_collaboration(Entities::Project)
-        plugin.add_collaboration(Entities::Contact)
-        plugin.add_collaboration(Entities::Event)
       end
     end
   end

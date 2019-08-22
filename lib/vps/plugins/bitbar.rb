@@ -31,16 +31,23 @@ module VPS
     # area +myarea+ is set to a thumbs up.
     #
     module BitBar
-      def self.read_area_configuration(area, hash)
-        {
-          label: hash['label'] || area[:name]
-        }
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.with_action(Refresh)
       end
 
-      def self.read_action_configuration(hash)
-        {
-          plugin: hash['plugin'] || 'focused-area.1d.rb'
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            label: hash['label'] || area[:name]
+          }
+        end
+
+        def read_action_configuration(hash)
+          {
+            plugin: hash['plugin'] || 'focused-area.1d.rb'
+          }
+        end
       end
 
       ##
@@ -61,10 +68,6 @@ module VPS
           plugin = @context.configuration.actions['bitbar'][:plugin]
           runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.with_action(Refresh)
       end
     end
   end

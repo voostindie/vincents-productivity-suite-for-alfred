@@ -1,10 +1,21 @@
 module VPS
   module Plugins
     module Alfred
-      def self.read_area_configuration(area, hash)
-        {
-          path: hash['path'] || 'Projects',
-        }
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.for_entity(Entities::File)
+        plugin.add_command(Browse, :single)
+        plugin.add_command(Project, :single)
+        plugin.add_collaboration(Entities::Project)
+      end
+
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            path: hash['path'] || 'Projects',
+          }
+        end
+
       end
 
       def self.commands_for(entity)
@@ -63,13 +74,6 @@ module VPS
           runner.execute('browse', path)
           "Opened Alfred for directory '#{path}'"
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::File)
-        plugin.add_command(Browse, :single)
-        plugin.add_command(Project, :single)
-        plugin.add_collaboration(Entities::Project)
       end
     end
   end

@@ -1,11 +1,19 @@
 module VPS
   module Plugins
     module Mail
+      def self.configure_plugin(plugin)
+        plugin.configurator = Configurator.new
+        plugin.for_entity(Entities::Mail)
+        plugin.add_command(Email, :single)
+        plugin.add_collaboration(Entities::Contact)
+      end
 
-      def self.read_area_configuration(area, hash)
-        {
-          from: hash['from'] || nil
-        }
+      class Configurator < PluginSupport::Configurator
+        def read_area_configuration(area, hash)
+          {
+            from: hash['from'] || nil
+          }
+        end
       end
 
       def self.commands_for(entity)
@@ -45,12 +53,6 @@ module VPS
           runner.execute('create-email', address_line, from)
           nil
         end
-      end
-
-      def self.configure_plugin(plugin)
-        plugin.for_entity(Entities::Mail)
-        plugin.add_command(Email, :single)
-        plugin.add_collaboration(Entities::Contact)
       end
     end
   end

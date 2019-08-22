@@ -1,6 +1,34 @@
 module VPS
   module PluginSupport
 
+    class Configurator
+      def read_area_configuration(area, hash)
+        {}
+      end
+
+      def read_action_configuration(hash)
+        {}
+      end
+    end
+
+    class Repository
+      def load_entity(context)
+
+      end
+    end
+
+    class ClassCommand
+
+    end
+
+    class InstanceCommand
+
+    end
+
+    class Action
+
+    end
+
     ##
     # Creates a new command. This happens whenever the command is executed through the CLI.
     #

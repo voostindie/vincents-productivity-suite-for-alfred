@@ -107,7 +107,7 @@ module VPS
               next
             end
           end
-          area[plugin.name] = plugin.plugin_module.read_area_configuration(area, plugin_config || {})
+          area[plugin.name] = plugin.configurator.read_area_configuration(area, plugin_config || {})
         end
         @areas[key] = area
       end
@@ -121,7 +121,7 @@ module VPS
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next
         end
-        @actions[key] = plugin.plugin_module.read_action_configuration(config || {})
+        @actions[key] = plugin.configurator.read_action_configuration(config || {})
       end
     end
   end

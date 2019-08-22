@@ -8,10 +8,6 @@ module VPS
       def to_short_name(clazz)
         clazz.name.split('::').last.downcase
       end
-
-      def name
-        to_short_name(name_class)
-      end
     end
 
     class Command
@@ -24,8 +20,8 @@ module VPS
         @type = type
       end
 
-      def name_class
-        @command_class
+      def name
+        to_short_name(@command_class)
       end
     end
 
@@ -34,12 +30,19 @@ module VPS
 
       attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
 
+      attr_reader :name, :repositories
+      attr_accessor :configurator
+
       def initialize(plugin_module)
         @plugin_module = plugin_module
         @entity_class = nil
         @collaborates_with = []
         @commands = {}
         @action_class = nil
+
+        @name = to_short_name(plugin_module)
+        @repositories = {}
+        @configurator = PluginSupport::Configurator.new
       end
 
       def name_class
@@ -49,6 +52,10 @@ module VPS
       def entity_class_name
         raise "You shouldn't be calling this" if @entity_class.nil?
         to_short_name(@entity_class)
+      end
+
+      def add_repository(entity_class, repository)
+        repositories[entity_class] = repository
       end
 
       def for_entity(entity_class)
