@@ -63,7 +63,7 @@ module VPS
         end
       end
 
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
         plugin.with_action(Refresh)
       end
     end

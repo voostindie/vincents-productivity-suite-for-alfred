@@ -47,7 +47,7 @@ module VPS
         end
       end
 
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
         plugin.for_entity(Entities::Mail)
         plugin.add_command(Email, :single)
         plugin.add_collaboration(Entities::Contact)

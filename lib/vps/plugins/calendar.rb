@@ -75,7 +75,7 @@ module VPS
         end
       end
 
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
         plugin.for_entity(Entities::Event)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list) # Work in progress..

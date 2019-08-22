@@ -74,8 +74,8 @@ module VPS
     def initialize
       @plugins = VPS::Plugins.constants(false)
                    .map { |c| VPS::Plugins.const_get(c) }
-                   .select { |c| c.is_a?(Module) && c.singleton_methods(false).include?(:register) }
-                   .map { |m| p = Plugin.new(m); m.register(p); [p.name, p] }
+                   .select { |c| c.is_a?(Module) && c.singleton_methods(false).include?(:configure_plugin) }
+                   .map { |m| p = Plugin.new(m); m.configure_plugin(p); [p.name, p] }
                    .to_h
     end
 

@@ -65,7 +65,7 @@ module VPS
         end
       end
 
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
         plugin.for_entity(Entities::File)
         plugin.add_command(Browse, :single)
         plugin.add_command(Project, :single)

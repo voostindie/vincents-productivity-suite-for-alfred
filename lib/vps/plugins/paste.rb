@@ -114,7 +114,7 @@ module VPS
         end
       end
 
-      def self.register(plugin)
+      def self.configure_plugin(plugin)
         plugin.for_entity(Entities::Text)
         plugin.add_command(Project, :single)
         plugin.add_command(Contact, :single)
