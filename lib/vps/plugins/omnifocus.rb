@@ -3,7 +3,6 @@ module VPS
     module OmniFocus
       def self.configure_plugin(plugin)
         plugin.configurator = Configurator.new
-        plugin.add_repository(Entities::Project, ProjectRepository.new)
         plugin.for_entity(Entities::Project)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)
@@ -16,16 +15,6 @@ module VPS
           {
             folder: hash['folder'] || area[:name]
           }
-        end
-      end
-
-      class ProjectRepository < PluginSupport::Repository
-        def load_entity(context, runner = Jxa::Runner.new('omnifocus'))
-          if context.environment['PROJECT_ID'].nil?
-            Entities::Project.from_hash(runner.execute('project-details', context.arguments[0]))
-          else
-            Entities::Project.from_env(context.environment)
-          end
         end
       end
 

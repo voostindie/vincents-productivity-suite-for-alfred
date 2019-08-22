@@ -30,7 +30,7 @@ module VPS
 
       attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
 
-      attr_reader :name, :repositories
+      attr_reader :name
       attr_accessor :configurator
 
       def initialize(plugin_module)
@@ -41,7 +41,6 @@ module VPS
         @action_class = nil
 
         @name = to_short_name(plugin_module)
-        @repositories = {}
         @configurator = PluginSupport::Configurator.new
       end
 
@@ -52,10 +51,6 @@ module VPS
       def entity_class_name
         raise "You shouldn't be calling this" if @entity_class.nil?
         to_short_name(@entity_class)
-      end
-
-      def add_repository(entity_class, repository)
-        repositories[entity_class] = repository
       end
 
       def for_entity(entity_class)
