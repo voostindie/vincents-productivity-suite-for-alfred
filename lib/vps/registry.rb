@@ -30,7 +30,7 @@ module VPS
 
       attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
 
-      attr_reader :name, :configurator
+      attr_reader :name
       attr_accessor :configurator_class
 
       def initialize(plugin_module)
