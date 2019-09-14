@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module Contacts
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Contact)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)

@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module OmniFocus
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Project)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)

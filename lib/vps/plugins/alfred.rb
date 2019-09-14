@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module Alfred
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::File)
         plugin.add_command(Browse, :single)
         plugin.add_command(Project, :single)

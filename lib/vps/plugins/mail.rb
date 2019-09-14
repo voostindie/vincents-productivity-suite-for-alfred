@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module Mail
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Mail)
         plugin.add_command(Email, :single)
         plugin.add_collaboration(Entities::Contact)

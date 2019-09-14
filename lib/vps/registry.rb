@@ -30,8 +30,8 @@ module VPS
 
       attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
 
-      attr_reader :name
-      attr_accessor :configurator
+      attr_reader :name, :configurator
+      attr_accessor :configurator_class
 
       def initialize(plugin_module)
         @plugin_module = plugin_module
@@ -41,7 +41,15 @@ module VPS
         @action_class = nil
 
         @name = to_short_name(plugin_module)
-        @configurator = PluginSupport::Configurator.new
+        @configurator_class = nil
+      end
+
+      def configurator
+        if @configurator_class.nil?
+          PluginSupport::Configurator.new
+        else
+          @configurator_class.new
+        end
       end
 
       def name_class

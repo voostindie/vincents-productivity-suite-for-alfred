@@ -32,7 +32,7 @@ module VPS
     #
     module BitBar
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.with_action(Refresh)
       end
 

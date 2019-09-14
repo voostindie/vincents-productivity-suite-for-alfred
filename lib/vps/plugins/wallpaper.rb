@@ -19,7 +19,7 @@ module VPS
   module Plugins
     module Wallpaper
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.with_action(Replace)
       end
 

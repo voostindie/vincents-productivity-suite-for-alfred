@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module Bear
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Note)
         plugin.add_command(Plain, :single)
         plugin.add_command(Project, :single)
@@ -150,7 +150,7 @@ module VPS
 
         def create_tags
           ## TODO: make the contact tags configurable.
-          super << "#{@context.focus[:name]}/Contacts/#{@contact.name}"
+          super << "#{@context.focus[:name]}/People/#{@contact.name}"
         end
       end
 
@@ -180,7 +180,7 @@ module VPS
         def create_tags
           ## TODO: make the contact tags configurable.
           focus = @context.focus[:name]
-          tags = @event.people.map { |p| "#{focus}/Contacts/#{p}" }
+          tags = @event.people.map { |p| "#{focus}/People/#{p}" }
           super + tags
         end
       end

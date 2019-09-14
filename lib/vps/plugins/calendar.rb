@@ -2,7 +2,7 @@ module VPS
   module Plugins
     module Calendar
       def self.configure_plugin(plugin)
-        plugin.configurator = Configurator.new
+        plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Event)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list) # Work in progress..
@@ -104,22 +104,22 @@ module VPS
           start_date = (Time.mktime(date.year, date.month, date.day, 0, 0, 0) - TIME_DIFF).to_f
           end_date = (Time.mktime(date.year, date.month, date.day, 23, 59, 59) - TIME_DIFF).to_f
           query = <<-EOS
-        SELECT CI.Z_PK,
-               CI.ZLOCALUID,
-               CI.ZTITLE,
-               CI.ZSTARTDATE,
-               CI.ZENDDATE,
-               CI.ZISDETACHED,
-               CI.ZMYATTENDEESTATUS,
-               CI.ZORGANIZERCOMMONNAME,
-               CI.ZORGANIZERADDRESSSTRING
-        FROM ZCALENDARITEM CI
-        JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
-        WHERE CA.ZTITLE = '#{@calendar_name}'
-        AND ZSTARTDATE >= #{start_date} AND ZSTARTDATE <= #{end_date}
-        AND ZRECURRENCERULE IS NULL
-        AND ZISALLDAY = 0
-        ORDER BY ZSTARTDATE
+            SELECT CI.Z_PK,
+                   CI.ZLOCALUID,
+                   CI.ZTITLE,
+                   CI.ZSTARTDATE,
+                   CI.ZENDDATE,
+                   CI.ZISDETACHED,
+                   CI.ZMYATTENDEESTATUS,
+                   CI.ZORGANIZERCOMMONNAME,
+                   CI.ZORGANIZERADDRESSSTRING
+            FROM ZCALENDARITEM CI
+            JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
+            WHERE CA.ZTITLE = '#{@calendar_name}'
+            AND ZSTARTDATE >= #{start_date} AND ZSTARTDATE <= #{end_date}
+            AND ZRECURRENCERULE IS NULL
+            AND ZISALLDAY = 0
+            ORDER BY ZSTARTDATE
           EOS
           @database.execute(query).map { |row| SingleEvent.new(*row) }
         end
@@ -127,22 +127,22 @@ module VPS
         def recurrent_events_for(date)
           start_date = (Time.mktime(date.year, date.month, date.day, 0, 0, 0) - CalendarDatabase::TIME_DIFF).to_f
           query = <<-EOS
-          SELECT CI.Z_PK,
-               CI.ZLOCALUID,
-               CI.ZTITLE,
-               CI.ZSTARTDATE,
-               CI.ZENDDATE,
-               CI.ZRECURRENCERULE,
-               CI.ZMYATTENDEESTATUS,
-               CI.ZORGANIZERCOMMONNAME,
-               CI.ZORGANIZERADDRESSSTRING
-          FROM ZCALENDARITEM CI
-          JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
-          WHERE CA.ZTITLE = '#{@calendar_name}'
-          AND (ZRECURRENCEENDDATE IS NULL
-                  OR ZRECURRENCEENDDATE >= #{start_date})
-          AND ZRECURRENCERULE IS NOT NULL
-          ORDER BY ZSTARTDATE
+            SELECT CI.Z_PK,
+                 CI.ZLOCALUID,
+                 CI.ZTITLE,
+                 CI.ZSTARTDATE,
+                 CI.ZENDDATE,
+                 CI.ZRECURRENCERULE,
+                 CI.ZMYATTENDEESTATUS,
+                 CI.ZORGANIZERCOMMONNAME,
+                 CI.ZORGANIZERADDRESSSTRING
+            FROM ZCALENDARITEM CI
+            JOIN ZNODE CA ON CI.ZCALENDAR = CA.Z_PK
+            WHERE CA.ZTITLE = '#{@calendar_name}'
+            AND (ZRECURRENCEENDDATE IS NULL
+                    OR ZRECURRENCEENDDATE >= #{start_date})
+            AND ZRECURRENCERULE IS NOT NULL
+            ORDER BY ZSTARTDATE
           EOS
           @database.execute(query).map { |row| RecurringEvent.new(*row) }.filter { |e| e.is_active(date) }
         end
@@ -170,17 +170,17 @@ module VPS
 
         def event_by_id(id)
           query = <<-EOS
-          SELECT CI.Z_PK,
-                 CI.ZLOCALUID,
-                 CI.ZTITLE,
-                 CI.ZSTARTDATE,
-                 CI.ZENDDATE,
-                 CI.ZISDETACHED,
-                 CI.ZMYATTENDEESTATUS,
-                 CI.ZORGANIZERCOMMONNAME,
-                 CI.ZORGANIZERADDRESSSTRING
-          FROM ZCALENDARITEM CI
-          WHERE CI.Z_PK = ?
+            SELECT CI.Z_PK,
+                   CI.ZLOCALUID,
+                   CI.ZTITLE,
+                   CI.ZSTARTDATE,
+                   CI.ZENDDATE,
+                   CI.ZISDETACHED,
+                   CI.ZMYATTENDEESTATUS,
+                   CI.ZORGANIZERCOMMONNAME,
+                   CI.ZORGANIZERADDRESSSTRING
+            FROM ZCALENDARITEM CI
+            WHERE CI.Z_PK = ?
           EOS
           event = @database.execute(query, id).map { |row| SingleEvent.new(*row) }.first
           enrich_event_with_attendees(event)
@@ -190,9 +190,9 @@ module VPS
 
         def enrich_event_with_attendees(event)
           query = <<-EOS
-          SELECT DISTINCT ZCOMMONNAME, ZADDRESSSTRING
-          FROM ZATTENDEE
-          WHERE ZEVENT = ?
+            SELECT DISTINCT ZCOMMONNAME, ZADDRESSSTRING
+            FROM ZATTENDEE
+            WHERE ZEVENT = ?
           EOS
           @database.execute(query, event.primary_key).map do |row|
             event.people << Person.new(*row)

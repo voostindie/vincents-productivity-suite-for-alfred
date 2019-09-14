@@ -562,7 +562,7 @@ ruby exe/vps note plain $*</string>
 				<key>text</key>
 				<string>{query}</string>
 				<key>title</key>
-				<string>VPS</string>
+				<string></string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.notification</string>
