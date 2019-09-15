@@ -95,11 +95,10 @@ module VPS
         plugins['paste'] = {}
         entity_classes = [Entities::Area, Entities::Text]
         config.each_pair do |plugin_key, plugin_config|
+          next if %w(key name root).include?(plugin_key)
           plugin = @registry.plugins[plugin_key]
           if plugin.nil?
-            unless %w(key name root).include?(plugin_key)
-              $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
-            end
+            $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
           entity_class = plugin.entity_class
