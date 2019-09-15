@@ -20,6 +20,7 @@ module VPS
       hash = YAML.load_file(path)
       extract_areas(hash)
       extract_actions(hash)
+      freeze
     end
 
     def include_area?(name)
@@ -42,7 +43,7 @@ module VPS
     # Returns the manager for a specified entity name in an area
     def entity_manager_for(area, entity_name)
       @registry.entity_managers_for(entity_name).select do |plugin|
-        area.has_key?(plugin.name)
+        area.has_key?(plugin.key)
       end.first
     end
 
@@ -57,7 +58,7 @@ module VPS
     # Returns all entity managers that are enabled within an area
     def entity_managers(area)
       @registry.entity_managers.select do |plugin|
-        area.has_key?(plugin.name)
+        area.has_key?(plugin.key)
       end
     end
 
@@ -65,7 +66,7 @@ module VPS
     # Returns all collaborators. Possible types are +:project+
     def collaborators(area, entity_class)
       @registry.collaborators(entity_class).select do |plugin|
-        area.has_key?(plugin.name)
+        area.has_key?(plugin.key)
       end
     end
 
@@ -85,12 +86,13 @@ module VPS
           key: key,
           name: name,
           root: root
-        }
+        }.freeze
         # The area and paste plugins are added to every area, so that:
         # - these commands are always available
         # - no overriding configuration can be provided
-        area['area'] = {}
-        area['paste'] = {}
+        plugins = {}
+        plugins['area'] = {}
+        plugins['paste'] = {}
         entity_classes = [Entities::Area, Entities::Text]
         config.each_pair do |plugin_key, plugin_config|
           plugin = @registry.plugins[plugin_key]
@@ -107,10 +109,11 @@ module VPS
               next
             end
           end
-          area[plugin.name] = plugin.configurator.read_area_configuration(area, plugin_config || {})
+          plugins[plugin.key] = plugin.configurator.read_area_configuration(area, plugin_config || {}).freeze
         end
-        @areas[key] = area
+        @areas[key] = area.merge(plugins)
       end
+      @areas.freeze
     end
 
     def extract_actions(hash)
@@ -121,8 +124,9 @@ module VPS
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next
         end
-        @actions[key] = plugin.configurator.read_action_configuration(config || {})
+        @actions[key] = plugin.configurator.read_action_configuration(config || {}).freeze
       end
+      @actions.freeze
     end
   end
 end

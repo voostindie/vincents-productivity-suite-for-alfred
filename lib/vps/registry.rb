@@ -4,14 +4,14 @@ module VPS
   # Any new plugin needs to be added here.
   class Registry
 
-    module WithName
-      def to_short_name(clazz)
+    module WithKey
+      def to_key(clazz)
         clazz.name.split('::').last.downcase
       end
     end
 
     class Command
-      include WithName
+      include WithKey
 
       attr_reader :command_class, :type
 
@@ -20,17 +20,17 @@ module VPS
         @type = type
       end
 
-      def name
-        to_short_name(@command_class)
+      def key
+        to_key(@command_class)
       end
     end
 
     class Plugin
-      include WithName
+      include WithKey
 
       attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
 
-      attr_reader :name
+      attr_reader :key
       attr_accessor :configurator_class
 
       def initialize(plugin_module)
@@ -40,7 +40,7 @@ module VPS
         @commands = {}
         @action_class = nil
 
-        @name = to_short_name(plugin_module)
+        @key = to_key(plugin_module)
         @configurator_class = nil
       end
 
@@ -58,7 +58,7 @@ module VPS
 
       def entity_class_name
         raise "You shouldn't be calling this" if @entity_class.nil?
-        to_short_name(@entity_class)
+        to_key(@entity_class)
       end
 
       def for_entity(entity_class)
@@ -67,7 +67,7 @@ module VPS
 
       def add_command(command_class, type)
         command = Command.new(command_class, type)
-        @commands[command.name] = command
+        @commands[command.key] = command
       end
 
       def with_action(action_class)
@@ -85,7 +85,7 @@ module VPS
       @plugins = VPS::Plugins.constants(false)
                    .map { |c| VPS::Plugins.const_get(c) }
                    .select { |c| c.is_a?(Module) && c.singleton_methods(false).include?(:configure_plugin) }
-                   .map { |m| p = Plugin.new(m); m.configure_plugin(p); [p.name, p] }
+                   .map { |m| p = Plugin.new(m); m.configure_plugin(p); [p.key, p] }
                    .to_h
     end
 
