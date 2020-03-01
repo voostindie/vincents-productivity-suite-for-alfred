@@ -4,51 +4,28 @@
 #
 #   areas:
 #     family:
-#       markdown-notes:
+#       bear:
 #       omnifocus:
 #       contacts:
-#       files:
 #
 # This sets up a single area called 'Family' with:
 # - Root directory ~/Family
-# - Markdown notes in ~/Family/Notes
+# - Bear notes
 # - OmniFocus projects from the folder 'Family'
 # - Contacts people from the group 'Family'.
 areas:
   work:
     # No name specified; the default is the key, capitalized. I.e. 'Work'
-    markdown-notes:
-      path: 'Notes'
-      editor: 'open -a Byword.app'
-      extension: 'markdown'
-      # Fields available in the name template:
-      # - $year
-      # - $month
-      # - $week
-      # - $day
-      # - $title
-      # - $safe_title: the title, usable in filenames
-      # - $slug: title in lower case, spaces replaced by hyphens
-      name-template: '$year/Week $week/$year-$month-$day/$safe_title'
-      file-template: |
-        ---
-        date: $day-$month-$year
-        slug: $slug
-        ---
-        # $title
-
+    bear:
+      tags:
+        - Work/Journal/$year/$month/$date
     omnifocus:
       folder: 'Professional life'
     contacts:
       group: 'Business associates'
-      mail:
-        client: 'Microsoft Outlook'
-    project-files:
-      path: 'Files'
-      documents: 'Docs'
-      reference: 'Refs'
     wallpaper:
       path: 'work.jpg'
+
   personal:
     name: 'Personal Stuff'
     root: '~/Personal'
@@ -63,12 +40,7 @@ areas:
       # group: 'Personal Stuff' (the name of the area)
       mail:
         from: 'Me Myself <me@example.com>'
-        # Client is not defined, and is therefore 'Mail'
     # No "wallpaper" specified, so nothing happens when focusing on this area.
-    project-files:
-      # Nothing specified here, so the defaults apply:
-      # documents: 'Documents'
-      # reference: 'Reference Material'
 
 # The optional actions section describes the things to do whenever the focus changes.
 # If this section is not available, nothing special happens.
