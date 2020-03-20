@@ -86,7 +86,7 @@ module VPS
 
         def create_title
           # TODO: make the title configurable (now the date is hard coded)
-          @context.arguments.join(' ') + ' $day-$month-$year'
+          '$year-$month-$day ' + @context.arguments.join(' ')
         end
 
         def create_tags
@@ -122,7 +122,7 @@ module VPS
         end
 
         def create_title
-          strip_emojis(@project.name) + ' $day-$month-$year'
+          '$year-$month-$day ' + strip_emojis(@project.name)
         end
       end
 
@@ -146,7 +146,7 @@ module VPS
         end
 
         def create_title
-          @contact.name + ' $day-$month-$year'
+          '$year-$month-$day ' + @contact.name
         end
 
         def create_tags
@@ -175,7 +175,7 @@ module VPS
         end
 
         def create_title
-          @event.title + ' $day-$month-$year'
+          '$year-$month-$day ' + @event.title
         end
 
         def create_tags
