@@ -63,7 +63,7 @@ module VPS
 
         def run(runner = Shell::SystemRunner.new)
           context = create_context
-          title = ERB::Util.url_encode(context[:title])
+          title = ERB::Util.url_encode(merge_template(context[:title], context))
           tags = create_tags
                    .map { |t| merge_template(t, context) }
                    .map { |t| ERB::Util.url_encode(t) }
@@ -85,7 +85,8 @@ module VPS
         end
 
         def create_title
-          @context.arguments.join(' ')
+          # TODO: make the title configurable (now the date is hard coded)
+          @context.arguments.join(' ') + " $day-$month-$year"
         end
 
         def create_tags
