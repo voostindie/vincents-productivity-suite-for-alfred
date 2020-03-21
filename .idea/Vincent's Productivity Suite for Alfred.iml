@@ -13,7 +13,7 @@
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.3, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="docile (v1.1.5, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ice_cube (v0.16.3, rbenv: 2.7.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="json (v2.1.0, rbenv: 2.7.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="json (v2.3.0, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.1, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec (v3.8.0, rbenv: 2.7.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-core (v3.8.0, rbenv: 2.7.0) [gem]" level="application" />
