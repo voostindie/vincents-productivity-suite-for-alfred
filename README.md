@@ -133,34 +133,71 @@ Where:
 
 As of Juny 2019 I've switched to Bear for all my note keeping. I've imported over 6500 notes in it from plaintext Markdown notes and am experimenting with it a bit. To support my daily workflow of course I had to built support for Bear into this suite.
  
-The configuration for Bear is the following:
+The default configuration for Bear is the following:
 
 ```yaml
 bear:
-    tags:
-        - tag1
-        - tag2
+    templates:
+        default:
+            title: '{{input}}'
+            text: ''
+            tags: []
 ```
 
-Where `tags` represent a list of tags you want to add to the newly created note. It's entirely optional. If you decide to use it, then you can use the placeholders in the tag that are replaced dynamically. So, for example, this is valid:
+Bear works using a set of templates for the title, the text, and the tags for the note. The default are shown above. Each template is a [Liquid template](https://shopify.github.io/liquid/).
+
+You can:
+
+- Change the defaults
+- Override the defaults, partly or in full, for a different template set. The available sets are `plain`, `contact`, `event` and `project`.
+
+For example:
 
 ```yaml
 bear:
-    tags:
-        - Work/Journal/$year/$month/$day
+    templates:
+        default:
+            title: '{{year}}-{{month}}-{{day}} {{input}}'
+            tags:
+                - 'Journal/{{year}}-{{month}}-{{day}}
+                - 'Needs Work'
+        event:
+            text: |
+                {% for name in names %}
+                - name
+                {% endfor %}
 ```
 
-You can leave out the `tags` entry completely, in which case no tags will be set at all.
+This prepends the current date to every note and also adds 2 tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
 
-Placeholders you can use are:
+The available variables depend on the thing your creating a note for:
 
-- `$day`: the number of the day in the current month, zero-padded
-- `$month`: the number of the current month
-- `$year`: the current year
-- `$week`: the number of the week in the current month, zero padded
-- `$title`: the title of the note entered in Alfred
+#### Every note type
 
-When creating a note for a contact or an event, tags are automatically added for each associated contact. These are currently in a hard-coded format: `<area name>/Contact/<contact name>`. Making this configurable (and being able to disable it) is on the TO DO list.
+- `day`: the number of the day in the current month, zero-padded
+- `month`: the number of the current month
+- `year`: the current year
+- `week`: the number of the week in the current month, zero padded
+- `query`: the arguments passed to the command as a string, separated by a space
+- `input`: same as query
+
+The arguments are passed both in `query` and in `input`. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. But, if you want, the arguments are still available.
+
+#### Contact
+
+- `input`: the name of the contact
+- `name`: the name of the contact
+
+#### Event
+
+- `input`: the title of the event
+- `title`: the title of the event
+- `names`: an array of contact names
+
+#### Project
+
+- `input`: the name of the project
+- `name`: the name of the project
 
 ### OmniFocus
 

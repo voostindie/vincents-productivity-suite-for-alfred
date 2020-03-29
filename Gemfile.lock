@@ -5,6 +5,7 @@ GEM
     docile (1.1.5)
     ice_cube (0.16.3)
     json (2.3.0)
+    liquid (4.0.3)
     rake (13.0.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -32,6 +33,7 @@ PLATFORMS
 
 DEPENDENCIES
   ice_cube
+  liquid (>= 4.0.3)
   rake (>= 12.3.3)
   rspec (~> 3.8)
   simplecov (~> 0.15.1)

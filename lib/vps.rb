@@ -12,6 +12,7 @@ require 'erb'
 require 'optparse'
 require 'sqlite3'
 require 'ice_cube'
+require 'liquid'
 
 # Core code
 require 'vps/output_formatter'
