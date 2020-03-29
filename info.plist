@@ -309,7 +309,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</string>
+				<string>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1340,7 +1340,9 @@ ruby exe/vps -a file browse</string>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
-				<integer>0</integer>
+				<integer>3</integer>
+				<key>argumenttext</key>
+				<string>all</string>
 				<key>focusedappvariable</key>
 				<false/>
 				<key>focusedappvariablename</key>
@@ -1364,6 +1366,39 @@ ruby exe/vps -a file browse</string>
 			<string>B8F0AC10-7E4E-4E4D-B7B6-10052FBC6122</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string></string>
+				<key>variables</key>
+				<dict>
+					<key>FINDER</key>
+					<string>{query}</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>note find {var:FINDER} {query}</string>
+				<key>variables</key>
+				<dict/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>E8C8F407-2821-4A4E-902E-3D6B58648057</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -1415,39 +1450,6 @@ ruby exe/vps -a note finders
 			<string>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</string>
 			<key>version</key>
 			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argument</key>
-				<string></string>
-				<key>variables</key>
-				<dict>
-					<key>FINDER</key>
-					<string>{query}</string>
-				</dict>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.argument</string>
-			<key>uid</key>
-			<string>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argument</key>
-				<string>note find {var:FINDER} {query}</string>
-				<key>variables</key>
-				<dict/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.utility.argument</string>
-			<key>uid</key>
-			<string>E8C8F407-2821-4A4E-902E-3D6B58648057</string>
-			<key>version</key>
-			<integer>1</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -1603,7 +1605,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>375</integer>
 			<key>ypos</key>
-			<integer>1140</integer>
+			<integer>1250</integer>
 		</dict>
 		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
 		<dict>
@@ -1645,9 +1647,9 @@ See the README for more information.</string>
 		<key>B8F0AC10-7E4E-4E4D-B7B6-10052FBC6122</key>
 		<dict>
 			<key>xpos</key>
-			<integer>65</integer>
+			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1140</integer>
+			<integer>1145</integer>
 		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>

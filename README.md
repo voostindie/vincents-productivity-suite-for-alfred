@@ -52,7 +52,7 @@ It may not sound like much, but for me this is an enormous time saver.
 ### Keywords and hotkeys
 
 - `focus` / *ctrl* + *opt* + *cmd* + A: sets the focus to an area of responsibility.
-- `find` / *ctrl* + *opt* + *cmd* + F: selects one of the available global note finders.
+- `find`: selects one of the available global note finders. *ctrl* + *opt* + *cmd* + F runs the global note finder `all`, if available.
 - `note` / *ctrl* + *opt* + *cmd* + N: creates a new note and opens it for editing after you optionally specify the title.
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
