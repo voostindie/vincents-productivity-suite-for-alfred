@@ -16,7 +16,7 @@ module VPS
         end
       end
 
-      def self.commands_for(entity)
+      def self.commands_for(area, entity)
         if entity.is_a?(Entities::Contact)
           {
             title: 'Write an e-mail in Mail',

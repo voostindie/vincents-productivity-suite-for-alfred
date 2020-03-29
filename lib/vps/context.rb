@@ -21,9 +21,9 @@ module VPS
       commands = []
       collaborators = @configuration.collaborators(@state.focus, entity.class)
       collaborators.each do |collaborator|
-        commands << collaborator.plugin_module.commands_for(entity)
+        commands << collaborator.plugin_module.commands_for(@state.focus, entity)
       end
-      commands
+      commands.flatten
     end
   end
 end

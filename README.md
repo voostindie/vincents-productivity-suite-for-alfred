@@ -51,7 +51,8 @@ It may not sound like much, but for me this is an enormous time saver.
 
 ### Keywords and hotkeys
 
-- `focus` / *ctrl* + *opt* + *cmd* + F: sets the focus to an area of responsibility.
+- `focus` / *ctrl* + *opt* + *cmd* + A: sets the focus to an area of responsibility.
+- `find` / *ctrl* + *opt* + *cmd* + F: selects one of the available global note finders.
 - `note` / *ctrl* + *opt* + *cmd* + N: creates a new note and opens it for editing after you optionally specify the title.
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
@@ -85,7 +86,7 @@ In case you were wondering: yes, this is [YAML](http://yaml.org).
 
 This sets up a single *area of responsibility* with the Bear, OmniFocus, Contacts, Mail, Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
-Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
+Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-A) in Alfred to focus on a specific area.
 
 ## How to configure, in detail
 
@@ -137,18 +138,51 @@ The default configuration for Bear is the following:
 
 ```yaml
 bear:
-    templates:
+    finders:
+    creators:
         default:
             title: '{{input}}'
             text: ''
             tags: []
 ```
 
-Bear works using a set of templates for the title, the text, and the tags for the note. The default are shown above. Each template is a [Liquid template](https://shopify.github.io/liquid/).
+This is the same as just:
+
+```yaml
+bear:
+```
+
+Bear support consists of two parts: finders and creators. Finders give you quick access to pre-defined queries, as many as you want. Creators help you quickly create new notes.
+
+Basically every property you can set in the Bear configuration is a template, meaning that it may contain dynamic values, like the `{{input}}` above. Each template is a [Liquid template](https://shopify.github.io/liquid/).
+
+### Finders
+
+A finder looks as follows:
+
+```yaml
+name:
+    description: 'Find all notes'
+    scope:
+        - global
+        - contact
+    term: '"{{input}}"'
+    tags:
+        - 'Work'
+```
+
+The description is what is shown in the CLI help and the Alfred pop-up. The scope determines for which entity types the finder is available. The valid values are `plain`, `contact`, `event`, `project` and `global`. `global` is used for finders that run outside of any selection.
+
+The term and each indivual tag is a template. The only variable available in this template is `{{input}}`, which represents the selection.
+
+
+#### Creators
+
+Each note has a title, text, and a set of tags for the note. The defaults are shown above. 
 
 You can:
 
-- Change the defaults
+- Change the defaults and
 - Override the defaults, partly or in full, for a different template set. The available sets are `plain`, `contact`, `event` and `project`.
 
 For example:
@@ -168,11 +202,11 @@ bear:
                 {% endfor %}
 ```
 
-This prepends the current date to every note and also adds 2 tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
+This prepends the current date to every note and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
 
-The available variables depend on the thing your creating a note for:
+The available variables depend on the thing you're creating a note for:
 
-#### Every note type
+##### Every note type
 
 - `day`: the number of the day in the current month, zero-padded
 - `month`: the number of the current month
@@ -183,18 +217,18 @@ The available variables depend on the thing your creating a note for:
 
 The arguments are passed both in `query` and in `input`. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. But, if you want, the arguments are still available.
 
-#### Contact
+##### Contact
 
 - `input`: the name of the contact
 - `name`: the name of the contact
 
-#### Event
+##### Event
 
 - `input`: the title of the event
 - `title`: the title of the event
 - `names`: an array of contact names
 
-#### Project
+##### Project
 
 - `input`: the name of the project
 - `name`: the name of the project

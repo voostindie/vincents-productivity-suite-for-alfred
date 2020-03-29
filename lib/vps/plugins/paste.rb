@@ -11,7 +11,7 @@ module VPS
         plugin.add_collaboration(Entities::Event)
       end
 
-      def self.commands_for(entity)
+      def self.commands_for(area, entity)
         if entity.is_a?(Entities::Project)
           {
             title: 'Paste project name to the frontmost app',

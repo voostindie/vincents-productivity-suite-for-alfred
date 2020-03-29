@@ -150,6 +150,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>8DA06A07-6581-4E7C-BED0-32CC97132209</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</key>
 		<array>
 			<dict>
@@ -214,11 +227,37 @@
 				<false/>
 			</dict>
 		</array>
+		<key>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>8DA06A07-6581-4E7C-BED0-32CC97132209</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E8C8F407-2821-4A4E-902E-3D6B58648057</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -258,6 +297,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>B8F0AC10-7E4E-4E4D-B7B6-10052FBC6122</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -306,6 +358,19 @@
 			</dict>
 		</array>
 		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1E6815E6-601D-4507-8911-DB4C68D96DBB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E8C8F407-2821-4A4E-902E-3D6B58648057</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
@@ -395,6 +460,37 @@ ruby exe/vps -a area focus $*</string>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>0</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>A</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>CA31C553-287F-43E1-8380-7CF792A7FE9B</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -455,11 +551,11 @@ ruby exe/vps -a area list
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>3</integer>
+				<integer>45</integer>
 				<key>hotmod</key>
 				<integer>1835008</integer>
 				<key>hotstring</key>
-				<string>F</string>
+				<string>N</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -470,9 +566,30 @@ ruby exe/vps -a area list
 			<key>type</key>
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
-			<string>CA31C553-287F-43E1-8380-7CF792A7FE9B</string>
+			<string>25862486-DB87-4D99-8A2F-270DF2ED344B</string>
 			<key>version</key>
 			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string></string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -494,37 +611,6 @@ ruby exe/vps -a area list
 			<string>25F37FFD-0AC5-47B1-98CC-0526E2732384</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>0</integer>
-				<key>focusedappvariable</key>
-				<false/>
-				<key>focusedappvariablename</key>
-				<string></string>
-				<key>hotkey</key>
-				<integer>45</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>N</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>25862486-DB87-4D99-8A2F-270DF2ED344B</string>
-			<key>version</key>
-			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -553,54 +639,51 @@ ruby exe/vps note plain $*</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>lastpathcomponent</key>
+				<key>alfredfiltersresults</key>
 				<false/>
-				<key>onlyshowifquerypopulated</key>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
 				<true/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a project commands
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-project-actions</string>
+				<key>subtext</key>
+				<string></string>
 				<key>title</key>
 				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
+			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
 			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>0</integer>
-				<key>focusedappvariable</key>
-				<false/>
-				<key>focusedappvariablename</key>
-				<string></string>
-				<key>hotkey</key>
-				<integer>35</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>P</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</string>
-			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -656,51 +739,33 @@ ruby exe/vps -a project list
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
 				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>35</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>P</string>
+				<key>leftcursor</key>
 				<false/>
-				<key>argumenttrimmode</key>
+				<key>modsmode</key>
 				<integer>0</integer>
-				<key>argumenttype</key>
+				<key>relatedAppsMode</key>
 				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a project commands
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>bin/list-omnifocus-project-actions</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
+			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
-			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
+			<string>FC86CA91-DA9F-4F8A-AFF8-02D0B2D43D7B</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -829,37 +894,6 @@ ruby exe/vps $*</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>0</integer>
-				<key>focusedappvariable</key>
-				<false/>
-				<key>focusedappvariablename</key>
-				<string></string>
-				<key>hotkey</key>
-				<integer>8</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>C</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>0ED34B50-BB28-4DAF-83CF-6431B7340FD1</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>alfredfiltersresults</key>
 				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -959,6 +993,37 @@ ruby exe/vps -a contact commands
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>8</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>C</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>0ED34B50-BB28-4DAF-83CF-6431B7340FD1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -1042,6 +1107,87 @@ ruby exe/vps -a contact commands
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>14</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>E</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>6875C4C0-6D56-45D4-8E13-FF83B9F33944</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>event</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a event list</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-contacts-people</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Select event {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>22D4F09F-F01A-478C-BE58-D38C10C03D5D</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -1085,87 +1231,6 @@ ruby exe/vps -a event commands
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>action</key>
-				<integer>0</integer>
-				<key>argument</key>
-				<integer>0</integer>
-				<key>focusedappvariable</key>
-				<false/>
-				<key>focusedappvariablename</key>
-				<string></string>
-				<key>hotkey</key>
-				<integer>14</integer>
-				<key>hotmod</key>
-				<integer>1835008</integer>
-				<key>hotstring</key>
-				<string>E</string>
-				<key>leftcursor</key>
-				<false/>
-				<key>modsmode</key>
-				<integer>0</integer>
-				<key>relatedAppsMode</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.hotkey</string>
-			<key>uid</key>
-			<string>6875C4C0-6D56-45D4-8E13-FF83B9F33944</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<true/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>2</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>keyword</key>
-				<string>event</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a event list</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>bin/list-contacts-people</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>Select event {query}</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>22D4F09F-F01A-478C-BE58-D38C10C03D5D</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -1249,6 +1314,140 @@ ruby exe/vps -a file browse</string>
 			<string>3B89983B-B77A-4B9C-A813-3F077219E15C</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>subtext</key>
+				<string>Find {var:FINDER} notes</string>
+				<key>text</key>
+				<string>Find notes...</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>8DA06A07-6581-4E7C-BED0-32CC97132209</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>3</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>F</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>B8F0AC10-7E4E-4E4D-B7B6-10052FBC6122</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>find</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a note finders
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-areas</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Find notes for {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string></string>
+				<key>variables</key>
+				<dict>
+					<key>FINDER</key>
+					<string>{query}</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>note find {var:FINDER} {query}</string>
+				<key>variables</key>
+				<dict/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>E8C8F407-2821-4A4E-902E-3D6B58648057</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -1337,6 +1536,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>190</integer>
 		</dict>
+		<key>327408B1-4CBC-4215-B2C0-C3FEB8D7BA8D</key>
+		<dict>
+			<key>xpos</key>
+			<integer>605</integer>
+			<key>ypos</key>
+			<integer>1170</integer>
+		</dict>
 		<key>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</key>
 		<dict>
 			<key>note</key>
@@ -1390,12 +1596,28 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>620</integer>
 		</dict>
+		<key>8B07D568-E3E7-4988-BA11-0E36C7BFDD1E</key>
+		<dict>
+			<key>note</key>
+			<string>Lists note finders</string>
+			<key>xpos</key>
+			<integer>375</integer>
+			<key>ypos</key>
+			<integer>1140</integer>
+		</dict>
 		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
 		<dict>
 			<key>xpos</key>
 			<integer>245</integer>
 			<key>ypos</key>
 			<integer>380</integer>
+		</dict>
+		<key>8DA06A07-6581-4E7C-BED0-32CC97132209</key>
+		<dict>
+			<key>xpos</key>
+			<integer>740</integer>
+			<key>ypos</key>
+			<integer>1140</integer>
 		</dict>
 		<key>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</key>
 		<dict>
@@ -1419,6 +1641,13 @@ See the README for more information.</string>
 			<integer>750</integer>
 			<key>ypos</key>
 			<integer>40</integer>
+		</dict>
+		<key>B8F0AC10-7E4E-4E4D-B7B6-10052FBC6122</key>
+		<dict>
+			<key>xpos</key>
+			<integer>65</integer>
+			<key>ypos</key>
+			<integer>1140</integer>
 		</dict>
 		<key>CA31C553-287F-43E1-8380-7CF792A7FE9B</key>
 		<dict>
@@ -1453,6 +1682,13 @@ See the README for more information.</string>
 			<integer>745</integer>
 			<key>ypos</key>
 			<integer>350</integer>
+		</dict>
+		<key>E8C8F407-2821-4A4E-902E-3D6B58648057</key>
+		<dict>
+			<key>xpos</key>
+			<integer>915</integer>
+			<key>ypos</key>
+			<integer>1170</integer>
 		</dict>
 		<key>FAB85A5B-C66E-46A0-A2CB-06EA8852E590</key>
 		<dict>

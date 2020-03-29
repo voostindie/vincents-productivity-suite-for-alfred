@@ -2,6 +2,10 @@ class String
   def url_encode
     ERB::Util.url_encode(self)
   end
+
+  def render_template(context)
+    Liquid::Template.parse(self).render(context)
+  end
 end
 
 module VPS
@@ -10,6 +14,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Note)
+        plugin.add_command(Finders, :list)
         plugin.add_command(Find, :single)
         plugin.add_command(Plain, :single)
         plugin.add_command(Project, :single)
@@ -23,32 +28,50 @@ module VPS
       class Configurator < PluginSupport::Configurator
         def read_area_configuration(area, hash)
           config = {
-            templates: {}
+            finders: {},
+            creators: {}
           }
+          if hash['finders']
+            hash['finders'].each_pair do |name, finder|
+              config[:finders][name] = {
+                description: finder['description'] || "No description available",
+                scope: (finder['scope'] || ['global']).filter { |s| %w(global contact event project).include?(s) }.map { |s| s.to_sym },
+                term: finder['term'] || '{{input}}',
+                tags: finder['tags'] || ''
+              }
+            end
+          end
           %w(default plain contact event project).each do |set|
-            templates = if hash['templates'] && hash['templates'][set] then hash['templates'][set] else {} end
-            config[:templates][set.to_sym] = {
-              title: templates['title'] || nil,
-              text: templates['text'] || nil,
-              tags: templates['tags'] || nil
+            creators = if hash['creators'] && hash['creators'][set] then
+                          hash['creators'][set]
+                        else
+                          {}
+                        end
+            config[:creators][set.to_sym] = {
+              title: creators['title'] || nil,
+              text: creators['text'] || nil,
+              tags: creators['tags'] || nil
             }
           end
-          config[:templates][:default][:title] ||= '{{input}}'
-          config[:templates][:default][:text] ||= ''
-          config[:templates][:default][:tags] ||= []
+          config[:creators][:default][:title] ||= '{{input}}'
+          config[:creators][:default][:text] ||= ''
+          config[:creators][:default][:tags] ||= []
           config
         end
       end
 
-      def self.commands_for(entity)
+      def self.commands_for(area, entity)
         if entity.is_a?(Entities::Project)
-          {
-            title: 'Create a note in Bear',
-            arg: "note project #{entity.id}",
-            icon: {
-              path: "icons/bear.png"
-            }
-          }
+          [
+            {
+              title: 'Create a note in Bear',
+              arg: "note project #{entity.id}",
+              icon: {
+                path: "icons/bear.png"
+              }
+            },
+            *self.add_finders(area, entity.name, :project)
+          ]
         elsif entity.is_a?(Entities::Contact)
           [
             {
@@ -58,31 +81,60 @@ module VPS
                 path: "icons/bear.png"
               }
             },
-            {
-              title: 'Find all notes',
-              arg: "note find \"#{entity.name}\" -\"Bila #{entity.name}\"",
-              icon: {
-                path: "icons/bear.png"
-              }
-            },
-            {
-              title: 'Find all 1-on-1 meeting notes',
-              arg: "note find \"Bila #{entity.name}\"",
-              icon: {
-                path: "icons/bear.png"
-              }
-            }
+            *self.add_finders(area, entity.name, :contact)
           ]
         elsif entity.is_a?(Entities::Event)
-          {
-            title: 'Create a note in Bear',
-            arg: "note event #{entity.id}",
-            icon: {
-              path: "icons/bear.png"
-            }
-          }
+          [{
+             title: 'Create a note in Bear',
+             arg: "note event #{entity.id}",
+             icon: {
+               path: "icons/bear.png"
+             }
+           },
+           *self.add_finders(area, entity.name, :event)
+          ]
         else
           raise "Unsupported entity class for collaboration: #{entity.class}"
+        end
+      end
+
+      def self.add_finders(area, query, type)
+        finders = []
+        area['bear'][:finders].each_pair do |name, finder|
+          if finder[:scope].include?(type)
+            finders << {
+              title: finder[:description],
+              arg: "note find #{name} #{query}",
+              icon: {
+                path: 'icons/bear.png'
+              }
+            }
+          end
+        end
+        finders
+      end
+
+      class Finders
+        include PluginSupport
+
+        def self.option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'List all available global finders'
+          end
+        end
+
+        def run
+          finders = []
+          @context.focus['bear'][:finders].each_pair do |name, finder|
+            if finder[:scope].include?(:global)
+              finders << {
+                uid: name,
+                arg: name,
+                title: finder[:description]
+              }
+            end
+          end
+          finders
         end
       end
 
@@ -92,14 +144,27 @@ module VPS
         def self.option_parser
           OptionParser.new do |parser|
             parser.banner = 'Find all notes matching the search criteria'
-            parser.separator 'Usage: note find [criteria]'
+            parser.separator 'Usage: note find <query> [criteria]'
+            parser.separator ''
+            parser.separator 'Where <query> is a reference to a finder in your configuration.'
           end
         end
 
         def run(runner = Shell::SystemRunner.new)
-          criteria = ERB::Util.url_encode(@context.arguments.join(' '))
-          url = "bear://x-callback-url/search?term=#{criteria}"
+          arguments = @context.arguments
+          finder = @context.focus['bear'][:finders][arguments.shift]
+          unless finder
+            puts "ERROR: finder doesn't exist!"
+            return
+          end
+          context = {'input' => arguments.join(' ')}
+          query = [finder[:term].render_template(context)]
+          query << finder[:tags].map { |tag| '#' + tag.render_template(context) }
+          term = query.flatten.compact.join(' ').url_encode
+          url = "bear://x-callback-url/search?term=#{term}"
+          puts url
           runner.execute("open", url)
+          nil
         end
       end
 
@@ -115,19 +180,19 @@ module VPS
 
         def initialize(context)
           super(context)
-          @template_set = template_set
+          @creator_set = creator_set
         end
 
-        def template_set
+        def creator_set
           :plain
         end
 
         def run(runner = Shell::SystemRunner.new)
           context = create_context
-          title = merge_template(template(:title), context).url_encode
-          text = merge_template(template(:text), context).url_encode
+          title = template(:title).render_template(context).url_encode
+          text = template(:text).render_template(context).url_encode
           tags = template(:tags)
-                   .map { |t| merge_template(t, context) }
+                   .map { |t| t.render_template(context) }
                    .map { |t| t.url_encode }
                    .join(',')
           callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}"
@@ -149,12 +214,8 @@ module VPS
         end
 
         def template(sym)
-          templates = @context.focus['bear'][:templates]
-          templates[template_set][sym] || templates[:default][sym]
-        end
-
-        def merge_template(template, context)
-          Liquid::Template.parse(template).render(context)
+          templates = @context.focus['bear'][:creators]
+          templates[creator_set][sym] || templates[:default][sym]
         end
       end
 
@@ -168,7 +229,7 @@ module VPS
           end
         end
 
-        def template_set
+        def creator_set
           :project
         end
 
@@ -199,7 +260,7 @@ module VPS
           end
         end
 
-        def template_set
+        def creator_set
           :contact
         end
 
@@ -230,7 +291,7 @@ module VPS
           end
         end
 
-        def template_set
+        def creator_set
           :contact
         end
 
