@@ -198,8 +198,7 @@ bear:
         event:
             text: |
                 {% for name in names %}
-                - name
-                {% endfor %}
+                - {{name}}{% endfor %}
 ```
 
 This prepends the current date to every note and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.

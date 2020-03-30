@@ -91,7 +91,7 @@ module VPS
                path: "icons/bear.png"
              }
            },
-           *self.add_finders(area, entity.name, :event)
+           *self.add_finders(area, entity.title, :event)
           ]
         else
           raise "Unsupported entity class for collaboration: #{entity.class}"
@@ -292,7 +292,7 @@ module VPS
         end
 
         def creator_set
-          :contact
+          :event
         end
 
         def can_run?
@@ -309,6 +309,7 @@ module VPS
           context['input'] = @event.title
           context['title'] = @event.title
           context['names'] = @event.people
+          puts context
           context
         end
       end
