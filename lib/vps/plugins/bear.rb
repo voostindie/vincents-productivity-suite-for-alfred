@@ -159,7 +159,7 @@ module VPS
           end
           context = {'input' => arguments.join(' ')}
           query = [finder[:term].render_template(context)]
-          query << finder[:tags].map { |tag| '#' + tag.render_template(context) }
+          query << finder[:tags].map { |tag| '#' + tag.render_template(context) + '#' }
           term = query.flatten.compact.join(' ').url_encode
           url = "bear://x-callback-url/search?term=#{term}"
           puts url
