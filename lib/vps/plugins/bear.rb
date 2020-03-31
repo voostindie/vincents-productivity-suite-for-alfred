@@ -162,7 +162,6 @@ module VPS
           query << finder[:tags].map { |tag| '#' + tag.render_template(context) + '#' }
           term = query.flatten.compact.join(' ').url_encode
           url = "bear://x-callback-url/search?term=#{term}"
-          puts url
           runner.execute("open", url)
           nil
         end
@@ -309,7 +308,6 @@ module VPS
           context['input'] = @event.title
           context['title'] = @event.title
           context['names'] = @event.people
-          puts context
           context
         end
       end
