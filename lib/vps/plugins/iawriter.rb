@@ -408,7 +408,7 @@ module VPS
                   {}
                 end
         cache_size = cache.size
-        output = input.gsub /\[\[(.*)\]\]/ do |_|
+        output = input.gsub /\[\[(.*?)\]\]/ do |_|
           match = if cache.include?($1)
                     cache[$1]
                   else
