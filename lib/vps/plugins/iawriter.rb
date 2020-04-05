@@ -421,13 +421,23 @@ module VPS
                     end
                   end
           if match.nil?
-            "*#{$1}* (?)"
+            location = File.join('/Locations', focus['iawriter'][:location], $1 + ".md")
+            text = "# #{$1}"
+            token = focus['iawriter'][:token]
+            url = "iawriter://new?path=#{location.url_encode}&text=#{text.url_encode}&auth-token=#{token}"
+            "[[**#{$1}**]] ([*create*](#{url}))"
           else
             "[#{$1}](x-marked://open?file=#{match.url_encode})"
           end
         end
         File.open(cache_file, 'w') { |f| f.write(YAML.dump(cache)) } if cache.size > cache_size
-        output
+        location = File.join(
+          '/Locations',
+          focus['iawriter'][:location],
+          path[focus['iawriter'][:root].length..])
+        url = "iawriter://open?path=#{location.url_encode}"
+        output.gsub(/^(# .*)$/, "\\1\n([*edit*](#{url}))")
+        # output
       end
     end
   end
