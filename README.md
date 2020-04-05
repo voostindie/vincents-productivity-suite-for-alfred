@@ -13,6 +13,7 @@ But please remember that I've had exactly one person in mind while creating this
 This is a command-line interface (CLI) as well as an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ruby scripts that make my daily computer work a lot more efficient. So, yes it's macOS only, and specifically it works with:
 
 - Alfred (duh!)
+- iA Wrtier
 - Bear
 - OmniFocus
 - Apple Contacts
@@ -30,7 +31,10 @@ This CLI and Alfred workflow can:
 - Set focus to an area and
     - Show the name of the area (or a nice label) in BitBar
     - Change the desktop wallpaper
-- Create new notes according to a template, in Bear
+- Create a new notes according to a template in iA Writer
+- Select a note and:
+    - Open it in iA Writer for editing
+    - Open it in Marked 2 for viewing
 - Select a contact and:
     - Open it in Contacts
     - Create a note for it
@@ -53,7 +57,8 @@ It may not sound like much, but for me this is an enormous time saver.
 
 - `focus` / *ctrl* + *opt* + *cmd* + A: sets the focus to an area of responsibility.
 - `find`: selects one of the available global note finders. *ctrl* + *opt* + *cmd* + F runs the global note finder `all`, if available.
-- `note` / *ctrl* + *opt* + *cmd* + N: creates a new note and opens it for editing after you optionally specify the title.
+- `note` / *ctrl* + *opt* + *cmd* + ,: creates a new note and opens it for editing in after you specify the title.
+- `notes` / *ctrl* + *opt* + *cmd* + N: selects a note and shows an action list
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
 - `browse` / *ctrl* + *opt* + *cmd* + B: browses the files for the selected area in Alfred's file browser.
@@ -67,6 +72,7 @@ Using the shared prefix `;` and no suffix for snippets:
 
 - `;c`: copies a contact's name into the frontmost application.
 - `;p`: copies a project's name into the frontmost application.
+- `;n`: copies a note's ID into the frontmost application as a Wiki-link
 
 ## How to configure
 
@@ -97,7 +103,7 @@ areas:
     work:
         name: 'Work'
         root: '~/Work'
-        bear:
+        iawriter:
         omnifocus:
             folder: 'Work'
         contacts:
@@ -130,15 +136,19 @@ Where:
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
 - `root`: the directory under which all files for this reside on disk. The default is set to `~/<name>`.
 
-### Bear
+### iA Writer
 
-As of Juny 2019 I've switched to Bear for all my note keeping. I've imported over 6500 notes in it from plaintext Markdown notes and am experimenting with it a bit. To support my daily workflow of course I had to built support for Bear into this suite.
+As of April 2020 I've switched to iA Writer for all my note keeping. I've used Bear for almost a year, and before that I had all my notes in plaintext Markdown notes. I started to miss that, so I switched back.
+
+(Bear support is still available, but not actively maintained.)
  
-The default configuration for Bear is the following:
+The default configuration for iA Writer is the following:
 
 ```yaml
-bear:
-    finders:
+iawriter:
+    location:
+    path:
+    token:
     creators:
         default:
             title: '{{input}}'
@@ -146,44 +156,39 @@ bear:
             tags: []
 ```
 
+With:
+
+- `location`: the location in iA Writer for this area, defaults to the name of the area.
+- `path`: the root of the notes on disk, defaults to the name of the URL.
+- `token`: the authentication token required by iA Writer to control it using URL Commands. See iA Writer's Preferences. Make sure to check the *Enable URL Commands* settings and click on the *Manage...* button to acquire a copy of the token.
+
 This is the same as just:
 
 ```yaml
-bear:
+iawriter:
 ```
 
-Bear support consists of two parts: finders and creators. Finders give you quick access to pre-defined queries, as many as you want. Creators help you quickly create new notes.
+With this default configuration it's not possible to create new notes. Make sure to set the `token` to be able to do that.
 
-Basically every property you can set in the Bear configuration is a template, meaning that it may contain dynamic values, like the `{{input}}` above. Each template is a [Liquid template](https://shopify.github.io/liquid/).
+#### A note on IDs
 
-### Finders
+This plugin works by assuming that the filename of each note, excluding its extension, is unique. That means that you can move notes around in subdirectories (for example to an archive folder) without breaking anything.
 
-A finder looks as follows:
+What's there to break? Two things:
 
-```yaml
-name:
-    description: 'Find all notes'
-    scope:
-        - global
-        - contact
-    term: '"{{input}}"'
-    tags:
-        - 'Work'
-```
+1. Note selections. If you do a `vps note list` you'll get all note IDs.
+2. Note links. Pressing `;n` allows you to put a link to a note anywhere. This link is not actually a link, but just plaintext: `[[Like This]]`. Several editors support this out of the box. iA Writer does not, as of yet, but that's no problem: a link is just text.
 
-The description is what is shown in the CLI help and the Alfred pop-up. The scope determines for which entity types the finder is available. The valid values are `plain`, `contact`, `event`, `project` and `global`. `global` is used for finders that run outside of any selection.
+#### Template
 
-The term and each indivual tag is a template. The only variable available in this template is `{{input}}`, which represents the selection.
-
-
-#### Creators
+The iA Writer support in VPS allows you to set up templates for different types of entities. Each template consists of a set of property, where the value of each property is a [Liquid template](https://shopify.github.io/liquid/) template.
 
 Each note has a title, text, and a set of tags for the note. The defaults are shown above. 
 
 You can:
 
 - Change the defaults and
-- Override the defaults, partly or in full, for a different template set. The available sets are `plain`, `contact`, `event` and `project`.
+- Override the defaults, partly or in full, for a different template set. The available sets are `default`, `plain`, `contact`, `event` and `project`.
 
 For example:
 
@@ -193,12 +198,14 @@ bear:
         default:
             title: '{{year}}-{{month}}-{{day}} {{input}}'
             tags:
-                - 'Journal/{{year}}-{{month}}-{{day}}
-                - 'Needs Work'
+                - 'Journal/{{year}}'
+                - 'NeedsWork'
         event:
             text: |
-                {% for name in names %}
-                - {{name}}{% endfor %}
+                ## Attendees
+                
+                {% for name in names %}- {{name}}
+                {% endfor %}
 ```
 
 This prepends the current date to every note and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
@@ -216,6 +223,10 @@ The available variables depend on the thing you're creating a note for:
 
 The arguments are passed both in `query` and in `input`. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. But, if you want, the arguments are still available.
 
+##### Plain
+
+- `input`: the input text specified by the user
+
 ##### Contact
 
 - `input`: the name of the contact
@@ -231,6 +242,14 @@ The arguments are passed both in `query` and in `input`. `input` is meant to be 
 
 - `input`: the name of the project
 - `name`: the name of the project
+
+#### Marked link resolver
+
+The plugin also provides a custom preprocessor for [Marked 2](https://marked2app.com). This preprocessor replaces [[Note Links]] with actual working links to notes, to be opened in Marked. In other words, you can click through your notes this way within Marked itself.
+
+If a link cannot be resolved, the text of the link will be italiced, and a question mark placed after it. That way you now what to fix right away.
+
+Links to notes are resolved only once, and then cached on disk, in a file called `.marked`, at the root of the note repository. If you find that links don't work anymore because you've moved files around for a bit, just remove that file (or edit it; it's just YAML). Also, don't stick it in a Git repository.
 
 ### OmniFocus
 

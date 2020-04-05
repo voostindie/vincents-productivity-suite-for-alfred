@@ -1,13 +1,3 @@
-class String
-  def url_encode
-    ERB::Util.url_encode(self)
-  end
-
-  def render_template(context)
-    Liquid::Template.parse(self).render(context)
-  end
-end
-
 module VPS
   module Plugins
     module Bear
@@ -196,7 +186,7 @@ module VPS
                    .join(',')
           callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}"
           runner.execute('open', callback)
-          "Created a new note in Bear with title '#{context[:title]}'"
+          "Created a new note in Bear with title '#{context['input']}'"
         end
 
         def create_context

@@ -27,6 +27,7 @@ GEM
     simplecov-html (0.10.2)
     sqlite3 (1.4.1)
     yard (0.9.24)
+    zaru (0.3.0)
 
 PLATFORMS
   ruby
@@ -39,6 +40,7 @@ DEPENDENCIES
   simplecov (~> 0.15.1)
   sqlite3
   yard (>= 0.9.20)
+  zaru
 
 BUNDLED WITH
    2.1.2

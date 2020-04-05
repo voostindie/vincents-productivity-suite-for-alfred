@@ -92,7 +92,7 @@ module VPS
         # - no overriding configuration can be provided
         plugins = {}
         plugins['area'] = {}
-        plugins['paste'] = {}
+        plugins['text'] = {}
         entity_classes = [Entities::Area, Entities::Text]
         config.each_pair do |plugin_key, plugin_config|
           next if %w(key name root).include?(plugin_key)

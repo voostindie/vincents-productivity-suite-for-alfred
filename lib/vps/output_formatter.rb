@@ -43,7 +43,11 @@ module VPS
                end
           width = result.map { |entry| entry[id].size}.max
           result.map do |entry|
-            "- #{entry[id].ljust(width)}: #{entry[:title]}"
+            if entry[id] == entry[:title]
+              "- #{entry[id]}"
+            else
+              "- #{entry[id].ljust(width)}: #{entry[:title]}"
+            end
           end.join("\n")
         else
           result

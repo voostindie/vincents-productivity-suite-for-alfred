@@ -1,6 +1,7 @@
 module VPS
   class Context
-    attr_reader :configuration, :state, :arguments, :environment
+    attr_reader :configuration, :state
+    attr_accessor :arguments, :environment
 
     def initialize(configuration, state, arguments, environment)
       @configuration = configuration

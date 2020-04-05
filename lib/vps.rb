@@ -13,6 +13,7 @@ require 'optparse'
 require 'sqlite3'
 require 'ice_cube'
 require 'liquid'
+require 'zaru'
 
 # Core code
 require 'vps/output_formatter'
@@ -27,6 +28,22 @@ require 'vps/state'
 require 'vps/context'
 require 'vps/cli'
 require 'vps/plugin_support'
+
+# Extensions
+class String
+  def url_encode
+    ERB::Util.url_encode(self)
+  end
+
+  def shell_escape
+    Shellwords.escape(self)
+  end
+
+  def render_template(context)
+    Liquid::Template.parse(self).render(context)
+  end
+end
+
 
 # Plugins
 files = Dir.glob(File.join(File.dirname(__FILE__), 'vps/plugins/**.rb')).sort

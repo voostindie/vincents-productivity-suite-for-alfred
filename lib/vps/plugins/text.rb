@@ -1,21 +1,31 @@
 module VPS
   module Plugins
-    module Paste
+    module Text
       def self.configure_plugin(plugin)
         plugin.for_entity(Entities::Text)
+        plugin.add_command(Note, :single)
         plugin.add_command(Project, :single)
         plugin.add_command(Contact, :single)
         plugin.add_command(Event, :single)
+        plugin.add_collaboration(Entities::Note)
         plugin.add_collaboration(Entities::Project)
         plugin.add_collaboration(Entities::Contact)
         plugin.add_collaboration(Entities::Event)
       end
 
       def self.commands_for(area, entity)
-        if entity.is_a?(Entities::Project)
+        if entity.is_a?(Entities::Note)
+          {
+            title: 'Paste note name to the frontmost app',
+            arg: "text note #{entity.id}",
+            icon: {
+              path: "icons/clipboard.png"
+            }
+          }
+        elsif entity.is_a?(Entities::Project)
           {
             title: 'Paste project name to the frontmost app',
-            arg: "paste project #{entity.id}",
+            arg: "text project #{entity.id}",
             icon: {
               path: "icons/clipboard.png"
             }
@@ -23,7 +33,7 @@ module VPS
         elsif entity.is_a?(Entities::Contact)
           {
             title: 'Paste contact name to the frontmost app',
-            arg: "paste contact #{entity.id}",
+            arg: "text contact #{entity.id}",
             icon: {
               path: "icons/clipboard.png"
             }
@@ -31,7 +41,7 @@ module VPS
         elsif entity.is_a?(Entities::Event)
           {
             title: 'Pate event title to the frontmost app',
-            arg: "paste event #{entity.id}",
+            arg: "text event #{entity.id}",
             icon: {
               path: "icons/clipboard.png"
             }
@@ -75,6 +85,20 @@ module VPS
 
         def text_from(entity)
           nil
+        end
+      end
+
+      class Note < PasteTemplate
+        def self.entity_name
+          'note'
+        end
+
+        def entity_class
+          Entities::Note
+        end
+
+        def text_from(note)
+          note.id
         end
       end
 
