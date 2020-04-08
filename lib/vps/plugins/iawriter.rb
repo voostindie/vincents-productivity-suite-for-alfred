@@ -28,10 +28,10 @@ module VPS
           }
           %w(default plain contact event project).each do |set|
             templates = if hash['templates'] && hash['templates'][set] then
-                         hash['templates'][set]
-                       else
-                         {}
-                       end
+                          hash['templates'][set]
+                        else
+                          {}
+                        end
             config[:templates][set.to_sym] = {
               title: templates['title'] || nil,
               text: templates['text'] || nil,
@@ -106,7 +106,7 @@ module VPS
 
         def run
           root = @context.focus['iawriter'][:root]
-          notes = Dir.glob("#{root}/**/*.md").sort_by {|p|File.basename(p)}.reverse
+          notes = Dir.glob("#{root}/**/*.md").sort_by { |p| File.basename(p) }.reverse
           notes.map do |note|
             name = File.basename(note)[0..-4]
             {
@@ -379,65 +379,6 @@ module VPS
           context['names'] = @event.people
           context
         end
-      end
-
-      def self.preprocess_markdown(path, input, config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
-        configuration = configuration = Configuration::load(config_file)
-        focus = State::load(state_file, configuration).focus
-        unless focus['iawriter']
-          $stderr.puts "iA Writer not enabled here; not doing anything"
-          return input
-        end
-        root = focus['iawriter'][:root]
-        if path.nil? || !path.include?(root)
-          $stderr.puts "File is outside of iA Writer root; not doing anything"
-          return input
-        end
-        # I'd like to use the Silver Searcher to search in files, instead of globbing filenames, but ag doesn't
-        # work well when executed through pipe, which is how Marked is running preprocessors.
-        #
-        # The issue: the first line of output produced by ag is gone. Which the one and only line I need...
-        #
-        # This is the ag command I'd like to be running:
-        # command = "ag --nocolor --files-with-matches --max-count 1 --nomultiline "
-        #   + "--silent --nopager --markdown '^# #{$1}$' #{root}"
-        cache_file = File.join(root, '.marked')
-        cache = if File.exist?(cache_file)
-                  YAML.load(File.read(cache_file))
-                else
-                  {}
-                end
-        cache_size = cache.size
-        output = input.gsub /\[\[(.*?)\]\]/ do |_|
-          match = if cache.include?($1)
-                    cache[$1]
-                  else
-                    name = Shellwords.escape($1)
-                    matches = Dir.glob("#{root}/**/#{name}.md")
-                    if matches.empty?
-                      nil
-                    else
-                      cache[$1] = matches[0]
-                    end
-                  end
-          if match.nil?
-            location = File.join('/Locations', focus['iawriter'][:location], $1 + ".md")
-            text = "# #{$1}"
-            token = focus['iawriter'][:token]
-            url = "iawriter://new?path=#{location.url_encode}&text=#{text.url_encode}&auth-token=#{token}"
-            "[[**#{$1}**]] ([*create*](#{url}))"
-          else
-            "[#{$1}](x-marked://open?file=#{match.url_encode})"
-          end
-        end
-        File.open(cache_file, 'w') { |f| f.write(YAML.dump(cache)) } if cache.size > cache_size
-        location = File.join(
-          '/Locations',
-          focus['iawriter'][:location],
-          path[focus['iawriter'][:root].length..])
-        url = "iawriter://open?path=#{location.url_encode}"
-        output.gsub(/^(# .*)$/, "\\1\n([*edit*](#{url}))")
-        # output
       end
     end
   end
