@@ -4,7 +4,8 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::File)
-        plugin.add_command(Browse, :single)
+        plugin.add_command(Refs, :single)
+        plugin.add_command(Docs, :single)
         plugin.add_command(Project, :single)
         plugin.add_collaboration(Entities::Project)
       end
@@ -12,7 +13,8 @@ module VPS
       class Configurator < PluginSupport::Configurator
         def read_area_configuration(area, hash)
           {
-            path: hash['path'] || 'Projects',
+            docs: hash['documents'] || 'Documents',
+            refs: hash['reference material'] || 'Reference Material'
           }
         end
 
@@ -32,19 +34,38 @@ module VPS
         end
       end
 
-      class Browse
+      class Docs
         include PluginSupport
 
         def self.option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Browse files in Alfred'
-            parser.separator 'Usage: files browse'
+            parser.banner = 'Browse documents in Alfred'
+            parser.separator 'Usage: file docs'
           end
         end
 
         def run(runner = Jxa::Runner.new('alfred'))
           area = @context.focus
-          path = File.join(area[:root], area['alfred'][:path]) + '/'
+          path = File.join(area[:root], area['alfred'][:docs]) + '/'
+          runner.execute('browse', path)
+          "Opened Alfred for directory '#{path}'"
+        end
+      end
+
+
+      class Refs
+        include PluginSupport
+
+        def self.option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Browse reference material in Alfred'
+            parser.separator 'Usage: file refs'
+          end
+        end
+
+        def run(runner = Jxa::Runner.new('alfred'))
+          area = @context.focus
+          path = File.join(area[:root], area['alfred'][:refs]) + '/'
           runner.execute('browse', path)
           "Opened Alfred for directory '#{path}'"
         end
@@ -70,7 +91,7 @@ module VPS
           project = @context.load_entity(Entities::Project)
           area = @context.focus
           folder = strip_emojis(project.name)
-          path = File.join(area[:root], area['alfred'][:path], folder) + '/'
+          path = File.join(area[:root], area['alfred'][:refs], folder) + '/'
           runner.execute('browse', path)
           "Opened Alfred for directory '#{path}'"
         end

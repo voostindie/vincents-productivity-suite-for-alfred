@@ -304,6 +304,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>9767D754-E8EA-40D6-B12B-8ADACF2C0CAD</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>674E46A0-2544-4618-9406-9BD5FF321BD5</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>9C7796AE-C61E-4516-992A-FCE9BF0E1957</key>
 		<array>
 			<dict>
@@ -507,11 +520,11 @@ ruby exe/vps -a area focus $*</string>
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>0</integer>
+				<integer>3</integer>
 				<key>hotmod</key>
 				<integer>1835008</integer>
 				<key>hotstring</key>
-				<string>A</string>
+				<string>F</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -891,6 +904,57 @@ ruby exe/vps -a note list
 			<key>config</key>
 			<dict>
 				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>projects</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a project list
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-projects</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Select project {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
 				<integer>0</integer>
@@ -933,57 +997,6 @@ ruby exe/vps -a project commands
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<true/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>2</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>keyword</key>
-				<string>project</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a project list
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>bin/list-omnifocus-projects</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>Select project {query}</string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -1158,7 +1171,7 @@ ruby exe/vps $*</string>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>contact</string>
+				<string>contacts</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -1402,7 +1415,7 @@ ruby exe/vps -a contact commands
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>event</string>
+				<string>events</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -1497,11 +1510,11 @@ ruby exe/vps -a event commands
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>11</integer>
+				<integer>15</integer>
 				<key>hotmod</key>
 				<integer>1835008</integer>
 				<key>hotstring</key>
-				<string>B</string>
+				<string>R</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
@@ -1532,7 +1545,7 @@ ruby exe/vps -a event commands
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>browse</string>
+				<string>refs</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -1545,7 +1558,7 @@ ruby exe/vps -a event commands
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a file browse</string>
+ruby exe/vps -a file refs</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1553,7 +1566,7 @@ ruby exe/vps -a file browse</string>
 				<key>subtext</key>
 				<string></string>
 				<key>title</key>
-				<string>Browse area files</string>
+				<string>Browse reference material</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -1565,6 +1578,87 @@ ruby exe/vps -a file browse</string>
 			<string>3B89983B-B77A-4B9C-A813-3F077219E15C</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>docs</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a file docs</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-contacts-people</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>Browse documents</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>674E46A0-2544-4618-9406-9BD5FF321BD5</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>2</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>D</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>9767D754-E8EA-40D6-B12B-8ADACF2C0CAD</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -1681,7 +1775,7 @@ See the README for more information.</string>
 		<key>3B89983B-B77A-4B9C-A813-3F077219E15C</key>
 		<dict>
 			<key>note</key>
-			<string>Lists events</string>
+			<string>Browse reference material</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
@@ -1700,6 +1794,15 @@ See the README for more information.</string>
 			<integer>570</integer>
 			<key>ypos</key>
 			<integer>340</integer>
+		</dict>
+		<key>674E46A0-2544-4618-9406-9BD5FF321BD5</key>
+		<dict>
+			<key>note</key>
+			<string>Browse documents</string>
+			<key>xpos</key>
+			<integer>370</integer>
+			<key>ypos</key>
+			<integer>1390</integer>
 		</dict>
 		<key>6875C4C0-6D56-45D4-8E13-FF83B9F33944</key>
 		<dict>
@@ -1749,6 +1852,13 @@ See the README for more information.</string>
 			<integer>60</integer>
 			<key>ypos</key>
 			<integer>720</integer>
+		</dict>
+		<key>9767D754-E8EA-40D6-B12B-8ADACF2C0CAD</key>
+		<dict>
+			<key>xpos</key>
+			<integer>60</integer>
+			<key>ypos</key>
+			<integer>1390</integer>
 		</dict>
 		<key>9C7796AE-C61E-4516-992A-FCE9BF0E1957</key>
 		<dict>

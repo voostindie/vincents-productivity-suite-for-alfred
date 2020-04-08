@@ -32,6 +32,8 @@ This CLI and Alfred workflow can:
     - Show the name of the area (or a nice label) in BitBar
     - Change the desktop wallpaper
 - Create a new notes according to a template in iA Writer
+- Browse documents in Alfred
+- Browse reference material in Alfred
 - Select a note and:
     - Open it in iA Writer for editing
     - Open it in Marked 2 for viewing
@@ -61,7 +63,8 @@ It may not sound like much, but for me this is an enormous time saver.
 - `notes` / *ctrl* + *opt* + *cmd* + N: selects a note and shows an action list
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
-- `browse` / *ctrl* + *opt* + *cmd* + B: browses the files for the selected area in Alfred's file browser.
+- `docs` / *ctrl* + *opt* + *cmd* + D: browses the Documents for the selected area in Alfred's file browser.
+- `refs` / *ctrl* + *opt* + *cmd* + D: browses the Reference Material for the selected area in Alfred's file browser.
 
 The list of actions available for a contact or project depends on the configuration of the focused area of responsibility. E.g. if Bear is enabled, the action to create a note on a contact, project or event will
 automatically show up. 
@@ -268,20 +271,25 @@ Projects are sorted in the order they appear in OmniFocus, but thanks to Alfred'
 
 ### Alfred
 
-I like to store files for projects in a directory specific to that project. To that end, I've set up a directory under each area of focus, typically called `Projects` that has in turn a directory for each project I store files for. 
+I store files on disk for an area in two separate directories:
 
-By enabling the `alfred` plugin on top of the OmniFocus plugin, project files can be browsed after selecting a project in Alfred. For now that's it. The plan is to later extend this with more functionality, for example for filing files directly into the right folder.
+1. Documents: everything I create myself (or collaborate on with others)
+2. Reference Material: all documents I get from others as reference or support material.
+
+By enabling the `alfred` plugin on top of the OmniFocus plugin, project files can be browsed inside the Reference Material directory.
 
 The configuration looks as follows:
 
 ```yaml
 alfred:
-    path:
+    documents:
+    reference material:
 ```
 
 With:
 
-* `path` (optional): the subdirectory under the area's root directory to project files under. Defaults to `Projects`.
+* `documents` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Documents`.
+* `reference material` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Reference Material`.
 
 ### Contacts
 
