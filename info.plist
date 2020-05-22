@@ -1425,7 +1425,7 @@ ruby exe/vps -a contact commands
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string></string>
+				<string>This is Outlook, so be patient!</string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
 ruby exe/vps -a event list</string>
