@@ -19,11 +19,8 @@ module VPS
       end
 
       def self.load_entity(context, runner = Jxa::Runner.new('omnifocus'))
-        if context.environment['PROJECT_ID'].nil?
-          Entities::Project.from_hash(runner.execute('project-details', context.arguments[0]))
-        else
-          Entities::Project.from_env(context.environment)
-        end
+        id = context.environment['PROJECT_ID'] || context.arguments[0]
+        Entities::Project.from_hash(runner.execute('project-details', id))
       end
 
       class List

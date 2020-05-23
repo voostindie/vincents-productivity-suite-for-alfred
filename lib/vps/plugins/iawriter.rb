@@ -307,7 +307,12 @@ module VPS
 
         def run
           @project = @context.load_entity(Entities::Project)
+          @custom_config = @project.config['iawriter'] || {}
           super
+        end
+
+        def template(sym)
+          @custom_config[sym.to_s] || super(sym)
         end
 
         def create_context

@@ -56,7 +56,7 @@ module VPS
         entity = self.new do |entity|
           prefix = entity.env_prefix
           index = prefix.size
-          env.select {|key, _| key.start_with?(prefix)}.each_pair do |key, value|
+          env.select { |key, _| key.start_with?(prefix) }.each_pair do |key, value|
             variable = "@#{key[index..-1].downcase}".to_sym
             entity.instance_variable_set(variable, value)
           end
@@ -96,7 +96,22 @@ module VPS
     ##
     # Represents a project with a name
     class Project < BaseEntity
-      attr_accessor :name
+      attr_accessor :name, :note
+
+      def config
+        return nil if note.nil?
+        yaml = note.
+          gsub("\t", '  ').
+          gsub("’", "'").
+          gsub("“", '"').
+          gsub("”", '"').
+          lines.
+          drop_while { |l| !l.start_with?('---') }.
+          drop(1).
+          join
+        return nil if yaml.empty?
+        YAML.load(yaml)
+      end
     end
 
     ##
