@@ -88,15 +88,15 @@ areas:
         iawriter:
         omnifocus:
         contacts:
-        mail:
+        outlookcalendar:
         alfred:
 ```
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Mail, Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Outlook Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
-Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-A) in Alfred to focus on a specific area.
+Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
 ## How to configure, in detail
 
@@ -112,8 +112,9 @@ areas:
             folder: 'Work'
         contacts:
             group: 'Work'
-        mail:
-            from: null
+        outlookcalendar:
+            account: 'Work'
+            calendar: 'Calendar'
         alfred:
             path: 'Projects'
         bitbar:
@@ -136,7 +137,7 @@ key:
 
 Where:
 
-- `key`: the technical key to use internally. It doesn't really matter what you name an area, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
+- `key`: the technical key to use internally. It doesn't really matter what it is, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
 - `root`: the directory under which all files for this reside on disk. The default is set to `~/<name>`.
 
@@ -185,7 +186,7 @@ What's there to break? Two things:
 
 #### Template
 
-The iA Writer support in VPS allows you to set up templates for different types of entities. Each template consists of a set of property, where the value of each property is a [Liquid template](https://shopify.github.io/liquid/) template.
+The iA Writer support in VPS allows you to set up templates for different types of entities. Each template consists of a set of property, where the value of each property is a [Liquid template](https://shopify.github.io/liquid/).
 
 Each note has a title, text, and a set of tags for the note. The defaults are shown above. 
 
@@ -252,9 +253,9 @@ For projects managed in OmniFocus (next section) there's a special add-on: you c
 ```yaml
 ---
 iawriter:
-	title: YOUR TITLE TEMPLATE
-	text: YOUR TEXT HERE
-	tags: YOUR TAGS HERE
+    title: YOUR TITLE TEMPLATE
+    text: YOUR TEXT HERE
+    tags: YOUR TAGS HERE
 ```
 
 Just to be sure: put this at the **bottom** of the note, not at the top!
@@ -336,8 +337,8 @@ The configuration looks as follows:
 
 ```yaml
 calendar:
-		name:
-		me:
+    name:
+    me:
 ```
 
 With:
@@ -360,8 +361,8 @@ The configuration looks as follows:
 
 ```yaml
 outlookcalendar:
-	  account: 
-	  calendar:
+    account: 
+    calendar:
     me:
 ```
 
