@@ -13,16 +13,17 @@ But please remember that I've had exactly one person in mind while creating this
 This is a command-line interface (CLI) as well as an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ruby scripts that make my daily computer work a lot more efficient. So, yes it's macOS only, and specifically it works with:
 
 - Alfred (duh!)
-- iA Wrtier
+- iA Writer
 - Bear
 - OmniFocus
 - Apple Contacts
 - Apple Mail
 - Apple Calendar
+- Outlook Calendar
 - Desktop wallpapers
 - BitBar
 
-A lot of activity at my computer consists of managing projects and tasks in OmniFocus, keeping notes in Bear, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly create notes and e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
+A lot of activity at my computer consists of managing projects and tasks in OmniFocus, keeping notes in iA Writer, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly create notes and e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
 
 An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus.
 
@@ -66,7 +67,7 @@ It may not sound like much, but for me this is an enormous time saver.
 - `docs` / *ctrl* + *opt* + *cmd* + D: browses the Documents for the selected area in Alfred's file browser.
 - `refs` / *ctrl* + *opt* + *cmd* + D: browses the Reference Material for the selected area in Alfred's file browser.
 
-The list of actions available for a contact or project depends on the configuration of the focused area of responsibility. E.g. if Bear is enabled, the action to create a note on a contact, project or event will
+The list of actions available for a contact or project depends on the configuration of the focused area of responsibility. E.g. if iA Writer is enabled, the action to create a note on a contact, project or event will
 automatically show up. 
 
 ### Snippets
@@ -84,7 +85,7 @@ Create a file `.vpsrc` in your home folder and put something like this in there:
 ```yaml
 areas:
    work:
-        bear:
+        iawriter:
         omnifocus:
         contacts:
         mail:
@@ -93,7 +94,7 @@ areas:
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the Bear, OmniFocus, Contacts, Mail, Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Mail, Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-A) in Alfred to focus on a specific area.
 
@@ -196,7 +197,7 @@ You can:
 For example:
 
 ```yaml
-bear:
+iawriter:
     templates:
         default:
             title: '{{year}}-{{month}}-{{day}} {{input}}'
@@ -246,13 +247,17 @@ The arguments are passed both in `query` and in `input`. `input` is meant to be 
 - `input`: the name of the project
 - `name`: the name of the project
 
-#### Marked link resolver
+For projects managed in OmniFocus (next section) there's a special add-on: you can override the templates for the title, the text and the tags, *per project*. You do that by adding a "Yaml Back Matter" section at the end of the note of the project, like so:
 
-The plugin also provides a custom preprocessor for [Marked 2](https://marked2app.com). This preprocessor replaces [[Note Links]] with actual working links to notes, to be opened in Marked. In other words, you can click through your notes this way within Marked itself.
+```yaml
+---
+iawriter:
+	title: YOUR TITLE TEMPLATE
+	text: YOUR TEXT HERE
+	tags: YOUR TAGS HERE
+```
 
-If a link cannot be resolved, the text of the link will be italiced, and a question mark placed after it. That way you now what to fix right away.
-
-Links to notes are resolved only once, and then cached on disk, in a file called `.marked`, at the root of the note repository. If you find that links don't work anymore because you've moved files around for a bit, just remove that file (or edit it; it's just YAML). Also, don't stick it in a Git repository.
+Just to be sure: put this at the **bottom** of the note, not at the top!
 
 ### OmniFocus
 
@@ -291,7 +296,7 @@ With:
 * `documents` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Documents`.
 * `reference material` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Reference Material`.
 
-### Contacts
+### Apple Contacts
 
 For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I have set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see and use them on all your devices!)
 
@@ -308,10 +313,9 @@ With:
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
 
-### Mail
+### Apple Mail
 
-The mail plugin is useful as an extension on top of the Contacts plugin,
-to send e-mails to contacts.
+The mail plugin is useful as an extension on top of the Contacts plugin, to send e-mails to contacts.
 
 The configuration looks as follows:
 
@@ -323,6 +327,49 @@ mail:
 With:
 
 - `from`: in case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail. If the account is not found, Mail will fall back to its default.
+
+### Apple Calendar
+
+This plugin uses SQL to fetch data from the the Apple Calendar cache, and is definitely not perfect. It doesn't always find all events for the day, even though it tries a nice of job of combining one-time events and recurring events. And it's fast.
+
+The configuration looks as follows:
+
+```yaml
+calendar:
+		name:
+		me:
+```
+
+With:
+
+- `name`: the name of the calendar to fetch events from.
+- `me`: your own name, as it shows up in events. Filling this in ensures that your own name is filtered from the list of attendees for a meeting.
+
+### Outlook Calendar
+
+WARNING: this plugin is limited, in two ways:
+
+1. It's sloooooow. The plugin uses scripting to fetch today's calendar events from Outlook. This takes many seconds, at least in my case.
+2. It doesn't find all events for the day. Recurring items that have not been adapted for today are not found.
+
+It's boggling my mind how hard it is to fetch all events that happen on a particular day. I would expect this to be one simple API call away. (This is just as true for Apple's Calendar, by the way.)
+
+Anyway, although hampered, this plugin is still useful I think, because it allows me to create notes for events fairly quickly, including a list of all attendees. That saves me a lot of typing.
+
+The configuration looks as follows:
+
+```yaml
+outlookcalendar:
+	  account: 
+	  calendar:
+    me:
+```
+
+Where:
+
+- `account`: the name of the account in Outlook. This defaults to the name of the area.
+- `calendar`: the name of the calendar to fetch events from. This defaults to `Calendar`.
+- `me`: your e-mail address. This defaults to nothing. Filling this in ensures that your own name is filtered from the list of attendees for a meeting.
 
 ### BitBar
 
