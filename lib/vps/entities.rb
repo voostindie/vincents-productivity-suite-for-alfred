@@ -99,7 +99,7 @@ module VPS
       attr_accessor :name, :note
 
       def config
-        return nil if note.nil?
+        return {} if note.nil?
         yaml = note.
           gsub("\t", '  ').
           gsub("’", "'").
@@ -109,7 +109,7 @@ module VPS
           drop_while { |l| !l.start_with?('---') }.
           drop(1).
           join
-        return nil if yaml.empty?
+        return {} if yaml.empty?
         YAML.load(yaml)
       end
     end

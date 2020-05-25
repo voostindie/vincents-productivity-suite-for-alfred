@@ -528,7 +528,7 @@ ruby exe/vps -a area focus $*</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -610,7 +610,7 @@ ruby exe/vps -a area list
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -806,7 +806,7 @@ ruby exe/vps -a note list
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -1020,7 +1020,7 @@ ruby exe/vps -a project commands
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -1274,7 +1274,7 @@ ruby exe/vps -a contact commands
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -1388,7 +1388,7 @@ ruby exe/vps -a contact commands
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -1518,7 +1518,7 @@ ruby exe/vps -a event commands
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
@@ -1649,7 +1649,7 @@ ruby exe/vps -a file docs</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
-				<integer>0</integer>
+				<integer>2</integer>
 				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
