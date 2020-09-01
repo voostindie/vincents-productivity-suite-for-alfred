@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rake', '>= 12.3.3'
 gem 'yard', '>= 0.9.20'
-gem 'sqlite3'
+gem 'sqlite3', '>= 1.4.2'
 gem 'ice_cube'
 gem 'rspec', '~> 3.8'
 gem 'simplecov', '~> 0.15.1'

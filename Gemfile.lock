@@ -25,7 +25,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sqlite3 (1.4.1)
+    sqlite3 (1.4.2)
     yard (0.9.24)
     zaru (0.3.0)
 
@@ -38,7 +38,7 @@ DEPENDENCIES
   rake (>= 12.3.3)
   rspec (~> 3.8)
   simplecov (~> 0.15.1)
-  sqlite3
+  sqlite3 (>= 1.4.2)
   yard (>= 0.9.20)
   zaru
 
