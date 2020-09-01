@@ -852,6 +852,8 @@ ruby exe/vps -a note list
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -887,6 +889,8 @@ ruby exe/vps -a note list
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -1066,6 +1070,8 @@ ruby exe/vps -a project commands
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -1142,6 +1148,8 @@ ruby exe/vps $*</string>
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -1320,6 +1328,8 @@ ruby exe/vps -a contact commands
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -1355,6 +1365,8 @@ ruby exe/vps -a contact commands
 			<dict>
 				<key>argument</key>
 				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
 				<key>variables</key>
 				<dict>
 					<key>TRIGGERED_AS_SNIPPET</key>
@@ -1425,7 +1437,7 @@ ruby exe/vps -a contact commands
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>This is Outlook, so be patient!</string>
+				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
 ruby exe/vps -a event list</string>
