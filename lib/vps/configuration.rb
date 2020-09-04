@@ -117,7 +117,7 @@ module VPS
 
     def extract_actions(hash)
       @actions = {}
-      hash['actions'].each_pair do |key, config|
+      (hash['actions'] || {}).each_pair do |key, config|
         plugin = @registry.plugins[key]
         if plugin.nil? || plugin.action_class.nil?
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
