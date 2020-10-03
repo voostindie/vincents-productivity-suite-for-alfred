@@ -260,6 +260,36 @@ iawriter:
 
 Just to be sure: put this at the **bottom** of the note, not at the top!
 
+### Bear
+
+(Disclaimer: I'm not using Bear myself anymore, so I don't have this plugin in my own configuration anymore.)
+
+Bear's configuration is very similar to iA Writer's. The differences are:
+
+- The settings `path`, `location` and `token` do not apply.
+- Templates are configured under the key `creators` instead of `templates`. 
+- Finders can run often-used searches (see below).
+
+#### Finders
+
+A finder allows you to run a query against Bear, using pre-defined criteria. Here's how to configure:
+
+```yaml
+bear:
+    finders:
+        description:
+        scope:
+        term:
+        tags:
+```
+
+With:
+
+- `description`: your personal description of this finder, shown in the CLI.
+- `scope`: either `global`, `contact`, `event` or `project`. This defines to what entity the finder applies.
+- `term`: the search term to use. This default to `{{input}}` which is the user input on the CLI.
+- `tags`: tags to add to the search command.
+
 ### OmniFocus
 
 I use OmniFocus to keep track of all projects and tasks in my life. As most OmniFocus users will have done, I've created top-level folders in the project tree, one for each area of responsibility. This is why the configuration looks like this:
