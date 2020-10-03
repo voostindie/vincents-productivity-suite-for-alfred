@@ -44,7 +44,7 @@ module VPS
                    key: 'null',
                    name: 'Null area. Please fix your configuration file!',
                    root: nil,
-                   area: {}
+                   'area' => {}
                  }
                end
     end
