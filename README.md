@@ -154,7 +154,7 @@ iawriter:
     location:
     path:
     token:
-    creators:
+    templates:
         default:
             title: '{{input}}'
             text: ''
