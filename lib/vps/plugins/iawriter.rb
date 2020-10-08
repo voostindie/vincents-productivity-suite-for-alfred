@@ -27,7 +27,7 @@ module VPS
             templates: {}
           }
           %w(default plain contact event project).each do |set|
-            templates = if hash['templates'] && hash['templates'][set] then
+            templates = if hash['templates'] && hash['templates'][set]
                           hash['templates'][set]
                         else
                           {}
