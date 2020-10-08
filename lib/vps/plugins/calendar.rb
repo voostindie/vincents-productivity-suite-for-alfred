@@ -10,10 +10,15 @@ module VPS
 
       class Configurator < PluginSupport::Configurator
         def read_area_configuration(area, hash)
-          {
+          config = {
             name: hash['name'] || nil,
-            me: hash['me'] || nil
+            me: hash['me'] || nil,
+            replacements: {}
           }
+          if hash['replacements'] && hash['replacements'].is_a?(Hash)
+            config[:replacements] = hash['replacements'].select {|k,v| k.is_a?(String) && v.is_a?(String)}
+          end
+          config
         end
       end
 
@@ -29,7 +34,10 @@ module VPS
           e.id = record.primary_key.to_s
           e.title = record.title
         end
-        event.people = record.people.map { |p| p.name }.reject { |n| n == context.focus['calendar'][:me] }
+        event.people = record.people.
+          map { |p| p.name }.
+          reject { |n| n == context.focus['calendar'][:me] }.
+          map { |n| context.focus['calendar'][:replacements][n] || n}
         event
       end
 

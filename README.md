@@ -369,12 +369,25 @@ The configuration looks as follows:
 calendar:
     name:
     me:
+    replacements:
 ```
 
 With:
 
 - `name`: the name of the calendar to fetch events from.
 - `me`: your own name, as it shows up in events. Filling this in ensures that your own name is filtered from the list of attendees for a meeting.
+- `replacements`: a list of key-value pairs of people's names, see below.
+
+#### Replacements
+
+Although this plugin does a pretty good job of unmangling people's names from the Calendar, it doesn't always work. On top of that some people are simply published under the wrong name. With the replacements you have the option to fix that. For example:
+
+```yaml
+replacements:
+    "Bert Simpson": "Bart Simpson"
+```
+
+This can save you a lot of repetitive manual work that's easy to forget. 
 
 ### Outlook Calendar
 
