@@ -121,6 +121,20 @@ module VPS
       attr_accessor :title, :people
     end
 
+    ##
+    # Represents a group of people.
+    class Group < BaseEntity
+      attr_accessor :name, :people
+    end
+
+    class Note < BaseEntity
+      def self.from_id(id)
+        Note.new do |note|
+          note.id = id
+        end
+      end
+    end
+
     # The entities below do nothing (yet); they exist only to make the code safer/better.
 
     class Area
@@ -130,14 +144,6 @@ module VPS
     end
 
     class Mail
-    end
-
-    class Note < BaseEntity
-      def self.from_id(id)
-        Note.new do |note|
-          note.id = id
-        end
-      end
     end
 
     class Text

@@ -3,7 +3,7 @@
  * Creates a new e-mail message in Apple Mail.
  *
  * Requires two arguments:
- * - the e-mail address to send the mail to.
+ * - the e-mail addresses to send the mail to, in a JSON array
  * - the e-mail address to send mail from (optional).
  */
 function run(arguments) {
@@ -18,8 +18,10 @@ function run(arguments) {
     if (from != null) {
         message.sender = from;
     }
-
-    message.toRecipients.push(mail.Recipient({address: to}));
+    addresses = JSON.parse(to);
+    addresses.forEach(function(address) {
+        message.toRecipients.push(mail.Recipient({address: address}));
+    });
     message.visible = true;
     mail.activate();
     return '{}'

@@ -7,10 +7,12 @@ module VPS
         plugin.add_command(Project, :single)
         plugin.add_command(Contact, :single)
         plugin.add_command(Event, :single)
+        plugin.add_command(Group, :single)
         plugin.add_collaboration(Entities::Note)
         plugin.add_collaboration(Entities::Project)
         plugin.add_collaboration(Entities::Contact)
         plugin.add_collaboration(Entities::Event)
+        plugin.add_collaboration(Entities::Group)
       end
 
       def self.commands_for(area, entity)
@@ -40,8 +42,16 @@ module VPS
           }
         elsif entity.is_a?(Entities::Event)
           {
-            title: 'Pate event title to the frontmost app',
+            title: 'Paste event title to the frontmost app',
             arg: "text event #{entity.id}",
+            icon: {
+              path: "icons/clipboard.png"
+            }
+          }
+        elsif entity.is_a?(Entities::Group)
+          {
+            title: 'Paste group addresses to the frontmost app',
+            arg: "text group #{entity.id}",
             icon: {
               path: "icons/clipboard.png"
             }
@@ -144,6 +154,20 @@ module VPS
 
         def text_from(event)
           event.title
+        end
+      end
+
+      class Group < PasteTemplate
+        def self.entity_name
+          'group'
+        end
+
+        def entity_class
+          Entities::Group
+        end
+
+        def text_from(group)
+          group.people.map {|p| "\"#{p['name']}\" <#{p['email']}>"}.join(', ')
         end
       end
     end

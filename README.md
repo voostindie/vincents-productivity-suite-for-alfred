@@ -344,6 +344,21 @@ With:
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
 
+### Groups (from Apple Contacts)
+
+The groups plugin also runs against the Contacts app from Apple. It allows you to paste complete lists of groups, and sends mail to them.
+
+The configuration for this plugin looks as follows:
+
+```yaml
+groups:
+    prefix:
+```
+
+With:
+
+- `prefix`: the prefix of all names of the groups in this area. This defaults to the name of the area followed by "` - `".
+
 ### Apple Mail
 
 The mail plugin is useful as an extension on top of the Contacts plugin, to send e-mails to contacts.
