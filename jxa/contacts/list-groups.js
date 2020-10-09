@@ -19,7 +19,7 @@ function run(argv) {
     let result = ids.map(function(id) {
         return {
             id: id,
-            name: names[i++]
+            name: names[i++].substr(prefix.length)
         }
     });
     return JSON.stringify(result);
