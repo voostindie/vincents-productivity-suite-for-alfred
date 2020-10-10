@@ -265,6 +265,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>64628FC8-936D-4869-B6FD-5F87C86143E1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>6875C4C0-6D56-45D4-8E13-FF83B9F33944</key>
 		<array>
 			<dict>
@@ -503,6 +516,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>1E6815E6-601D-4507-8911-DB4C68D96DBB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>E02E303D-1FAE-4203-BA52-AD5F5B5CF429</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>64628FC8-936D-4869-B6FD-5F87C86143E1</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1024,55 +1050,6 @@ ruby exe/vps -a note list
 			<key>config</key>
 			<dict>
 				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a project commands
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string>bin/list-omnifocus-project-actions</string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
 				<true/>
 				<key>alfredfiltersresultsmatchmode</key>
 				<integer>2</integer>
@@ -1117,6 +1094,55 @@ ruby exe/vps -a project list
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>38C9FA7B-DC38-4F1C-A1F5-D51CF9964759</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a project commands
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string>bin/list-omnifocus-project-actions</string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>E32A5968-A53E-49A6-805D-9CA05BE60BDF</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -2031,6 +2057,51 @@ ruby exe/vps -a file docs</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps -a area flush</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>64628FC8-936D-4869-B6FD-5F87C86143E1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>flush</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Flush all caches for the active area</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>E02E303D-1FAE-4203-BA52-AD5F5B5CF429</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>This is Vincent's Productivity Suite for Alfred.
@@ -2191,6 +2262,15 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>340</integer>
 		</dict>
+		<key>64628FC8-936D-4869-B6FD-5F87C86143E1</key>
+		<dict>
+			<key>note</key>
+			<string>Flush area caches</string>
+			<key>xpos</key>
+			<integer>1010</integer>
+			<key>ypos</key>
+			<integer>1790</integer>
+		</dict>
 		<key>674E46A0-2544-4618-9406-9BD5FF321BD5</key>
 		<dict>
 			<key>note</key>
@@ -2342,6 +2422,13 @@ See the README for more information.</string>
 			<integer>750</integer>
 			<key>ypos</key>
 			<integer>320</integer>
+		</dict>
+		<key>E02E303D-1FAE-4203-BA52-AD5F5B5CF429</key>
+		<dict>
+			<key>xpos</key>
+			<integer>370</integer>
+			<key>ypos</key>
+			<integer>1790</integer>
 		</dict>
 		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
 		<dict>

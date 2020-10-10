@@ -336,13 +336,17 @@ The configuration for Contacts looks as follows:
 ```yaml
 contacts:
     group:
+    cache:
 ```
 
 With:
 
 - `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
+- `cache`: whether caching of contacts is enabled or not. To prevent surprises this defaults to `false`
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
+
+When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area.
 
 ### Groups (from Apple Contacts)
 
@@ -353,11 +357,13 @@ The configuration for this plugin looks as follows:
 ```yaml
 groups:
     prefix:
+    cache:
 ```
 
 With:
 
 - `prefix`: the prefix of all names of the groups in this area. This defaults to the name of the area followed by "` - `".
+- `cache`: whether caching of groups and contacts in these groups is enabled or not. This defaults to `false`.
 
 ### Apple Mail
 

@@ -5,6 +5,7 @@ module VPS
         plugin.for_entity(Entities::Area)
         plugin.add_command(List, :list)
         plugin.add_command(Focus, :single)
+        plugin.add_command(Flush, :list)
       end
 
       class List
@@ -65,6 +66,22 @@ module VPS
           end
           "#{area[:name]} is now the focused area"
         end
+      end
+    end
+
+    class Flush
+      include PluginSupport, CacheSupport
+
+      def self.option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'Flushes any caches for all plugins in this area'
+          parser.separator 'Usage: area flush'
+        end
+      end
+
+      def run
+        total = flush_plugin_cache
+        "Flushed #{total} cache file(s) for area #{@context.focus[:name]}"
       end
     end
   end

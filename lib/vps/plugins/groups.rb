@@ -15,6 +15,7 @@ module VPS
         def read_area_configuration(area, hash)
           {
             prefix: hash['prefix'] || area[:name] + ' - ',
+            cache: hash['cache'] || false
           }
         end
       end
@@ -25,7 +26,7 @@ module VPS
       end
 
       class List
-        include PluginSupport
+        include PluginSupport, CacheSupport
 
         def self.option_parser
           OptionParser.new do |parser|
@@ -34,22 +35,28 @@ module VPS
           end
         end
 
+        def cache_enabled?
+          @context.focus['groups'][:cache] == true
+        end
+
         def run(runner = Jxa::Runner.new('contacts'))
-          contacts = runner.execute('list-groups', @context.focus['groups'][:prefix])
-          contacts.map do |group|
-            group = Entities::Group.from_hash(group)
-            {
-              uid: group.id,
-              title: group.name,
-              subtitle: if triggered_as_snippet?
-                          "Paste addresses from '#{group.name}' in the frontmost application"
-                        else
-                          "Select an action for '#{group.name}'"
-                        end,
-              arg: group.name,
-              autocomplete: group.name,
-              variables: group.to_env
-            }
+          cache do
+            contacts = runner.execute('list-groups', @context.focus['groups'][:prefix])
+            contacts.map do |group|
+              group = Entities::Group.from_hash(group)
+              {
+                uid: group.id,
+                title: group.name,
+                subtitle: if triggered_as_snippet?
+                            "Paste addresses from '#{group.name}' in the frontmost application"
+                          else
+                            "Select an action for '#{group.name}'"
+                          end,
+                arg: group.name,
+                autocomplete: group.name,
+                variables: group.to_env
+              }
+            end
           end
         end
       end

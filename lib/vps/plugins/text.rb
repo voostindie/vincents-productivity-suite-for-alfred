@@ -62,7 +62,7 @@ module VPS
       end
 
       class PasteTemplate
-        include PluginSupport
+        include PluginSupport, CacheSupport
 
         def self.option_parser
           OptionParser.new do |parser|
@@ -80,7 +80,9 @@ module VPS
         end
 
         def run(runner = Jxa::Runner.new('alfred'))
-          entity = @context.load_entity(entity_class)
+          entity = cache(@context.arguments[0]) do
+            @context.load_entity(entity_class)
+          end
           runner.execute('paste', text_from(entity))
           nil
         end
@@ -162,12 +164,18 @@ module VPS
           'group'
         end
 
+        def cache_enabled?
+          # This is technically incorrect, because it looks into the configuration of the 'groups' plugin
+          # which it should not even know about...
+          @context.focus['groups'][:cache] == true
+        end
+
         def entity_class
           Entities::Group
         end
 
         def text_from(group)
-          group.people.map {|p| "\"#{p['name']}\" <#{p['email']}>"}.join(', ')
+          group.people.map { |p| "\"#{p['name']}\" <#{p['email']}>" }.join(', ')
         end
       end
     end

@@ -27,6 +27,7 @@ require 'vps/configuration'
 require 'vps/state'
 require 'vps/context'
 require 'vps/cli'
+require 'vps/cache_support'
 require 'vps/plugin_support'
 
 # Extensions
