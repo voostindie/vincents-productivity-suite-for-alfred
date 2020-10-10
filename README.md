@@ -62,7 +62,9 @@ It may not sound like much, but for me this is an enormous time saver.
 2. Go to the project root: `cd vincents-productivity-suite-for-alfred`
 3. Install all required libraries: `bundle install`
 
-Now a `exe/vps help` should work. For easier use on the command-line you might want to add the `exe` directory to your `PATH`.
+**Important**: if you use macOS's system Ruby, you will need to use `sudo` for the last command! 
+
+After all this, an `exe/vps help` should work. For easier use on the command-line you might want to add the `exe` directory to your `PATH`.
 
 ### Alfred
 
