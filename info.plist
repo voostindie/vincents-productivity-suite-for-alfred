@@ -485,6 +485,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>D1C324B0-EF82-4FBF-A6C6-EE36B80F3F04</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E051C20D-B133-4F59-B2C5-10311F65C0E4</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>D47A3F59-9ECA-48D0-9A61-7B559E9EA7A8</key>
 		<array>
 			<dict>
@@ -2102,6 +2115,42 @@ ruby exe/vps -a area flush</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>vps</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Edit the VPS configuration</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>D1C324B0-EF82-4FBF-A6C6-EE36B80F3F04</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>openwith</key>
+				<string></string>
+				<key>sourcefile</key>
+				<string>~/.vpsrc</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openfile</string>
+			<key>uid</key>
+			<string>E051C20D-B133-4F59-B2C5-10311F65C0E4</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>This is Vincent's Productivity Suite for Alfred.
@@ -2398,6 +2447,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>40</integer>
 		</dict>
+		<key>D1C324B0-EF82-4FBF-A6C6-EE36B80F3F04</key>
+		<dict>
+			<key>xpos</key>
+			<integer>370</integer>
+			<key>ypos</key>
+			<integer>1925</integer>
+		</dict>
 		<key>D47A3F59-9ECA-48D0-9A61-7B559E9EA7A8</key>
 		<dict>
 			<key>note</key>
@@ -2429,6 +2485,13 @@ See the README for more information.</string>
 			<integer>370</integer>
 			<key>ypos</key>
 			<integer>1790</integer>
+		</dict>
+		<key>E051C20D-B133-4F59-B2C5-10311F65C0E4</key>
+		<dict>
+			<key>xpos</key>
+			<integer>1010</integer>
+			<key>ypos</key>
+			<integer>1925</integer>
 		</dict>
 		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
 		<dict>
