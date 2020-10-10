@@ -32,7 +32,7 @@ This CLI and Alfred workflow can:
 - Set focus to an area and
     - Show the name of the area (or a nice label) in BitBar
     - Change the desktop wallpaper
-- Create a new notes according to a template in iA Writer
+- Create new notes according to a template in iA Writer
 - Browse documents in Alfred
 - Browse reference material in Alfred
 - Select a note and:
@@ -54,12 +54,37 @@ This CLI and Alfred workflow can:
 
 It may not sound like much, but for me this is an enormous time saver.
 
+## Installation
+
+### Command-line
+
+1. Clone this repository: `git clone https://github.com/voostindie/vincents-productivity-suite-for-alfred.git`
+2. Go to the project root: `cd vincents-productivity-suite-for-alfred`
+3. Install all required libraries: `bundle install`
+
+Now a `exe/vps help` should work. For easier use on the command-line you might want to add the `exe` directory to your `PATH`.
+
+### Alfred
+
+1. Go to Alfred's plugin directory: `cd ~/Library/Application\ Support/Alfred/Alfred.alfredpreferences/workflows`
+2. Set up a symlink to the git clone: `ln -s /path/to/vincents-productivity-suite-for-alfred`
+
+This will make the "Vincent's Productivity Suite" workflow automatically show up in Alfred and any `git pull` you do will immediately work in Alfred too.
+
+### About Ruby versions
+
+I'm taking care that this plugin works with the Ruby version that comes with the latest macOS. At the moment that's `2.6.3`. But I actually use the latest version of Ruby myself. To manage multiple Ruby versions I use [rbenv](https://github.com/rbenv/rbenv) as provided by [Homebrew](https://brew.sh).
+
+To make Alfred use the same version of Ruby as the command-line tools, you can set up the `RUBY_PATH` workflow environment variable. For me it points to `/Users/vincent/.rbenv/shims`.
+
+I haven't yet found a way to make the BitBar plugin use the same version. it always uses the system Ruby. But I'm making sure that also works.
+
 ## Alfred features
 
 ### Keywords and hotkeys
 
 - `focus` / *ctrl* + *opt* + *cmd* + A: sets the focus to an area of responsibility.
-- `find`: selects one of the available global note finders. *ctrl* + *opt* + *cmd* + F runs the global note finder `all`, if available.
+- `flush`: flushes all caches for the focused area of responsibility.
 - `note` / *ctrl* + *opt* + *cmd* + ,: creates a new note and opens it for editing in after you specify the title.
 - `notes` / *ctrl* + *opt* + *cmd* + N: selects a note and shows an action list
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
@@ -76,7 +101,16 @@ Using the shared prefix `;` and no suffix for snippets:
 
 - `;c`: copies a contact's name into the frontmost application.
 - `;p`: copies a project's name into the frontmost application.
+- `;g`: copies all contacts from a contact group into the frontmost application
 - `;n`: copies a note's ID into the frontmost application as a Wiki-link
+
+### Icons
+
+Unfortunately the icons in the Alfred workflow are hardcoded, and independent of the active plugins in an area. That means, for example, that you see an iA Writer icon, even if you configured the focused area to use Bear.
+
+Of course you can change the icons yourself in the workflow through Alfred, but any changes made by me might override that at some point.
+
+I have some idea on how to fix this, but haven't come around to trying this out and implementing it for real. It's not high on my priority list, because I use one set of tools across all areas. 
 
 ## How to configure
 
@@ -88,13 +122,14 @@ areas:
         iawriter:
         omnifocus:
         contacts:
-        outlookcalendar:
+        groups:
+        calendar:
         alfred:
 ```
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Outlook Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Groups, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
@@ -112,9 +147,12 @@ areas:
             folder: 'Work'
         contacts:
             group: 'Work'
-        outlookcalendar:
-            account: 'Work'
-            calendar: 'Calendar'
+            cache: false
+        groups:
+            prefix: 'Work - '
+            cache: false
+        calendar:
+            name: 'Work'
         alfred:
             path: 'Projects'
         bitbar:
@@ -123,7 +161,7 @@ areas:
 
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate plugin.
 
-To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `markdown-notes` section, creating notes is not possible in that area.
+To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `iawriter` section, creating notes is not possible in that area. Alternatively you can select a different plugin that supports the same entities, to have the same shortcuts magically use a different application when you switch focus!
 
 ### Areas
 
