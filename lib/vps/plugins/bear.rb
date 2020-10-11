@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Note)
+        plugin.add_repository(Repository)
         plugin.add_command(Finders, :list)
         plugin.add_command(Find, :single)
         plugin.add_command(Plain, :single)
@@ -47,6 +48,16 @@ module VPS
           config[:creators][:default][:text] ||= ''
           config[:creators][:default][:tags] ||= []
           config
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Note
+        end
+
+        def load_from_context(context)
+          raise 'Repository.load_from_context is not supported in Bear'
         end
       end
 

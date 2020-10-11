@@ -40,29 +40,6 @@ module VPS
     end
 
     ##
-    # Returns the manager for a specified entity name in an area
-    def entity_manager_for(area, entity_name)
-      @registry.entity_managers_for(entity_name).select do |plugin|
-        area.has_key?(plugin.key)
-      end.first
-    end
-
-    ##
-    # Returns the manager for a specified entity name in an area
-    def entity_manager_for_class(area, entity_class)
-      entity_name = entity_class.name.split('::').last.downcase
-      entity_manager_for(area, entity_name)
-    end
-
-    ##
-    # Returns all entity managers that are enabled within an area
-    def entity_managers(area)
-      @registry.entity_managers.select do |plugin|
-        area.has_key?(plugin.key)
-      end
-    end
-
-    ##
     # Returns all collaborators. Possible types are +:project+
     def collaborators(area, entity_class)
       @registry.collaborators(entity_class).select do |plugin|
@@ -101,12 +78,12 @@ module VPS
             $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
-          entity_class = plugin.entity_class
-          unless entity_class.nil?
+          plugin.repositories.map { |r| r.entity_class }.each do |entity_class|
             if entity_classes.include? entity_class
-              $stderr.puts "WARNING: the area #{name} has multiple managers for entity class #{entity_class}. Skipping plugin #{plugin_key}"
+              $stderr.puts "WARNING: the area #{name} has multiple repositories for entity class #{entity_class}. Skipping plugin #{plugin_key}"
               next
             end
+            entity_classes << entity_class
           end
           plugins[plugin.key] = plugin.configurator.read_area_configuration(area, plugin_config || {}).freeze
         end

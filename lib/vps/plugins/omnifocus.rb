@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Project)
+        plugin.add_repository(Repository)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)
         plugin.add_command(Commands, :list)
@@ -15,6 +16,17 @@ module VPS
           {
             folder: hash['folder'] || area[:name]
           }
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Project
+        end
+
+        def load_from_context(context)
+          id = context.environment['PROJECT_ID'] || context.arguments[0]
+          Entities::Project.from_hash(runner.execute('project-details', id))
         end
       end
 

@@ -28,15 +28,15 @@ module VPS
     class Plugin
       include WithKey
 
-      attr_reader :plugin_module, :entity_class, :collaborates_with, :commands, :action_class
+      attr_reader :plugin_module, :entity_class, :collaborates_with, :repositories, :commands, :action_class
 
       attr_reader :key
       attr_accessor :configurator_class
 
       def initialize(plugin_module)
         @plugin_module = plugin_module
-        @entity_class = nil
         @collaborates_with = []
+        @repositories = []
         @commands = {}
         @action_class = nil
 
@@ -65,6 +65,10 @@ module VPS
         @entity_class = entity_class
       end
 
+      def add_repository(repository_class)
+        @repositories << repository_class
+      end
+
       def add_command(command_class, type)
         command = Command.new(command_class, type)
         @commands[command.key] = command
@@ -89,16 +93,12 @@ module VPS
                    .to_h
     end
 
-    def entity_managers
-      @plugins.values.reject do |plugin|
-        plugin.entity_class.nil?
-      end
+    def repositories
+      @plugins.values.filter_map { |plugin| plugin.repositories }.flatten
     end
 
-    def entity_managers_for(entity_name)
-      @plugins.values.select do |plugin|
-        plugin.entity_class != nil && plugin.entity_class_name == entity_name
-      end
+    def repositories_for
+      repositories.select { |r| r.entity_class == entity_class }
     end
 
     def collaborators(entity_class)

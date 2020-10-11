@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Contact)
+        plugin.add_repository(Repository)
         plugin.add_command(List, :list)
         plugin.add_command(Open, :single)
         plugin.add_command(Commands, :list)
@@ -15,6 +16,20 @@ module VPS
             group: hash['group'] || area[:name],
             cache: hash['cache'] || false
           }
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Contact
+        end
+
+        def load_from_context(context, runner = Jxa::Runner.new('contacts'))
+          if context.environment['CONTACT_ID'].nil?
+            Entities::Contact.from_hash(runner.execute('contact-details', context.arguments[0]))
+          else
+            Entities::Contact.from_env(context.environment)
+          end
         end
       end
 

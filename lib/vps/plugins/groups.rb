@@ -7,6 +7,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Group)
+        plugin.add_repository(Repository)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list)
       end
@@ -17,6 +18,17 @@ module VPS
             prefix: hash['prefix'] || area[:name] + ' - ',
             cache: hash['cache'] || false
           }
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Group
+        end
+
+        def load_from_context(context)
+          id = context.environment['GROUP_ID'] || context.arguments[0]
+          Entities::Group.from_hash(runner.execute('group-details', id))
         end
       end
 

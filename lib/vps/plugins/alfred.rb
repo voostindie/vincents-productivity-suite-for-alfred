@@ -17,7 +17,6 @@ module VPS
             refs: hash['reference material'] || 'Reference Material'
           }
         end
-
       end
 
       def self.commands_for(area, entity)

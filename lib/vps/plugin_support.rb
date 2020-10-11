@@ -12,21 +12,13 @@ module VPS
     end
 
     class Repository
-      def load_entity(context)
-
+      def entity_class
+        nil
       end
-    end
 
-    class ClassCommand
-
-    end
-
-    class InstanceCommand
-
-    end
-
-    class Action
-
+      def load_from_context(context)
+        {}
+      end
     end
 
     ##

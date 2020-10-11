@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Event)
+        plugin.add_repository(Repository)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list) # Work in progress..
       end
@@ -19,6 +20,31 @@ module VPS
             config[:replacements] = hash['replacements'].select {|k,v| k.is_a?(String) && v.is_a?(String)}
           end
           config
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Event
+        end
+
+        def load_from_context(context)
+          database = CalendarDatabase.new(context.focus['calendar'][:name])
+          id = if context.environment['EVENT_ID'].nil?
+                 context.arguments[0]
+               else
+                 context.environment['EVENT_ID']
+               end
+          record = database.event_by_id(id)
+          event = Entities::Event.new do |e|
+            e.id = record.primary_key.to_s
+            e.title = record.title
+          end
+          event.people = record.people.
+            map { |p| p.name }.
+            reject { |n| n == context.focus['calendar'][:me] }.
+            map { |n| context.focus['calendar'][:replacements][n] || n}
+          event
         end
       end
 

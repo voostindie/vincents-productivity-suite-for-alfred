@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Note)
+        plugin.add_repository(Repository)
         plugin.add_command(Root, :single)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list)
@@ -45,6 +46,16 @@ module VPS
           config[:templates][:default][:text] ||= ''
           config[:templates][:default][:tags] ||= []
           config
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Note
+        end
+
+        def load_from_context(context)
+          Entities::Note.from_id(context.arguments[0])
         end
       end
 

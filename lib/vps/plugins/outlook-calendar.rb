@@ -4,6 +4,7 @@ module VPS
       def self.configure_plugin(plugin)
         plugin.configurator_class = Configurator
         plugin.for_entity(Entities::Event)
+        plugin.add_repository(Repository)
         plugin.add_command(List, :list)
         plugin.add_command(Commands, :list)
       end
@@ -15,6 +16,29 @@ module VPS
             calendar: hash['calendar'] || 'Calendar',
             me: hash['me'] || nil
           }
+        end
+      end
+
+      class Repository < PluginSupport::Repository
+        def self.entity_class
+          Entities::Event
+        end
+
+        def load_from_context(context)
+          id = context.environment['EVENT_ID'] || context.arguments[0]
+          event = runner.execute('event-details', id)
+
+          people = [Person.new(nil, event['organizer'])]
+          event['attendees'].each do |attendee|
+            people << Person.new(attendee['name'], attendee['address'])
+          end
+          me = context.focus['outlookcalendar'][:me]
+          people.reject! { |p| p.email == me } unless me.nil?
+
+          event['people'] = people.map {|p| p.name}
+          event.delete('organizer')
+          event.delete('attendees')
+          Entities::Event.from_hash(event)
         end
       end
 
