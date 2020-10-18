@@ -202,6 +202,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>40DFDFE8-A1F3-43A3-AD76-95AD6100FF7F</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>5016CA8F-E58C-40F9-867F-4D58FDAA3121</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>44F42276-0729-4250-93E5-D7C2B26BE014</key>
 		<array>
 			<dict>
@@ -219,6 +232,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>18B2A6AD-FD12-4B96-A50B-028D192FCC5A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>5016CA8F-E58C-40F9-867F-4D58FDAA3121</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>492E4749-88F2-46BC-A846-A6EF34121962</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -309,6 +335,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>F5FB02E4-8231-4E86-9387-E0E111162784</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>811B4553-8A48-4EA7-BD42-ACAF51CDDCD2</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>5016CA8F-E58C-40F9-867F-4D58FDAA3121</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1058,6 +1097,82 @@ ruby exe/vps -a note list
 			<string>F5FB02E4-8231-4E86-9387-E0E111162784</string>
 			<key>version</key>
 			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>today</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Open today's note</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>811B4553-8A48-4EA7-BD42-ACAF51CDDCD2</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>17</integer>
+				<key>hotmod</key>
+				<integer>1835008</integer>
+				<key>hotstring</key>
+				<string>T</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>40DFDFE8-A1F3-43A3-AD76-95AD6100FF7F</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>PATH=$RUBY_PATH:$PATH
+ruby exe/vps note today</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>5016CA8F-E58C-40F9-867F-4D58FDAA3121</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -2179,21 +2294,21 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>245</integer>
 			<key>ypos</key>
-			<integer>750</integer>
+			<integer>930</integer>
 		</dict>
 		<key>0ED34B50-BB28-4DAF-83CF-6431B7340FD1</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>840</integer>
+			<integer>1020</integer>
 		</dict>
 		<key>141255DE-26A7-4A0A-91D9-4D46C4924504</key>
 		<dict>
 			<key>xpos</key>
 			<integer>250</integer>
 			<key>ypos</key>
-			<integer>1000</integer>
+			<integer>1180</integer>
 		</dict>
 		<key>14C7E1CD-8B7B-4BAF-B0E8-A69297B603A4</key>
 		<dict>
@@ -2202,7 +2317,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>740</integer>
 			<key>ypos</key>
-			<integer>1370</integer>
+			<integer>1550</integer>
 		</dict>
 		<key>18B2A6AD-FD12-4B96-A50B-028D192FCC5A</key>
 		<dict>
@@ -2211,14 +2326,14 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>740</integer>
 			<key>ypos</key>
-			<integer>1105</integer>
+			<integer>1285</integer>
 		</dict>
 		<key>19A1C1A7-8B05-44A8-8700-C87E81B7ECB5</key>
 		<dict>
 			<key>xpos</key>
 			<integer>565</integer>
 			<key>ypos</key>
-			<integer>610</integer>
+			<integer>790</integer>
 		</dict>
 		<key>1E6815E6-601D-4507-8911-DB4C68D96DBB</key>
 		<dict>
@@ -2227,7 +2342,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>1000</integer>
 			<key>ypos</key>
-			<integer>725</integer>
+			<integer>905</integer>
 		</dict>
 		<key>1EA1C2CE-E59A-4003-A62F-279C5E0E9B87</key>
 		<dict>
@@ -2236,7 +2351,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>840</integer>
+			<integer>1020</integer>
 		</dict>
 		<key>22D4F09F-F01A-478C-BE58-D38C10C03D5D</key>
 		<dict>
@@ -2245,7 +2360,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1370</integer>
+			<integer>1550</integer>
 		</dict>
 		<key>25862486-DB87-4D99-8A2F-270DF2ED344B</key>
 		<dict>
@@ -2270,7 +2385,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>590</integer>
+			<integer>770</integer>
 		</dict>
 		<key>3B89983B-B77A-4B9C-A813-3F077219E15C</key>
 		<dict>
@@ -2279,14 +2394,21 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1505</integer>
+			<integer>1685</integer>
+		</dict>
+		<key>40DFDFE8-A1F3-43A3-AD76-95AD6100FF7F</key>
+		<dict>
+			<key>xpos</key>
+			<integer>60</integer>
+			<key>ypos</key>
+			<integer>640</integer>
 		</dict>
 		<key>44F42276-0729-4250-93E5-D7C2B26BE014</key>
 		<dict>
 			<key>xpos</key>
 			<integer>575</integer>
 			<key>ypos</key>
-			<integer>1125</integer>
+			<integer>1305</integer>
 		</dict>
 		<key>492E4749-88F2-46BC-A846-A6EF34121962</key>
 		<dict>
@@ -2295,6 +2417,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>190</integer>
 		</dict>
+		<key>5016CA8F-E58C-40F9-867F-4D58FDAA3121</key>
+		<dict>
+			<key>xpos</key>
+			<integer>750</integer>
+			<key>ypos</key>
+			<integer>640</integer>
+		</dict>
 		<key>5247CD21-2075-4C96-93D4-71BDF114E7E7</key>
 		<dict>
 			<key>note</key>
@@ -2302,7 +2431,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1105</integer>
+			<integer>1285</integer>
 		</dict>
 		<key>5391E140-2CC0-40C5-975F-A8DACCA4370A</key>
 		<dict>
@@ -2318,7 +2447,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>1010</integer>
 			<key>ypos</key>
-			<integer>1790</integer>
+			<integer>1970</integer>
 		</dict>
 		<key>674E46A0-2544-4618-9406-9BD5FF321BD5</key>
 		<dict>
@@ -2327,28 +2456,28 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1635</integer>
+			<integer>1815</integer>
 		</dict>
 		<key>6875C4C0-6D56-45D4-8E13-FF83B9F33944</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1370</integer>
+			<integer>1550</integer>
 		</dict>
 		<key>6CF126FC-D8C1-4E36-A9BD-C398801C6E27</key>
 		<dict>
 			<key>xpos</key>
 			<integer>250</integer>
 			<key>ypos</key>
-			<integer>870</integer>
+			<integer>1050</integer>
 		</dict>
 		<key>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</key>
 		<dict>
 			<key>xpos</key>
 			<integer>745</integer>
 			<key>ypos</key>
-			<integer>725</integer>
+			<integer>905</integer>
 		</dict>
 		<key>727D5D88-C52C-40A5-ADA7-54B593E5E2E5</key>
 		<dict>
@@ -2357,12 +2486,21 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>455</integer>
 		</dict>
+		<key>811B4553-8A48-4EA7-BD42-ACAF51CDDCD2</key>
+		<dict>
+			<key>note</key>
+			<string>Open today's note</string>
+			<key>xpos</key>
+			<integer>375</integer>
+			<key>ypos</key>
+			<integer>495</integer>
+		</dict>
 		<key>8179C8F5-CA73-4AD1-81E9-0A437B83A521</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1105</integer>
+			<integer>1285</integer>
 		</dict>
 		<key>82870B1E-F93C-42CB-A9A2-04192D4A86FE</key>
 		<dict>
@@ -2371,35 +2509,35 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>550</integer>
 			<key>ypos</key>
-			<integer>970</integer>
+			<integer>1150</integer>
 		</dict>
 		<key>88E6859F-DDAF-4711-95D0-FB44354A461D</key>
 		<dict>
 			<key>xpos</key>
 			<integer>575</integer>
 			<key>ypos</key>
-			<integer>860</integer>
+			<integer>1040</integer>
 		</dict>
 		<key>8B78E256-3CB5-40FD-A40A-43436919DCC7</key>
 		<dict>
 			<key>xpos</key>
 			<integer>245</integer>
 			<key>ypos</key>
-			<integer>620</integer>
+			<integer>800</integer>
 		</dict>
 		<key>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>720</integer>
+			<integer>900</integer>
 		</dict>
 		<key>9767D754-E8EA-40D6-B12B-8ADACF2C0CAD</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1635</integer>
+			<integer>1815</integer>
 		</dict>
 		<key>9C7796AE-C61E-4516-992A-FCE9BF0E1957</key>
 		<dict>
@@ -2413,14 +2551,14 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>250</integer>
 			<key>ypos</key>
-			<integer>1265</integer>
+			<integer>1445</integer>
 		</dict>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>970</integer>
+			<integer>1150</integer>
 		</dict>
 		<key>B1C51158-7234-43A3-94A0-8006F4388F5F</key>
 		<dict>
@@ -2452,7 +2590,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1925</integer>
+			<integer>2105</integer>
 		</dict>
 		<key>D47A3F59-9ECA-48D0-9A61-7B559E9EA7A8</key>
 		<dict>
@@ -2461,14 +2599,14 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>740</integer>
 			<key>ypos</key>
-			<integer>840</integer>
+			<integer>1020</integer>
 		</dict>
 		<key>DD0521F5-FFA3-4AE8-8BEA-695B6E4EF9A0</key>
 		<dict>
 			<key>xpos</key>
 			<integer>250</integer>
 			<key>ypos</key>
-			<integer>1135</integer>
+			<integer>1315</integer>
 		</dict>
 		<key>DDE54F64-57B5-4EE8-BCF5-3F2FE5A1ABBD</key>
 		<dict>
@@ -2484,14 +2622,14 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>370</integer>
 			<key>ypos</key>
-			<integer>1790</integer>
+			<integer>1970</integer>
 		</dict>
 		<key>E051C20D-B133-4F59-B2C5-10311F65C0E4</key>
 		<dict>
 			<key>xpos</key>
 			<integer>1010</integer>
 			<key>ypos</key>
-			<integer>1925</integer>
+			<integer>2105</integer>
 		</dict>
 		<key>E32A5968-A53E-49A6-805D-9CA05BE60BDF</key>
 		<dict>
@@ -2500,14 +2638,14 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>745</integer>
 			<key>ypos</key>
-			<integer>590</integer>
+			<integer>770</integer>
 		</dict>
 		<key>E7D27349-F0DA-4DE3-845B-7DD59E544434</key>
 		<dict>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1235</integer>
+			<integer>1415</integer>
 		</dict>
 		<key>F5FB02E4-8231-4E86-9387-E0E111162784</key>
 		<dict>
@@ -2521,7 +2659,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>1505</integer>
+			<integer>1685</integer>
 		</dict>
 		<key>FC6B055A-D686-4E8F-93FA-3F2756565FEA</key>
 		<dict>
@@ -2535,7 +2673,7 @@ See the README for more information.</string>
 			<key>xpos</key>
 			<integer>60</integer>
 			<key>ypos</key>
-			<integer>590</integer>
+			<integer>770</integer>
 		</dict>
 	</dict>
 	<key>variables</key>

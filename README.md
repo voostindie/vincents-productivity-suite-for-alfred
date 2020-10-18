@@ -89,6 +89,7 @@ I haven't yet found a way to make the BitBar plugin use the same version. it alw
 - `flush`: flushes all caches for the focused area of responsibility.
 - `note` / *ctrl* + *opt* + *cmd* + ,: creates a new note and opens it for editing in after you specify the title.
 - `notes` / *ctrl* + *opt* + *cmd* + N: selects a note and shows an action list
+- `today` / *ctrl* + *opt* + *cmd* + T: open today's note
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
 - `docs` / *ctrl* + *opt* + *cmd* + D: browses the Documents for the selected area in Alfred's file browser.
@@ -233,7 +234,7 @@ Each note has a title, text, and a set of tags for the note. The defaults are sh
 You can:
 
 - Change the defaults and
-- Override the defaults, partly or in full, for a different template set. The available sets are `default`, `plain`, `contact`, `event` and `project`.
+- Override the defaults, partly or in full, for a different template set. The available sets are `default`, `plain`, `contact`, `event`, `project` and `today`.
 
 For example:
 
@@ -267,6 +268,10 @@ The available variables depend on the thing you're creating a note for:
 - `input`: same as query
 
 The arguments are passed both in `query` and in `input`. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. But, if you want, the arguments are still available.
+
+##### Today
+
+- `input`: empty; there is no input text
 
 ##### Plain
 

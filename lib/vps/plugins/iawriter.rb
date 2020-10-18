@@ -13,6 +13,7 @@ module VPS
         plugin.add_command(Project, :single)
         plugin.add_command(Contact, :single)
         plugin.add_command(Event, :single)
+        plugin.add_command(Today, :list)
         plugin.add_collaboration(Entities::Project)
         plugin.add_collaboration(Entities::Contact)
         plugin.add_collaboration(Entities::Event)
@@ -26,7 +27,7 @@ module VPS
             token: hash['token'] || 'TOKEN_NOT_CONFIGURED',
             templates: {}
           }
-          %w(default plain contact event project).each do |set|
+          %w(default plain contact event project today).each do |set|
             templates = if hash['templates'] && hash['templates'][set]
                           hash['templates'][set]
                         else
@@ -250,22 +251,29 @@ module VPS
 
         def run(runner = Shell::SystemRunner.new)
           context = create_context
-          title = template(:title).render_template(context)
+          title = template(:title).render_template(context).strip
           content = template(:text).render_template(context)
           tags = template(:tags)
-                   .map { |t| t.render_template(context) }
+                   .map { |t| t.render_template(context).strip }
                    .map { |t| "##{t}" }
                    .join(' ')
           text = "# #{title}\n"
           text += "\n#{content}" unless content.empty?
           text += "#{tags}" unless tags.empty?
 
-          filename = Zaru.sanitize!(title.strip + ".md")
+          filename = Zaru.sanitize!(title + ".md")
           location = File.join('/Locations', @context.focus['iawriter'][:location], filename)
+          path = File.join(@context.focus['iawriter'][:root], filename)
           token = @context.focus['iawriter'][:token]
-          callback = "iawriter://new?path=#{location.url_encode}&text=#{text.url_encode}&auth-token=#{token}"
-          runner.execute('open', callback)
-          "Created a new note in iA Writer with title '#{title}'"
+          if File.exist?(path)
+            callback = "iawriter://open?path=#{location.url_encode}"
+            runner.execute('open', callback)
+            "Opened existing note '#{title}' in IA Writer"
+          else
+            callback = "iawriter://new?path=#{location.url_encode}&text=#{text.url_encode}&auth-token=#{token}"
+            runner.execute('open', callback)
+            "Created a new note in iA Writer with title '#{title}'"
+          end
         end
 
         def create_context
@@ -383,6 +391,23 @@ module VPS
           context['title'] = @event.title
           context['names'] = @event.people
           context
+        end
+      end
+
+      class Today < Plain
+        def self.option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create or open today\'s note'
+            parser.separator 'Usage: note today'
+          end
+        end
+
+        def template_set
+          :today
+        end
+
+        def can_run?
+          is_entity_manager_available?(Entities::Event)
         end
       end
     end
