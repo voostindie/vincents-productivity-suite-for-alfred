@@ -80,7 +80,7 @@ module VPS
         end
 
         def run(runner = Jxa::Runner.new('alfred'))
-          entity = cache(@context.arguments[0]) do
+          entity = cache(@context.arguments.join(' ')) do
             @context.load_entity(entity_class)
           end
           runner.execute('paste', text_from(entity))

@@ -47,7 +47,7 @@ module VPS
       end
 
       def self.load_entity(context)
-        Entities::Note.from_id(context.arguments[0])
+        Entities::Note.from_id(context.arguments.join(' '))
       end
 
       def self.commands_for(area, entity)
@@ -109,7 +109,7 @@ module VPS
           root = @context.focus['iawriter'][:root]
           notes = Dir.glob("#{root}/**/*.md").sort_by { |p| File.basename(p) }.reverse
           notes.map do |note|
-            name = File.basename(note)[0..-4]
+            name = File.basename(note, '.md')
             {
               uid: name,
               title: name,
