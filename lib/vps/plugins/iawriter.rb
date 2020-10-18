@@ -34,11 +34,13 @@ module VPS
                           {}
                         end
             config[:templates][set.to_sym] = {
+              filename: templates['filename'] || nil,
               title: templates['title'] || nil,
               text: templates['text'] || nil,
               tags: templates['tags'] || nil
             }
           end
+          config[:templates][:default][:filename] ||= nil
           config[:templates][:default][:title] ||= '{{input}}'
           config[:templates][:default][:text] ||= ''
           config[:templates][:default][:tags] ||= []
@@ -252,6 +254,12 @@ module VPS
         def run(runner = Shell::SystemRunner.new)
           context = create_context
           title = template(:title).render_template(context).strip
+          filename_template = template(:filename)
+          filename = if filename_template.nil?
+                       title
+                     else
+                       filename_template.render_template(context).strip
+                     end
           content = template(:text).render_template(context)
           tags = template(:tags)
                    .map { |t| t.render_template(context).strip }
@@ -261,7 +269,7 @@ module VPS
           text += "\n#{content}" unless content.empty?
           text += "#{tags}" unless tags.empty?
 
-          filename = Zaru.sanitize!(title + ".md")
+          filename = Zaru.sanitize!(filename + ".md")
           location = File.join('/Locations', @context.focus['iawriter'][:location], filename)
           path = File.join(@context.focus['iawriter'][:root], filename)
           token = @context.focus['iawriter'][:token]

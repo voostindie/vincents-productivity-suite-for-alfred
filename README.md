@@ -197,6 +197,7 @@ iawriter:
     token:
     templates:
         default:
+		        file: null
             title: '{{input}}'
             text: ''
             tags: []
@@ -229,7 +230,7 @@ What's there to break? Two things:
 
 The iA Writer support in VPS allows you to set up templates for different types of entities. Each template consists of a set of property, where the value of each property is a [Liquid template](https://shopify.github.io/liquid/).
 
-Each note has a title, text, and a set of tags for the note. The defaults are shown above. 
+Each note has a filename, title, text, and a set of tags for the note. The defaults are shown above. 
 
 You can:
 
@@ -242,10 +243,11 @@ For example:
 iawriter:
     templates:
         default:
-            title: '{{year}}-{{month}}-{{day}} {{input}}'
+		        filename: '{{year}}-{{month}}-{{day}} {{input}}'
+            title: '{{input}} {{day}}-{{month}}-{{year}}'
             tags:
-                - 'Journal/{{year}}'
-                - 'NeedsWork'
+                - 'journal/{{year}}'
+                - 'todo'
         event:
             text: |
                 ## Attendees
@@ -254,7 +256,9 @@ iawriter:
                 {% endfor %}
 ```
 
-This prepends the current date to every note and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
+This prepends the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
+
+The default template for the filename is `null` (in YAML). If none is specified, the system will use the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 
 The available variables depend on the thing you're creating a note for:
 
