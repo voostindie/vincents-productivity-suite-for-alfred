@@ -15,6 +15,7 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Alfred (duh!)
 - iA Writer
 - Bear
+- Obsidian
 - OmniFocus
 - Apple Contacts
 - Apple Mail
@@ -36,7 +37,7 @@ This CLI and Alfred workflow can:
 - Browse documents in Alfred
 - Browse reference material in Alfred
 - Select a note and:
-    - Open it in iA Writer for editing
+    - Open it in iA Writer / Obsidian / Bear for editing
     - Open it in Marked 2 for viewing
 - Select a contact and:
     - Open it in Contacts
@@ -123,7 +124,7 @@ Create a file `.vpsrc` in your home folder and put something like this in there:
 ```yaml
 areas:
    work:
-        iawriter:
+        obsidian:
         omnifocus:
         contacts:
         groups:
@@ -133,7 +134,7 @@ areas:
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the iA Writer, OmniFocus, Contacts, Groups, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the Obsidian, OmniFocus, Contacts, Groups, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
@@ -146,7 +147,9 @@ areas:
     work:
         name: 'Work'
         root: '~/Work'
-        iawriter:
+        obsidian:
+            vault: 'Work'
+            path: 'Notes'
         omnifocus:
             folder: 'Work'
         contacts:
@@ -198,7 +201,7 @@ iawriter:
     token:
     templates:
         default:
-		        file: null
+            filename: null
             title: '{{input}}'
             text: ''
             tags: []
@@ -207,7 +210,7 @@ iawriter:
 With:
 
 - `location`: the location in iA Writer for this area, defaults to the name of the area.
-- `path`: the root of the notes on disk, defaults to the name of the URL.
+- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`.
 - `token`: the authentication token required by iA Writer to control it using URL Commands. See iA Writer's Preferences. Make sure to check the *Enable URL Commands* settings and click on the *Manage...* button to acquire a copy of the token.
 
 This is the same as just:
@@ -309,6 +312,27 @@ iawriter:
 ```
 
 Just to be sure: put this at the **bottom** of the note, not at the top!
+
+### Obsidian
+
+As of 19-10-2020 I'm trying out Obsidian for keeping notes. Switching from iA Writer to Obsidian was actually very easy, since they both work on top of a directory with files, and the whole ID resolving I built for iA Writer just happens to work for Obsidian as well! Quite nice!
+
+Overall instructions on the usage of Obsidian are:
+
+```yaml
+obsidian:
+    vault:
+    path:
+```
+
+With:
+
+- `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
+-  `path`: - `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
+
+For the rest, just follow the instructions for iA Writer in the previous section, replacing 'iawriter' with 'obsidian'. Everything works the exact same way: templates, the today note, pulling defaults from OmniFocus. Everything!
+
+Tip: Obsidian has a nice *Daily notes* plugin but if you use VPS I advise you to disable it and use VPS instead. Why? Because VPS gives you much more powerful templates, the template is stored outside of your vault (so, no garbage), and you can trigger it from any application using Alfred's global shortcut, not just from within Obsidian. By setting the filename template to `{{year}}-{{month}}-{{day}}` compatibility is guaranteed.
 
 ### Bear
 
