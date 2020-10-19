@@ -103,6 +103,7 @@ automatically show up.
 Using the shared prefix `;` and no suffix for snippets:
 
 - `;c`: copies a contact's name into the frontmost application.
+- `;e`: copies an event's name into the frontmost application.
 - `;p`: copies a project's name into the frontmost application.
 - `;g`: copies all contacts from a contact group into the frontmost application
 - `;n`: copies a note's ID into the frontmost application as a Wiki-link
