@@ -204,7 +204,7 @@ module VPS
             callback = "obsidian://open?vault=#{vault.url_encode}&file=#{path.url_encode}"
             runner.execute('open', callback)
             #"Opened the note with ID '#{note.id}' in Obsidian"
-            ''
+            nil
           end
         end
       end
