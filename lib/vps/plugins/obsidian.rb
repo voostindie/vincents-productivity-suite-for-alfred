@@ -203,7 +203,8 @@ module VPS
             vault = @context.focus['obsidian'][:vault]
             callback = "obsidian://open?vault=#{vault.url_encode}&file=#{path.url_encode}"
             runner.execute('open', callback)
-            "Opened the note with ID '#{note.id}' in Obsidian"
+            #"Opened the note with ID '#{note.id}' in Obsidian"
+            ''
           end
         end
       end
@@ -226,7 +227,7 @@ module VPS
           else
             callback = "x-marked://open?file=#{path.url_encode}"
             runner.execute('open', callback)
-            "Opened the note with ID '#{note.id}' in Marked"
+            nil # No output here, as Obsidian has its own notification
           end
         end
       end
@@ -281,7 +282,7 @@ module VPS
           end
           callback = "obsidian://open?vault=#{vault.url_encode}&file=#{filename.url_encode}"
           shell_runner.execute('open', callback)
-          "Opened note '#{title}' in Obsidian"
+          nil # No output here, as Obsidian has its own notification
         end
 
         def create_context
