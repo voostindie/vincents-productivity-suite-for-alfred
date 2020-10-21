@@ -27,7 +27,7 @@ module VPS
                 description: finder['description'] || "No description available",
                 scope: (finder['scope'] || ['global']).filter { |s| %w(global contact event project).include?(s) }.map { |s| s.to_sym },
                 term: finder['term'] || '{{input}}',
-                tags: finder['tags'] || ''
+                tags: finder['tags'] || []
               }
             end
           end
