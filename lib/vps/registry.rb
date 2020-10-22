@@ -1,110 +1,61 @@
 module VPS
+
   ##
-  # Registration of all plugins, the commands they support, and so on.
-  # Any new plugin needs to be added here.
+  # Registration of all plugin modules.
   class Registry
 
-    module WithKey
-      def to_key(clazz)
-        clazz.name.split('::').last.downcase
-      end
-    end
-
-    class Command
-      include WithKey
-
-      attr_reader :command_class, :type
-
-      def initialize(command_class, type)
-        @command_class = command_class
-        @type = type
-      end
-
-      def key
-        to_key(@command_class)
-      end
-    end
+    attr_reader :plugins
 
     class Plugin
-      include WithKey
-
-      attr_reader :plugin_module, :entity_class, :collaborates_with, :repositories, :commands, :action_class
-
-      attr_reader :key
-      attr_accessor :configurator_class
+      attr_reader :name, :configurator, :repositories, :commands, :action
 
       def initialize(plugin_module)
-        @plugin_module = plugin_module
-        @collaborates_with = []
-        @repositories = []
-        @commands = {}
-        @action_class = nil
-
-        @key = to_key(plugin_module)
-        @configurator_class = nil
+        @configurator = new_configurator(plugin_module)
+        @name = @configurator.plugin_name || plugin_module.name.split('::').last.downcase
+        @repositories = new_repositories(plugin_module)
+        @commands = new_commands(plugin_module)
+        @action = new_action(plugin_module)
       end
 
-      def configurator
-        if @configurator_class.nil?
-          PluginSupport::Configurator.new
-        else
-          @configurator_class.new
-        end
+      private
+
+      def new_configurator(plugin_module)
+        instantiate_classes(plugin_module, VPS::Plugin::BaseConfigurator).first ||
+          VPS::Plugin::BaseConfigurator.new
       end
 
-      def name_class
-        @plugin_module
+      def new_repositories(plugin_module)
+        instantiate_classes(plugin_module, VPS::Plugin::BaseRepository)
       end
 
-      def entity_class_name
-        raise "You shouldn't be calling this" if @entity_class.nil?
-        to_key(@entity_class)
+      def new_commands(plugin_module)
+        instantiate_classes(plugin_module, VPS::Plugin::BaseCommand)
       end
 
-      def for_entity(entity_class)
-        @entity_class = entity_class
+      def new_action(plugin_module)
+        instantiate_classes(plugin_module, VPS::Plugin::BaseAction).first
       end
 
-      def add_repository(repository_class)
-        @repositories << repository_class
-      end
-
-      def add_command(command_class, type)
-        command = Command.new(command_class, type)
-        @commands[command.key] = command
-      end
-
-      def with_action(action_class)
-        @action_class = action_class
-      end
-
-      def add_collaboration(entity_class)
-        @collaborates_with << entity_class
+      def instantiate_classes(plugin, super_class)
+        plugin.constants(false)
+          .map { |c| plugin.const_get(c) }
+          .select { |c| c.is_a?(Class) && c < super_class }
+          .map { |c| c.new }
       end
     end
-
-    attr_reader :plugins
 
     def initialize
       @plugins = VPS::Plugins.constants(false)
                    .map { |c| VPS::Plugins.const_get(c) }
-                   .select { |c| c.is_a?(Module) && c.singleton_methods(false).include?(:configure_plugin) }
-                   .map { |m| p = Plugin.new(m); m.configure_plugin(p); [p.key, p] }
+                   .select { |c| c.is_a?(Module) && c.include?(VPS::Plugin) }
+                   .map { |m| Plugin.new(m) }
+                   .map { |p| [p.name, p] }
                    .to_h
+                   .freeze
     end
 
-    def repositories
-      @plugins.values.filter_map { |plugin| plugin.repositories }.flatten
-    end
-
-    def repositories_for
-      repositories.select { |r| r.entity_class == entity_class }
-    end
-
-    def collaborators(entity_class)
-      @plugins.values.select do |plugin|
-        plugin.collaborates_with.include?(entity_class)
-      end
+    def command_plugin(command)
+      @plugins.values.select { |p| p.commands.include?(command) }.first
     end
   end
 end

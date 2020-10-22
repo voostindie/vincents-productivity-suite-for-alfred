@@ -27,6 +27,6 @@ require 'vps/configuration'
 require 'vps/state'
 # require 'vps/context'
 # require 'vps/cli'
-require 'vps/plugin_support'
+require 'vps/plugin'
 
 require 'vps/plugins/bitbar'

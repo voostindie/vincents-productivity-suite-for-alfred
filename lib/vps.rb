@@ -21,14 +21,14 @@ require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/jxa'
 require 'vps/version'
-require 'vps/entities'
+require 'vps/types'
 require 'vps/registry'
 require 'vps/configuration'
 require 'vps/state'
 require 'vps/context'
 require 'vps/cli'
 require 'vps/cache_support'
-require 'vps/plugin_support'
+require 'vps/plugin'
 
 # Extensions
 class String

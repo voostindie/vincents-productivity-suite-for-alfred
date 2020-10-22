@@ -18,13 +18,10 @@
 module VPS
   module Plugins
     module Wallpaper
-      def self.configure_plugin(plugin)
-        plugin.configurator_class = Configurator
-        plugin.with_action(Replace)
-      end
+      include Plugin
 
-      class Configurator < PluginSupport::Configurator
-        def read_area_configuration(area, hash)
+      class Configurator < BaseConfigurator
+        def process_area_configuration(area, hash)
           if hash['path'].nil?
             {}
           else
@@ -34,25 +31,26 @@ module VPS
           end
         end
 
-        def read_action_configuration(hash)
+        def process_action_configuration(hash)
           {
             path: hash['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
           }
         end
       end
 
-      class Replace
-        include PluginSupport
-
-        def run(runner = Jxa::Runner.new('wallpaper'))
-          path = if @context.focus['wallpaper']
-                   @context.focus['wallpaper'][:path]
-                 else
-                   nil
-                 end || @context.configuration.actions['wallpaper'][:path]
-          runner.execute('change-wallpaper', path)
-        end
-      end
+      #
+      # class Replace
+      #   include PluginSupport
+      #
+      #   def run(runner = Jxa::Runner.new('wallpaper'))
+      #     path = if @context.focus['wallpaper']
+      #              @context.focus['wallpaper'][:path]
+      #            else
+      #              nil
+      #            end || @context.configuration.actions['wallpaper'][:path]
+      #     runner.execute('change-wallpaper', path)
+      #   end
+      # end
     end
   end
 end

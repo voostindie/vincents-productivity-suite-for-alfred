@@ -14,7 +14,7 @@ module VPS
     # @return [OptionParser]
     def option_parser
       OptionParser.new do |parser|
-        parser.banner = 'Usage: vps [options] <plugin> <command> [arguments]'
+        parser.banner = 'Usage: vps [options] <type> <command> [arguments]'
         parser.program_name = 'vps'
         parser.version = VPS::VERSION
         parser.on('-a', '--[no-]alfred', 'Generate output in Alfred format') do |alfred|
@@ -62,8 +62,9 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        plugin = entity_manager(arguments.shift)
-        command = command(plugin, arguments.shift)
+        type_name = arguments.shift
+        command_name = arguments.shift
+        command = @configuration.resolve_command(@state.focus, type_name, command_name)
         show_command_help(command)
       end
     end
@@ -77,9 +78,9 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        plugin_name = arguments.shift
-        plugin = entity_manager(plugin_name)
-        command = command(plugin, arguments.shift)
+        type_name = arguments.shift
+        command_name = arguments.shift
+        command = @configuration.resolve_command(@state.focus, type_name, command_name)
         execute_command(command, arguments, environment)
       end
     end
@@ -88,27 +89,19 @@ module VPS
     # Shows overall help information, including information on each individual plugin.
     def show_overall_help
       @parser.separator ''
-      @parser.separator 'Where <plugin> and <command> are one of: '
+      @parser.separator 'Where <type> and <command> are one of: '
       @parser.separator ''
-      @configuration.entity_managers(@state.focus).each do |plugin|
-        @parser.separator "  #{plugin.entity_class_name}"
-        plugin.commands.each_pair do |name, command|
-          # TODO: filter out all commands that are collaborators for entities that are
-          # not available This is not so simple, as this information is not really
-          # easily accessible. This requires some more refactoring first...
-          banner = if command.command_class.respond_to? 'option_parser'
-                     command.command_class.option_parser.banner
-                   else
-                     '(Sorry, no information provided)'
-                   end
-          @parser.separator "    #{name.to_s.ljust(10)}: #{banner}"
+      @configuration.supported_types(@state.focus).each do |type|
+        @parser.separator "  #{type.type_name}"
+        @configuration.supported_commands(@state.focus, type).each do |command|
+          help = command.option_parser.banner || '(Sorry, no information provided)'
+          @parser.separator "    #{command.name.ljust(10)}: #{help}"
         end
       end
       @parser.separator ''
       @parser.separator '  help <plugin> <command>: show help on a specific command'
       @parser.separator ''
       @parser.separator 'Note that the plugins and commands available depend on the focused area.'
-      # Now print the full help information.
       puts @parser.help
     end
 
@@ -117,9 +110,9 @@ module VPS
     #
     # @param command [VPS::Plugin::Command] the command to show information on.
     def show_command_help(command)
-      clazz = command.command_class
-      if clazz.respond_to? 'option_parser'
-        puts clazz.option_parser.help
+      option_parser = command.option_parser
+      if !option_parser.nil?
+        puts option_parser.help
       else
         $stderr.puts 'No help information is available for this command'
         $stderr.puts
@@ -134,53 +127,20 @@ module VPS
     ##
     # Executes a command.
     #
-    # @param command [VPS::Plugin::Command] the command to execute.
+    # @param command [VPS::Plugin::BaseCommand] the command to execute.
     # @param arguments [Array] the program arguments.
     # @param environment [Hash] the environment variables.
     def execute_command(command, arguments, environment)
-      context = Context.new(@configuration, @state, arguments, environment)
-      instance = command.command_class.new(context)
-      can_run = if instance.respond_to?('can_run?')
-                  instance.can_run?
-                else
-                  true
-                end
-      if can_run
-        output = @output_formatter.format { instance.run }
+      configuration = @configuration.command_config(@state.focus, command)
+      repository = @configuration.repository_for_type(@state.focus, command.acts_on_type?)
+      context = Context.new(configuration, repository, arguments, environment)
+      if command.can_run?(context)
+        output = @output_formatter.format { command.run(context) }
         puts output unless output.nil?
       else
         puts 'Command execution failed. Sorry!'
         exit(-1)
       end
-    end
-
-    ##
-    # Locates the plugin that manages entities with name +entity_name+
-    #
-    # @param entity_name [String] short name of the entity class, e.g. +project+.
-    # @return [VPS::Plugin]
-    def entity_manager(entity_name)
-      plugin = @configuration.entity_manager_for(@state.focus, entity_name)
-      if plugin.nil?
-        puts "Entity '#{entity_name}' is not supported in this area."
-        exit(-1)
-      end
-      plugin
-    end
-
-    ##
-    # Retrieves a command from a plugin.
-    #
-    # @param plugin [Plugin] the plugin to get the command from.
-    # @param command_name [String] short name of the command class, e.g. +list+.
-    # @return [VPS::Command]
-    def command(plugin, command_name)
-      command = plugin.commands[command_name]
-      if command.nil?
-        puts "Unsupported command: #{command_name}"
-        exit(-1)
-      end
-      command
     end
   end
 end

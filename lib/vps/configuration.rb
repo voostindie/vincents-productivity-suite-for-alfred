@@ -39,12 +39,42 @@ module VPS
       @actions
     end
 
-    ##
-    # Returns all collaborators. Possible types are +:project+
-    def collaborators(area, entity_class)
-      @registry.collaborators(entity_class).select do |plugin|
-        area.has_key?(plugin.key)
-      end
+    def supported_types(area)
+      area.keys
+        .filter_map { |name| @registry.plugins[name] }
+        .map { |plugin| plugin.repositories }
+        .flatten
+        .map { |repository| repository.type? }
+    end
+
+    def supported_commands(area, type)
+      area.keys
+        .filter_map { |name| @registry.plugins[name] }
+        .map { |plugin| plugin.commands }
+        .flatten
+        .select { |command| command.acts_on_type? == type }
+    end
+
+    def resolve_command(area, type_name, command_name)
+      area.keys
+        .filter_map { |name| @registry.plugins[name] }
+        .map { |plugin| plugin.commands }
+        .flatten
+        .select { |command| command.name == command_name && command.acts_on_type?.type_name == type_name }
+        .first
+    end
+
+    def command_config(area, command)
+      area[@registry.command_plugin(command).name]
+    end
+
+    def repository_for_type(area, type)
+      area.keys
+        .filter_map { |name| @registry.plugins[name] }
+        .map { |plugin| plugin.repositories }
+        .flatten
+        .select { |repository| repository.type? == type }
+        .first
     end
 
     private
@@ -69,8 +99,8 @@ module VPS
         # - no overriding configuration can be provided
         plugins = {}
         plugins['area'] = {}
-        plugins['text'] = {}
-        entity_classes = [Entities::Area, Entities::Text]
+        plugins['paste'] = {}
+        types = [Types::Area, Types::Text]
         config.each_pair do |plugin_key, plugin_config|
           next if %w(key name root).include?(plugin_key)
           plugin = @registry.plugins[plugin_key]
@@ -78,14 +108,14 @@ module VPS
             $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
-          plugin.repositories.map { |r| r.entity_class }.each do |entity_class|
-            if entity_classes.include? entity_class
-              $stderr.puts "WARNING: the area #{name} has multiple repositories for entity class #{entity_class}. Skipping plugin #{plugin_key}"
+          plugin.repositories.map { |r| r.type? }.each do |type|
+            if types.include? type
+              $stderr.puts "WARNING: the area #{name} has multiple repositories for type #{type}. Skipping plugin #{plugin_key}"
               next
             end
-            entity_classes << entity_class
+            types << type
           end
-          plugins[plugin.key] = plugin.configurator.read_area_configuration(area, plugin_config || {}).freeze
+          plugins[plugin.name] = plugin.configurator.process_area_configuration(area, plugin_config || {}).freeze
         end
         @areas[key] = area.merge(plugins)
       end
@@ -96,11 +126,11 @@ module VPS
       @actions = {}
       (hash['actions'] || {}).each_pair do |key, config|
         plugin = @registry.plugins[key]
-        if plugin.nil? || plugin.action_class.nil?
+        if plugin.nil? || plugin.action.nil?
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next
         end
-        @actions[key] = plugin.configurator.read_action_configuration(config || {}).freeze
+        @actions[key] = plugin.configurator.process_action_configuration(config || {}).freeze
       end
       @actions.freeze
     end

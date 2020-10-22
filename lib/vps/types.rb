@@ -1,21 +1,20 @@
 module VPS
   ##
-  # Defines all different entities supported by VPS. An entity is a concept like
-  # a file, a project, an event. The names of the commands offered to the user are
-  # derived from the entity, not the actual plugin that implements it. The thinking
-  # here is that a different area can have different plugins, but that are overall
-  # for the same entity. E.g. OmniFocus for projects at work, and Things for projects
-  # at home. By using the entity concept, the user experience is exactly the same across
-  # all areas, which is the whole idea of VPS.
-  module Entities
+  # Defines all different type supported by VPS. A type is a concept like a contact,
+  # a file, a project, an event.
+  module Types
 
     ##
     # Base class for entities. All subclasses need to do is define +attr_accessor+s for
     # the fields they want to expose.
-    class BaseEntity
+    class BaseType
 
       # Every entity has an ID.
       attr_accessor :id
+
+      def self.type_name
+        self.name.split('::').last.downcase
+      end
 
       ##
       # Initialize a new entity. The pattern here is that you get an empty entity back
@@ -89,13 +88,13 @@ module VPS
 
     ##
     # Represents a contact with a name and email address.
-    class Contact < BaseEntity
+    class Contact < BaseType
       attr_accessor :name, :email
     end
 
     ##
     # Represents a project with a name
-    class Project < BaseEntity
+    class Project < BaseType
       attr_accessor :name, :note
 
       def config
@@ -117,17 +116,17 @@ module VPS
     ##
     # Represents an event with a title and people associated with it, like the organizer
     # and the attendees.
-    class Event < BaseEntity
+    class Event < BaseType
       attr_accessor :title, :people
     end
 
     ##
     # Represents a group of people.
-    class Group < BaseEntity
+    class Group < BaseType
       attr_accessor :name, :people
     end
 
-    class Note < BaseEntity
+    class Note < BaseType
       def self.from_id(id)
         Note.new do |note|
           note.id = id

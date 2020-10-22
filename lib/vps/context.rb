@@ -1,30 +1,17 @@
 module VPS
   class Context
-    attr_reader :configuration, :state
+    attr_reader :configuration, :repository
     attr_accessor :arguments, :environment
 
-    def initialize(configuration, state, arguments, environment)
+    def initialize(configuration, repository, arguments, environment)
       @configuration = configuration
-      @state = state
+      @repository = repository
       @arguments = arguments
       @environment = environment
     end
 
-    def focus
-      @state.focus
-    end
-
-    def load_entity(entitu_class)
-      @configuration.entity_manager_for_class(@state.focus, entitu_class).plugin_module.load_entity(self)
-    end
-
-    def collaborator_commands(entity)
-      commands = []
-      collaborators = @configuration.collaborators(@state.focus, entity.class)
-      collaborators.each do |collaborator|
-        commands << collaborator.plugin_module.commands_for(@state.focus, entity)
-      end
-      commands.flatten
+    def triggered_as_snippet?
+      environment['TRIGGERED_AS_SNIPPET'] == 'true'
     end
   end
 end
