@@ -63,6 +63,8 @@ module VPS
         nil
       end
 
+      # TODO: the repository commands need access to the configuration of the plugin they're part of
+      # So, I somehow have to pass this as an argument, in such a way that callers don't know it. Hmmm....
       def list
         []
       end
