@@ -33,8 +33,7 @@ module VPS
     module Console
       ##
       # Runs a block, captures its output, formats it for the console and returns it.
-      def self.format
-        result = yield
+      def self.format(result)
         if result.is_a? Array
           id = if result.size > 0 && result[0][:uid].nil?
                  :arg
@@ -49,8 +48,10 @@ module VPS
               "- #{entry[id].ljust(width)}: #{entry[:title]}"
             end
           end.join("\n")
-        else
+        elsif !result.nil?
           result
+        else
+          ''
         end
       end
     end
@@ -60,15 +61,20 @@ module VPS
     module Alfred
       ##
       # Runs a block, captures its output, formats it for Alfred and returns it.
-      def self.format
+      def self.format(result)
         result = yield
+        if result.nil?
+          return
+        end
         if result.is_a? Array
           output = {
             items: result
           }
           output.to_json
-        else
+        elsif !result.nil?
           result
+        else
+          {}
         end
       end
     end

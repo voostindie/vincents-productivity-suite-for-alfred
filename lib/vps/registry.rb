@@ -1,10 +1,33 @@
 module VPS
 
   ##
-  # Registration of all plugin modules.
+  # Registry of all plugins in the system.
   class Registry
+    include Singleton
 
     attr_reader :plugins
+
+    def initialize
+      @plugins = VPS::Plugins.constants(false)
+                   .map { |c| VPS::Plugins.const_get(c) }
+                   .select { |c| c.is_a?(Module) && c.include?(VPS::Plugin) }
+                   .map { |m| Plugin.new(m) }
+                   .map { |p| [p.name, p] }
+                   .to_h
+                   .freeze
+    end
+
+    def for_command(command)
+      @plugins.values.select { |p| p.commands.include?(command) }.first
+    end
+
+    def for_repository(repository)
+      @plugins.values.select { |p| p.repositories.include?(repository) }.first
+    end
+
+    def for_action(action)
+      @plugins.values.select { |p| p.actions.include?(action) }.first
+    end
 
     class Plugin
       attr_reader :name, :configurator, :repositories, :commands, :action
@@ -42,20 +65,6 @@ module VPS
           .select { |c| c.is_a?(Class) && c < super_class }
           .map { |c| c.new }
       end
-    end
-
-    def initialize
-      @plugins = VPS::Plugins.constants(false)
-                   .map { |c| VPS::Plugins.const_get(c) }
-                   .select { |c| c.is_a?(Module) && c.include?(VPS::Plugin) }
-                   .map { |m| Plugin.new(m) }
-                   .map { |p| [p.name, p] }
-                   .to_h
-                   .freeze
-    end
-
-    def plugin_for_command?(command)
-      @plugins.values.select { |p| p.commands.include?(command) }.first
     end
   end
 end

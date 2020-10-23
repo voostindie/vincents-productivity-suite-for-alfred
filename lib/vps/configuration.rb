@@ -1,8 +1,6 @@
 module VPS
   class Configuration
 
-    attr_reader :registry
-
     DEFAULT_FILE = File.join(Dir.home, '.vpsrc').freeze
 
     def self.load(path)
@@ -16,7 +14,6 @@ module VPS
     end
 
     def initialize(path)
-      @registry = Registry.new
       hash = YAML.load_file(path)
       extract_areas(hash)
       extract_actions(hash)
@@ -31,53 +28,32 @@ module VPS
       @areas[name]
     end
 
-    def areas
-      @areas.values
-    end
-
-    def actions
-      @actions
-    end
-
-    def supported_entity_types(area)
-      plugins_for?(area)
+    ##
+    # Return a list of available commands in the specified area, grouped by entity type.
+    #
+    def available_commands(area)
+      plugins_for(area)
         .map { |plugin| plugin.repositories }
         .flatten
-        .map { |repository| repository.supported_entity_type }
+        .map { |repository| [repository.supported_entity_type, commands_per_entity_type(area, repository.supported_entity_type)] }
+        .reject { |_, commands| commands.empty? }
+        .to_h
     end
 
-    def supported_commands(area, entity_type)
-      plugins_for?(area)
+    private
+
+    def commands_per_entity_type(area, entity_type)
+      plugins_for(area)
         .map { |plugin| plugin.commands }
         .flatten
         .select { |command| command.supported_entity_type == entity_type }
     end
 
-    def resolve_command(area, entity_type_name, command_name)
-      plugins_for?(area)
-        .map { |plugin| plugin.commands }
-        .flatten
-        .select { |command| command.name == command_name && command.supported_entity_type.entity_type_name == entity_type_name }
-        .first
-    end
-
-    def command_config(area, command)
-      area[@registry.plugin_for_command?(command).name]
-    end
-
-    def repository_for_entity_type(area, entity_type)
-      plugins_for?(area)
-        .map { |plugin| plugin.repositories }
-        .flatten
-        .select { |repository| repository.supported_entity_type == entity_type }
-        .first
-    end
-
-    private
-
-    def plugins_for?(area)
-      area.keys
-        .filter_map { |name| @registry.plugins[name] }
+    def plugins_for(area)
+      area
+        .keys
+        .reject { |key| key.is_a?(Symbol) }
+        .filter_map { |name| Registry.instance.plugins[name] }
     end
 
     def extract_areas(hash)
@@ -104,7 +80,7 @@ module VPS
         entity_types = [EntityTypes::Area, EntityTypes::Text]
         config.each_pair do |plugin_key, plugin_config|
           next if %w(key name root).include?(plugin_key)
-          plugin = @registry.plugins[plugin_key]
+          plugin = Registry.instance.plugins[plugin_key]
           if plugin.nil?
             $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
@@ -126,7 +102,7 @@ module VPS
     def extract_actions(hash)
       @actions = {}
       (hash['actions'] || {}).each_pair do |key, config|
-        plugin = @registry.plugins[key]
+        plugin = Registry.instance.plugins[key]
         if plugin.nil? || plugin.action.nil?
           $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next

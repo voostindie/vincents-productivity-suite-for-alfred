@@ -36,8 +36,40 @@ module VPS
           EntityTypes::Note
         end
 
-        def list
-          raise 'Not implemented yet!'
+        def find_all(context)
+          root = context.configuration[:root]
+          notes = Dir.glob("#{root}/**/*.md").sort_by { |p| File.basename(p) }
+          notes.map do |path|
+            EntityTypes::Note.new do |note|
+              note.id = File.basename(path, '.md')
+              note.path = path
+            end
+          end
+        end
+
+        def load(context)
+          id = context.arguments.join(' ')
+          return nil if id.empty?
+          root = context.configuration[:root]
+          matches = Dir.glob("#{root}/**/#{id}.md")
+          if matches.empty?
+            nil
+          else
+            EntityTypes::Note.new do |note|
+              note.id = id
+              note.path = matches[0]
+            end
+          end
+        end
+
+        def create_or_find(context, note)
+          note.path = File.join(context.configuration[:root], note.id + '.md')
+          unless File.exist?(note.path)
+            File.open(note.path, 'w') do |file|
+              file.puts note.text
+            end
+          end
+          note
         end
       end
 
@@ -54,7 +86,7 @@ module VPS
         end
 
         def run(context)
-          puts context.configuration[:root]
+          context.configuration[:root]
         end
       end
 
@@ -71,33 +103,140 @@ module VPS
         end
 
         def run(context)
-          root = context.configuration[:root]
-          # pp context.repository.list
-          notes = Dir.glob("#{root}/**/*.md").sort_by { |p| File.basename(p) }.reverse
-          notes.map do |note|
-            name = File.basename(note, '.md')
+          context.find_all.map do |note|
             {
-              uid: name,
-              title: name,
+              uid: note.id,
+              title: note.id,
               subtitle: if context.triggered_as_snippet?
-                          "Paste '#{name}' in the frontmost application"
+                          "Paste '#{note.id}' in the frontmost application"
                         else
-                          "Select an action for '#{name}'"
+                          "Select an action for '#{note.id}'"
                         end,
               arg: if context.triggered_as_snippet?
-                     "[[#{name}]]"
+                     "[[#{note.id}]]"
                    else
-                     "#{name}"
+                     "#{note.id}"
                    end,
-              autocomplete: name,
+              autocomplete: note.id,
             }
           end
         end
       end
 
-      # def self.load_entity(context)
-      #   Types::Note.from_id(context.arguments.join(' '))
-      # end
+      class Open < EntityInstanceCommand
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Opens the specified note in Obsidian for editing'
+            parser.separator 'Usage: note edit <noteId>'
+            parser.separator ''
+            parser.separator 'Where <noteID> is the ID of the note to edit'
+          end
+        end
+
+        def run(context, runner = Shell::SystemRunner.new)
+          note = context.load
+          vault = context.configuration[:vault]
+          file = note.path[context.configuration[:root].size..]
+          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
+          runner.execute('open', callback)
+          nil
+        end
+      end
+
+      class Create < EntityTypeCommand
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create a new, empty note, optionally with a title'
+            parser.separator 'Usage: note create [title]'
+          end
+        end
+
+        def template_set
+          :plain
+        end
+
+        def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
+          template_context = create_template_context(context)
+          title = template(context, :title).render_template(template_context).strip
+          filename_template = template(context, :filename)
+          filename = if filename_template.nil?
+                       title
+                     else
+                       filename_template.render_template(template_context).strip
+                     end
+          content = template(context, :text).render_template(template_context)
+          tags = template(context, :tags)
+                   .map { |t| t.render_template(template_context).strip }
+                   .map { |t| "##{t}" }
+                   .join(' ')
+          text = ''
+          text += "# #{title}\n\n" unless title.empty?
+          text += "#{content}" unless content.empty?
+          text += "#{tags}" unless tags.empty?
+
+          filename = Zaru.sanitize!(filename)
+          note = EntityTypes::Note.new do |n|
+            n.id = filename
+            n.text = text
+          end
+          note = context.create_or_find(note)
+          # Focus on Obsidian and give it some time, so that it can find the new file
+          jxa_runner.execute('activate')
+          sleep(0.5)
+          # Now open the file
+          vault = context.configuration[:vault]
+          file = note.path[context.configuration[:root].size..]
+          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
+          shell_runner.execute('open', callback)
+          nil # No output here, as Obsidian has its own notification
+        end
+
+        def create_template_context(context)
+          query = context.arguments.join(' ')
+          date = DateTime.now
+          {
+            'year' => date.strftime('%Y'),
+            'month' => date.strftime('%m'),
+            'week' => date.strftime('%V'),
+            'day' => date.strftime('%d'),
+            'query' => query,
+            'input' => query
+          }
+        end
+
+        def template(context, symbol)
+          templates = context.configuration[:templates]
+          templates[template_set][symbol] || templates[:default][symbol]
+        end
+      end
+
+      class Project < CollaborationCommand
+        def name
+          'note'
+        end
+
+        def supported_entity_type
+          EntityTypes::Project
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create a new note for a project'
+            parser.separator 'Usage: project note <projectId>'
+            parser.separator ''
+            parser.separator 'Where <projectId> is the ID of the project to create a note for'
+          end
+        end
+      end
+
       #
       # def self.commands_for(area, entity)
       #   if entity.is_a?(Types::Project)
@@ -129,29 +268,6 @@ module VPS
       #   end
       # end
       #
-      #
-      #
-      # class NoteCommand
-      #   include PluginSupport
-      #
-      #   def initialize(context)
-      #     context.arguments = [context.arguments.join(' ')]
-      #     super(context)
-      #   end
-      #
-      #   def resolve_note
-      #     note = Obsidian::load_entity(@context)
-      #     root = @context.focus['obsidian'][:root]
-      #     matches = Dir.glob("#{root}/**/#{note.id}.md")
-      #     if matches.empty?
-      #       nil
-      #     else
-      #       path = matches[0]
-      #       filename = path[root.size..]
-      #       return note, filename
-      #     end
-      #   end
-      # end
       #
       # class Commands < NoteCommand
       #
@@ -185,125 +301,7 @@ module VPS
       #   end
       # end
       #
-      # class Edit < NoteCommand
       #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Opens the specified note in Obsidian for editing'
-      #       parser.separator 'Usage: note edit <noteId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <noteID> is the ID of the note edit'
-      #     end
-      #   end
-      #
-      #   def run(runner = Shell::SystemRunner.new)
-      #     note, path = resolve_note
-      #     if path.nil?
-      #       "Note with ID '#{note.id}' not found"
-      #     else
-      #       vault = @context.focus['obsidian'][:vault]
-      #       callback = "obsidian://open?vault=#{vault.url_encode}&file=#{path.url_encode}"
-      #       runner.execute('open', callback)
-      #       #"Opened the note with ID '#{note.id}' in Obsidian"
-      #       nil
-      #     end
-      #   end
-      # end
-      #
-      # class View < NoteCommand
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Opens the specified note in Marked for viewing'
-      #       parser.separator 'Usage: note view <noteId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <noteID> is the ID of the note view'
-      #     end
-      #   end
-      #
-      #   def run(runner = Shell::SystemRunner.new)
-      #     note, path = resolve_note
-      #     if path.nil?
-      #       "Note with ID '#{note.id}' not found"
-      #     else
-      #       callback = "x-marked://open?file=#{path.url_encode}"
-      #       runner.execute('open', callback)
-      #       nil # No output here, as Obsidian has its own notification
-      #     end
-      #   end
-      # end
-      #
-      # class Plain
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new, empty note, optionally with a title'
-      #       parser.separator 'Usage: note plain [title]'
-      #     end
-      #   end
-      #
-      #   def initialize(context)
-      #     super(context)
-      #     @template_set = template_set
-      #   end
-      #
-      #   def template_set
-      #     :plain
-      #   end
-      #
-      #   def run(shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
-      #     context = create_context
-      #     title = template(:title).render_template(context).strip
-      #     filename_template = template(:filename)
-      #     filename = if filename_template.nil?
-      #                  title
-      #                else
-      #                  filename_template.render_template(context).strip
-      #                end
-      #     content = template(:text).render_template(context)
-      #     tags = template(:tags)
-      #              .map { |t| t.render_template(context).strip }
-      #              .map { |t| "##{t}" }
-      #              .join(' ')
-      #     text = "# #{title}\n"
-      #     text += "\n#{content}" unless content.empty?
-      #     text += "#{tags}" unless tags.empty?
-      #
-      #     filename = Zaru.sanitize!(filename + ".md")
-      #     path = File.join(@context.focus['obsidian'][:root], filename)
-      #     vault = @context.focus['obsidian'][:vault]
-      #     unless File.exist?(path)
-      #       File.open(path, 'w') do |file|
-      #         file.puts text
-      #       end
-      #       # Focus on Obsidian and give it some time, so that it can find the new file
-      #       jxa_runner.execute('activate')
-      #       sleep(0.5)
-      #     end
-      #     callback = "obsidian://open?vault=#{vault.url_encode}&file=#{filename.url_encode}"
-      #     shell_runner.execute('open', callback)
-      #     nil # No output here, as Obsidian has its own notification
-      #   end
-      #
-      #   def create_context
-      #     query = @context.arguments.join(' ')
-      #     date = DateTime.now
-      #     {
-      #       'year' => date.strftime('%Y'),
-      #       'month' => date.strftime('%m'),
-      #       'week' => date.strftime('%V'),
-      #       'day' => date.strftime('%d'),
-      #       'query' => query,
-      #       'input' => query
-      #     }
-      #   end
-      #
-      #   def template(sym)
-      #     templates = @context.focus['obsidian'][:templates]
-      #     templates[template_set][sym] || templates[:default][sym]
-      #   end
-      # end
       #
       # class Project < Plain
       #   def self.option_parser

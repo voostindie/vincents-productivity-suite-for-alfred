@@ -127,11 +127,7 @@ module VPS
     end
 
     class Note < BaseType
-      def self.from_id(id)
-        Note.new do |note|
-          note.id = id
-        end
-      end
+      attr_accessor :path, :text
     end
 
     # The entities below do nothing (yet); they exist only to make the code safer/better.

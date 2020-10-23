@@ -69,7 +69,7 @@ module VPS
 
       ##
       # Support method: make sure the value is a String, otherwise return nil.
-      # @param hash_value Value to enforce to a String
+      # @param hash_value [Object] value to enforce to a String
       def force_string(hash_value)
         hash_value if hash_value.is_a?(String)
       end
@@ -84,13 +84,28 @@ module VPS
 
     class BaseRepository
       def supported_entity_type
-        raise "#{self.class.name}.supported_entity_type must be implemented!"
+        raise "#{self.class.name}.supported_entity_type is not yet implemented!"
       end
 
-      # TODO: the repository commands need access to the configuration of the plugin they're part of
-      # So, I somehow have to pass this as an argument, in such a way that callers don't know it. Hmmm....
-      def list
-        []
+      ##
+      # Lists all entities in this repository
+      #
+      # @param context [VPS::Context]
+      def find_all(context)
+        raise "#{self.class.name}.find_all is not yet implemented!"
+      end
+
+      ##
+      # @param context [VPS::Context]
+      def load(context)
+        raise "#{self.class.name}.load is not yet implemented!"
+      end
+
+      ##
+      # @param context [VPS::Context]
+      # @param instance [VPS::EntityTypes::BaseType]
+      def create_or_find(context, instance)
+        raise "#{self.class.name}.create_or_find is not yet implemented!"
       end
     end
 
@@ -100,17 +115,17 @@ module VPS
       end
 
       def supported_entity_type
-        raise "#{self.class.name}.supported_entity_type must be implemented!"
+        raise "#{self.class.name}.supported_entity_type is not yet implemented!"
       end
 
+      ##
+      # @return [OptionParser]
       def option_parser
-        nil
+        raise "#{self.class.name}.option_parser is not yet implemented!"
       end
 
-      def can_run?(context)
-        true
-      end
-
+      ##
+      # @param context [VPS::Context]
       def run(context)
         nil
       end

@@ -3,9 +3,10 @@ module VPS
 end
 
 # Libraries
+require 'singleton'
+require 'date'
 require 'yaml'
 require 'json'
-require 'date'
 require 'fileutils'
 require 'shellwords'
 require 'erb'
@@ -26,6 +27,7 @@ require 'vps/registry'
 require 'vps/configuration'
 require 'vps/state'
 require 'vps/context'
+require 'vps/command_runner'
 require 'vps/cli'
 require 'vps/cache_support'
 require 'vps/plugin'

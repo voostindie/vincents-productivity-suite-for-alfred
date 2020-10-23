@@ -62,8 +62,8 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        command = resolve_command(arguments)
-        show_command_help(command)
+        runner = CommandRunner.new(@state.focus, arguments, {})
+        show_command_help(runner)
       end
     end
 
@@ -76,8 +76,9 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        command = resolve_command(arguments)
-        execute_command(command, arguments, environment)
+        runner = CommandRunner.new(@state.focus, arguments, environment)
+        output = runner.execute
+        puts @output_formatter.format(output)
       end
     end
 
@@ -87,9 +88,9 @@ module VPS
       @parser.separator ''
       @parser.separator 'Where <type> and <command> are one of: '
       @parser.separator ''
-      @configuration.supported_entity_types(@state.focus).each do |entity_type|
+      @configuration.available_commands(@state.focus).each_pair do |entity_type, commands|
         @parser.separator "  #{entity_type.entity_type_name}"
-        @configuration.supported_commands(@state.focus, entity_type).each do |command|
+        commands.each do |command|
           help = command.option_parser.banner || '(Sorry, no information provided)'
           @parser.separator "    #{command.name.ljust(10)}: #{help}"
         end
@@ -105,10 +106,9 @@ module VPS
     # Shows help information on a single command.
     #
     # @param command [VPS::Plugin::Command] the command to show information on.
-    def show_command_help(command)
-      option_parser = command.option_parser
-      if !option_parser.nil?
-        puts option_parser.help
+    def show_command_help(runner)
+      if runner.help_available?
+        puts runner.help
       else
         $stderr.puts 'No help information is available for this command'
         $stderr.puts
@@ -117,35 +117,6 @@ module VPS
         $stderr.puts "Please implement the method 'option_parser' in class #{clazz}"
         $stderr.puts
         $stderr.puts 'The user of your software thanks you!'
-      end
-    end
-
-    def resolve_command(arguments)
-      type_name = arguments.shift
-      command_name = arguments.shift
-      command = @configuration.resolve_command(@state.focus, type_name, command_name)
-      if command.nil?
-        raise "Invalid command '#{command_name}' for '#{type_name}'"
-      end
-      command
-    end
-
-    ##
-    # Executes a command.
-    #
-    # @param command [VPS::Plugin::BaseCommand] the command to execute.
-    # @param arguments [Array] the program arguments.
-    # @param environment [Hash] the environment variables.
-    def execute_command(command, arguments, environment)
-      configuration = @configuration.command_config(@state.focus, command)
-      repository = @configuration.repository_for_entity_type(@state.focus, command.supported_entity_type)
-      context = Context.new(configuration, repository, arguments, environment)
-      if command.can_run?(context)
-        output = @output_formatter.format { command.run(context) }
-        puts output unless output.nil?
-      else
-        puts 'Command execution failed. Sorry!'
-        exit(-1)
       end
     end
   end

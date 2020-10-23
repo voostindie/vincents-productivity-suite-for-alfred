@@ -23,7 +23,7 @@ module VPS
 
     it 'instantiates the commands' do
       commands = registry.plugins['alfred'].commands
-      expect(commands.size).to be(3)
+      expect(commands.size).to be(2)
       expect(commands.all? {|c| c.is_a?(VPS::Plugin::BaseCommand)}).to be_truthy
     end
   end
