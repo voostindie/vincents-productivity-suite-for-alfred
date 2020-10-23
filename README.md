@@ -6,7 +6,7 @@ This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothin
 
 But please remember that I've had exactly one person in mind while creating this suite: me. *Your mileage may vary!*
 
-**Update August 2019**: This is version 2.0 of this tool. It's, among others, a big refactoring. I deleted some plugins, added some new ones, revamped the Alfred workflow and added a CLI. Version 2 is **not** backwards compatible with the previous version. So, first check below whether this tool is still for you. If not, don't upgrade!
+**Update October 2020**: This is version 3.0 of this tool. More than one year after version 2.0, from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small thing, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. But the configuration file hasn't changed.
 
 ## So, what's this all about?
 
@@ -33,6 +33,7 @@ This CLI and Alfred workflow can:
 - Set focus to an area and
     - Show the name of the area (or a nice label) in BitBar
     - Change the desktop wallpaper
+    - Change the focus in Alfred
 - Create new notes according to a template in iA Writer
 - Browse documents in Alfred
 - Browse reference material in Alfred
@@ -44,6 +45,9 @@ This CLI and Alfred workflow can:
     - Create a note for it
     - Write an e-mail
     - Paste its name into the frontmost application
+- Select a contact group and:
+    - Create a note for it
+    - Paste all contacts in it into the frontmost application
 - Select a project and:
     - Open it in OmniFocus
     - Create a note for it
@@ -52,6 +56,9 @@ This CLI and Alfred workflow can:
 - Select an event and:
     - Create a note for it
     - Paste its title into the frontmost application
+    - Paste its attendees into the frontmost application
+
+And more!
 
 It may not sound like much, but for me this is an enormous time saver.
 
@@ -111,7 +118,7 @@ Using the shared prefix `;` and no suffix for snippets:
 
 ### Icons
 
-Unfortunately the icons in the Alfred workflow are hardcoded, and independent of the active plugins in an area. That means, for example, that you see an iA Writer icon, even if you configured the focused area to use Bear.
+Unfortunately the icons in the Alfred workflow are hardcoded, and independent of the active plugins in an area. That means, for example, that you see an Obsidian icon, even if you configured the focused area to use iA Writer or Bear.
 
 Of course you can change the icons yourself in the workflow through Alfred, but any changes made by me might override that at some point.
 
@@ -127,7 +134,6 @@ areas:
         obsidian:
         omnifocus:
         contacts:
-        groups:
         calendar:
         alfred:
 ```
@@ -154,9 +160,7 @@ areas:
             folder: 'Work'
         contacts:
             group: 'Work'
-            cache: false
-        groups:
-            prefix: 'Work - '
+            prefix: 'Work -'
             cache: false
         calendar:
             name: 'Work'
@@ -168,7 +172,7 @@ areas:
 
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate plugin.
 
-To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `iawriter` section, creating notes is not possible in that area. Alternatively you can select a different plugin that supports the same entities, to have the same shortcuts magically use a different application when you switch focus!
+To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `obsidian` section, creating notes is not possible in that area. Alternatively you can select a different plugin that supports the same entities, to have the same shortcuts magically use a different application when you switch focus!
 
 ### Areas
 
@@ -182,7 +186,7 @@ key:
 
 Where:
 
-- `key`: the technical key to use internally. It doesn't really matter what it is, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
+- `key`: the technical key. It doesn't really matter what it is, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
 - `root`: the directory under which all files for this reside on disk. The default is set to `~/<name>`.
 
@@ -328,7 +332,7 @@ obsidian:
 With:
 
 - `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
--  `path`: - `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
+- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
 
 For the rest, just follow the instructions for iA Writer in the previous section, replacing 'iawriter' with 'obsidian'. Everything works the exact same way: templates, the today note, pulling defaults from OmniFocus. Everything!
 
@@ -405,39 +409,26 @@ With:
 
 For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I have set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see and use them on all your devices!)
 
+This plugin supports contacts as well as groups of contacts. 
+
 The configuration for Contacts looks as follows:
 
 ```yaml
 contacts:
     group:
-    cache:
-```
-
-With:
-
-- `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
-- `cache`: whether caching of contacts is enabled or not. To prevent surprises this defaults to `false`
-
-Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
-
-When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area.
-
-### Groups (from Apple Contacts)
-
-The groups plugin also runs against the Contacts app from Apple. It allows you to paste complete lists of groups, and sends mail to them.
-
-The configuration for this plugin looks as follows:
-
-```yaml
-groups:
     prefix:
     cache:
 ```
 
 With:
 
-- `prefix`: the prefix of all names of the groups in this area. This defaults to the name of the area followed by "` - `".
-- `cache`: whether caching of groups and contacts in these groups is enabled or not. This defaults to `false`.
+- `group`: the name of the Contacts group to show contacts from. This defaults to the name of the area.
+- `prefix`: the prefix of all names of the groups in this area. This defaults to the value of the `group` setting followed by "` - `"
+- `cache`: whether caching of contacts is enabled or not. To prevent surprises this defaults to `false`
+
+Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
+
+When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area.
 
 ### Apple Mail
 
@@ -606,10 +597,6 @@ omnifocus:
 That's it. The section has no default settings as of yet.
 
 What this action does is pick the very first OmniFocus window it can find, and change its focus. For me this is just fine, since I always have exactly one OmniFocus window open anyway.
-
-## Future steps
-
-After the major overhaul in August 2019 (my summer holiday) I now have lots of new ideas, and a much easier way to implement them. Searching through notes, project files, and so on, it's all on the list now!
 
 ## About the icon
 
