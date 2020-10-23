@@ -21,19 +21,19 @@ module VPS
 
     ##
     # Is the cache enabled? Override this method, or it never will be!
-    def cache_enabled?
+    def cache_enabled?(context)
       false
     end
 
     ##
     # Caches the output from the block, or returns it from cache if one is present, skipping the block completely.
     # If a cache needs to differ per entity, pass the entity ID as the first argument.
-    def cache(id = nil, &block)
-      if cache_enabled? && cache_present?(id)
-        from_cache(id)
+    def cache(context, id = nil, &block)
+      if cache_enabled?(context) && cache_present?(context, id)
+        from_cache(context, id)
       else
         data = yield block
-        to_cache(id, data)
+        to_cache(context, id, data)
       end
     end
 
@@ -50,10 +50,10 @@ module VPS
 
     private
 
-    def cache_filename(id = nil)
+    def cache_filename(context, id = nil)
       @cache_filename ||= File.join(Dir.home,
                                     CACHE_PREFIX +
-                                      @context.focus[:key].downcase +
+                                      context.configuration[:key].downcase +
                                       '-' +
                                       self.class.name.split('::')[2..].map { |n| n.downcase }.join('-') +
                                       (id.nil? ? '' : "-#{hash_code(id)}"))
@@ -67,16 +67,16 @@ module VPS
       end
     end
 
-    def cache_present?(id)
-      File.exist?(cache_filename(id))
+    def cache_present?(context, id)
+      File.exist?(cache_filename(context, id))
     end
 
-    def from_cache(id)
-      YAML.load_file(cache_filename(id))
+    def from_cache(context, id)
+      YAML.load_file(cache_filename(context, id))
     end
 
-    def to_cache(id, data)
-      File.open(cache_filename(id), 'w') do |file|
+    def to_cache(context, id, data)
+      File.open(cache_filename(context, id), 'w') do |file|
         file.write data.to_yaml
       end
       data

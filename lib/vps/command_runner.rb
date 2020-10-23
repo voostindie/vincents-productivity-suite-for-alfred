@@ -1,8 +1,10 @@
 module VPS
 
   class CommandRunner
-    def initialize(area, arguments, environment)
-      @area = area
+    def initialize(configuration, state, arguments, environment)
+      @configuration = configuration
+      @state = state
+      @area = @state.focus
       @arguments = arguments
       @environment = environment
       entity_type_name = @arguments.shift
@@ -23,19 +25,32 @@ module VPS
     end
 
     def execute
-      repository = resolve_repository(@command.supported_entity_type)
-      repository_plugin = Registry.instance.for_repository(repository)
-      repository_context = Context.new(@area[repository_plugin.name], @arguments, @environment)
+      context = if @command.is_a?(VPS::Plugin::SystemCommand)
+                  SystemContext.new(@configuration, @state, @arguments)
+                else
+                  entity_types = [@command.supported_entity_type]
+                  if @command.is_a?(VPS::Plugin::CollaborationCommand)
+                    entity_types << @command.collaboration_entity_type
+                  end
 
-      command_plugin = Registry.instance.for_command(@command)
-      command_context = Context.new(@area[command_plugin.name], @arguments, @environment, repository, repository_context)
+                  entity_type_contexts = entity_types.map do |entity_type|
+                    repository = resolve_repository(entity_type)
+                    plugin = Registry.instance.for_repository(repository)
+                    context = Context.new(@area[plugin.name], @arguments, @environment)
+                    [entity_type, {repository: repository, context: context}]
+                  end.to_h
+
+                  plugin = Registry.instance.for_command(@command)
+                  CommandContext.new(@area[plugin.name], @arguments, @environment, entity_type_contexts)
+                end
+
       if @command.is_a?(VPS::Plugin::EntityInstanceCommand)
-        instance = command_context.load
+        instance = context.load
         if instance.nil?
           raise "Aborting. Could not load entity instance!"
         end
       end
-      @command.run(command_context)
+      @command.run(context)
     end
 
     private

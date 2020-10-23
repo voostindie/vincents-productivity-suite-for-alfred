@@ -33,49 +33,35 @@ module VPS
     module BitBar
       include Plugin
 
+      ##
+      # Returns the label for the currently focused area.
+      # This method is called by the `focused-area.1d.rb` BitBar plugin.
+      def self.label(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
+        configuration = VPS::Configuration::load(config_file)
+        state = VPS::State::load(state_file, configuration)
+        state.focus['bitbar'][:label]
+      end
+
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {
-            label: hash['label'] || area[:name]
+            label: force(hash['label'], String) || area[:name]
           }
         end
 
         def process_action_configuration(hash)
           {
-            plugin: hash['plugin'] || 'focused-area.1d.rb'
+            plugin: force(hash['plugin'], String) || 'focused-area.1d.rb'
           }
         end
       end
 
-      class Action < BaseAction
-
+      class Refresh < BaseAction
+        def run(context, runner = Shell::SystemRunner.new)
+          plugin = context.configuration.actions['bitbar'][:plugin]
+          runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
+        end
       end
-
-      # def self.configure_plugin(plugin)
-      #   plugin.configurator_class = Configurator
-      #   plugin.with_action(Refresh)
-      # end
-      #
-      #
-      # ##
-      # # Returns the label for the currently focused area.
-      # # This method is called by the `focused-area.1d.rb` BitBar plugin.
-      # def self.label(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
-      #   configuration = VPS::Configuration::load(config_file)
-      #   state = VPS::State::load(state_file, configuration)
-      #   state.focus['bitbar'][:label]
-      # end
-      #
-      # ##
-      # # Action that tells BitBar to refresh the plugin that shows the focused area.
-      # class Refresh
-      #   include PluginSupport
-      #
-      #   def run(runner = Shell::SystemRunner.new)
-      #     plugin = @context.configuration.actions['bitbar'][:plugin]
-      #     runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
-      #   end
-      # end
     end
   end
 end

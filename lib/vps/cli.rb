@@ -62,7 +62,7 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        runner = CommandRunner.new(@state.focus, arguments, {})
+        runner = CommandRunner.new(@configuration, @state, arguments, {})
         show_command_help(runner)
       end
     end
@@ -76,7 +76,7 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        runner = CommandRunner.new(@state.focus, arguments, environment)
+        runner = CommandRunner.new(@configuration, @state, arguments, environment)
         output = runner.execute
         puts @output_formatter.format(output)
       end
@@ -96,9 +96,9 @@ module VPS
         end
       end
       @parser.separator ''
-      @parser.separator '  help <plugin> <command>: show help on a specific command'
+      @parser.separator '  help <type> <command>: show help on a specific command'
       @parser.separator ''
-      @parser.separator 'Note that the plugins and commands available depend on the focused area.'
+      @parser.separator 'Note that the types and commands available depend on the focused area.'
       puts @parser.help
     end
 

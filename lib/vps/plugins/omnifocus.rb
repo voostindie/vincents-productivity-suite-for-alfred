@@ -6,7 +6,7 @@ module VPS
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {
-            folder: force_string(hash['folder']) || area[:name]
+            folder: force(hash['folder'], String) || area[:name]
           }
         end
       end

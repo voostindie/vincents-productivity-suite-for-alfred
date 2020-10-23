@@ -6,9 +6,9 @@ module VPS
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {
-            account: hash['account'] || area[:name],
-            calendar: hash['calendar'] || 'Calendar',
-            me: hash['me'] || nil
+            account: force(hash['account'], String) || area[:name],
+            calendar: force(hash['calendar'], String) || 'Calendar',
+            me: force(hash['me'], String) || nil
           }
         end
       end

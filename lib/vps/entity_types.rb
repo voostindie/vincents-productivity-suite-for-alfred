@@ -132,7 +132,7 @@ module VPS
 
     # The entities below do nothing (yet); they exist only to make the code safer/better.
 
-    class Area
+    class Area < BaseType
     end
 
     class File < BaseType

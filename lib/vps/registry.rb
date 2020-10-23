@@ -25,10 +25,6 @@ module VPS
       @plugins.values.select { |p| p.repositories.include?(repository) }.first
     end
 
-    def for_action(action)
-      @plugins.values.select { |p| p.actions.include?(action) }.first
-    end
-
     class Plugin
       attr_reader :name, :configurator, :repositories, :commands, :action
 

@@ -6,7 +6,7 @@ module VPS
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {
-            from: hash['from'] || nil
+            from: force(hash['from'], String) || nil
           }
         end
       end

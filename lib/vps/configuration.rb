@@ -28,6 +28,14 @@ module VPS
       @areas[name]
     end
 
+    def areas
+      @areas.values
+    end
+
+    def actions
+      @actions
+    end
+
     ##
     # Return a list of available commands in the specified area, grouped by entity type.
     #
@@ -35,6 +43,7 @@ module VPS
       plugins_for(area)
         .map { |plugin| plugin.repositories }
         .flatten
+        .sort_by { |repository| repository.supported_entity_type.name }
         .map { |repository| [repository.supported_entity_type, commands_per_entity_type(area, repository.supported_entity_type)] }
         .reject { |_, commands| commands.empty? }
         .to_h
@@ -46,6 +55,7 @@ module VPS
       plugins_for(area)
         .map { |plugin| plugin.commands }
         .flatten
+        .sort_by { |command| command.name }
         .select { |command| command.supported_entity_type == entity_type }
     end
 

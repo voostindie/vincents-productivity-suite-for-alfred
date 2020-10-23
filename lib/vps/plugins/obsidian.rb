@@ -6,8 +6,8 @@ module VPS
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           config = {
-            root: File.join(area[:root], force_string(hash['path']) || 'Notes'),
-            vault: force_string(hash['vault']) || area[:name],
+            root: File.join(area[:root], force(hash['path'], String) || 'Notes'),
+            vault: force(hash['vault'], String) || area[:name],
             templates: {}
           }
           %w(default plain contact event project today).each do |set|
@@ -17,10 +17,10 @@ module VPS
                           {}
                         end
             config[:templates][set.to_sym] = {
-              filename: force_string(templates['filename']) || nil,
-              title: force_string(templates['title']) || nil,
-              text: force_string(templates['text']) || nil,
-              tags: force_string_array(templates['tags']) || nil
+              filename: force(templates['filename'], String) || nil,
+              title: force(templates['title'], String) || nil,
+              text: force(templates['text'], String) || nil,
+              tags: force_array(templates['tags'], String) || nil
             }
           end
           config[:templates][:default][:filename] ||= nil
@@ -147,22 +147,7 @@ module VPS
         end
       end
 
-      class Create < EntityTypeCommand
-        def supported_entity_type
-          EntityTypes::Note
-        end
-
-        def option_parser
-          OptionParser.new do |parser|
-            parser.banner = 'Create a new, empty note, optionally with a title'
-            parser.separator 'Usage: note create [title]'
-          end
-        end
-
-        def template_set
-          :plain
-        end
-
+      module NoteTemplate
         def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
           template_context = create_template_context(context)
           title = template(context, :title).render_template(template_context).strip
@@ -187,7 +172,7 @@ module VPS
             n.id = filename
             n.text = text
           end
-          note = context.create_or_find(note)
+          note = context.create_or_find(note, EntityTypes::Note)
           # Focus on Obsidian and give it some time, so that it can find the new file
           jxa_runner.execute('activate')
           sleep(0.5)
@@ -218,7 +203,28 @@ module VPS
         end
       end
 
+      class Create < EntityTypeCommand
+        include NoteTemplate
+
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def template_set
+          :plain
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create a new, empty note, optionally with a title'
+            parser.separator 'Usage: note create [title]'
+          end
+        end
+      end
+
       class Project < CollaborationCommand
+        include NoteTemplate
+
         def name
           'note'
         end
@@ -227,16 +233,74 @@ module VPS
           EntityTypes::Project
         end
 
+        def collaboration_entity_type
+          EntityTypes::Note
+        end
+
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Create a new note for a project'
+            parser.banner = 'Create or edit a note for a project'
             parser.separator 'Usage: project note <projectId>'
             parser.separator ''
             parser.separator 'Where <projectId> is the ID of the project to create a note for'
           end
         end
+
+        def template_set
+          :project
+        end
+
+        def create_template_context(context)
+          project = context.load
+          template_context = super
+          template_context['input'] = project.name
+          template_context['name'] = project.name
+          template_context
+        end
+
+        def template(context, symbol)
+          project = context.load
+          custom_config = project.config['obsidian'] || {}
+          custom_config[symbol.to_s] || super(context, symbol)
+        end
       end
 
+      class Contact < CollaborationCommand
+        include NoteTemplate
+
+        def name
+          'note'
+        end
+
+        def supported_entity_type
+          EntityTypes::Contact
+        end
+
+        def collaboration_entity_type
+          EntityTypes::Note
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create or edit a note for a contact'
+            parser.separator 'Usage: contact note <contactID>'
+            parser.separator ''
+            parser.separator 'Where <contactID> is the ID of the project to create a note for'
+          end
+        end
+
+        def template_set
+          :contact
+        end
+
+        def create_template_context(context)
+          contact = context.load
+          template_context = super
+          template_context['input'] = contact.name
+          template_context['name'] = contact.name
+          template_context
+        end
+      end
       #
       # def self.commands_for(area, entity)
       #   if entity.is_a?(Types::Project)
@@ -303,72 +367,7 @@ module VPS
       #
       #
       #
-      # class Project < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for a project'
-      #       parser.separator 'Usage: note project <projectId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <projectId> is the ID of the project to create a note for'
-      #     end
-      #   end
-      #
-      #   def template_set
-      #     :project
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Project) && is_entity_manager_available?(Types::Project)
-      #   end
-      #
-      #   def run
-      #     @project = @context.load_entity(Types::Project)
-      #     @custom_config = @project.config['obsidian'] || {}
-      #     super
-      #   end
-      #
-      #   def template(sym)
-      #     @custom_config[sym.to_s] || super(sym)
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @project.name
-      #     context['name'] = @project.name
-      #     context
-      #   end
-      # end
-      #
-      # class Contact < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for a contact'
-      #       parser.separator 'Usage: note contact <contactId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <contactId> is the ID of the contact to create a note for'
-      #     end
-      #   end
-      #
-      #   def template_set
-      #     :contact
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Contact) && is_entity_manager_available?(Types::Contact)
-      #   end
-      #
-      #   def run
-      #     @contact = @context.load_entity(Types::Contact)
-      #     super
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @contact.name
-      #     context['name'] = @contact.name
-      #     context
-      #   end
-      # end
+
       #
       # class Event < Plain
       #   def self.option_parser

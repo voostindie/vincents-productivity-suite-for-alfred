@@ -1,14 +1,19 @@
 module VPS
   class Context
-    attr_reader :configuration, :repository, :arguments, :environment
+    attr_reader :configuration, :arguments, :environment
 
-    def initialize(configuration, arguments, environment, repository = nil, repository_context = nil)
+    def initialize(configuration, arguments, environment)
       @configuration = configuration
       @arguments = arguments
       @environment = environment
-      @repository = repository
-      @repository_context = repository_context
-      @instance = nil
+    end
+  end
+
+  class CommandContext < Context
+    def initialize(configuration, arguments, environment, entity_type_contexts = {})
+      super(configuration, arguments, environment)
+      @entity_type_contexts = entity_type_contexts
+      @entity_instance = nil
     end
 
     def triggered_as_snippet?
@@ -19,20 +24,34 @@ module VPS
 
     ##
     # @return [VPS::EntityTypes::BaseType]+
-    def find_all
-      @repository.find_all(@repository_context)
+    def find_all(entity_type = @entity_type_contexts.keys.first)
+      entity_type_context = @entity_type_contexts[entity_type]
+      entity_type_context[:repository].find_all(entity_type_context[:context])
     end
 
     ##
     # @return [VPS::EntityTypes::BaseType]
     def load
-      @instance ||= @repository.load(@repository_context)
+      entity_type_context = @entity_type_contexts[@entity_type_contexts.keys.first]
+      @entity_instance ||= entity_type_context[:repository].load(entity_type_context[:context])
     end
 
     ##
     # @param instance [VPS::EntityTypes::BaseType]
-    def create_or_find(instance)
-      @repository.create_or_find(@repository_context, instance)
+    def create_or_find(instance, entity_type = @entity_type_contexts.keys.first)
+      entity_type_context = @entity_type_contexts[entity_type]
+      entity_type_context[:repository].create_or_find(entity_type_context[:context], instance)
+    end
+  end
+
+  class SystemContext
+    attr_reader :configuration, :area, :state, :arguments
+
+    def initialize(configuration, state, arguments)
+      @configuration = configuration
+      @state = state
+      @area = @state.focus
+      @arguments = arguments
     end
   end
 end

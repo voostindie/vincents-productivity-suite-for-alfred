@@ -6,8 +6,8 @@ module VPS
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {
-            docs: File.join(area[:root], force_string(hash['documents']) || 'Documents', '/'),
-            refs: File.join(area[:root], force_string(hash['reference material']) || 'Reference Material', '/')
+            docs: File.join(area[:root], force(hash['documents'], String) || 'Documents', '/'),
+            refs: File.join(area[:root], force(hash['reference material'], String) || 'Reference Material', '/')
           }
         end
       end

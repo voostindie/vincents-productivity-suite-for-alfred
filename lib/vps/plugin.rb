@@ -67,18 +67,15 @@ module VPS
         {}
       end
 
-      ##
-      # Support method: make sure the value is a String, otherwise return nil.
-      # @param hash_value [Object] value to enforce to a String
-      def force_string(hash_value)
-        hash_value if hash_value.is_a?(String)
+      def force(hash_value, clazz)
+        hash_value if hash_value.is_a?(clazz)
       end
 
       ##
       # Support method: make sure the value is a an array of Strings, otherwise return nil.
       # @param hash_value Value to enforce to an Array of Strings
-      def force_string_array(hash_value)
-        hash_value if hash_value.is_a?(Array) && hash_value.all? { |e| e.is_a?(String) }
+      def force_array(hash_value, clazz)
+        hash_value if hash_value.is_a?(Array) && hash_value.all? { |e| e.is_a?(clazz) }
       end
     end
 
@@ -125,9 +122,10 @@ module VPS
       end
 
       ##
-      # @param context [VPS::Context]
+      # @param context [VPS::CommandContext]
       def run(context)
-        nil
+        raise "#{self.class.name}.run is not yet implemented!"
+
       end
     end
 
@@ -140,11 +138,26 @@ module VPS
     end
 
     class CollaborationCommand < BaseCommand
-
+      def collaboration_entity_type
+        raise "#{self.class.name}.collaboration_entity_type is not yet implemented!"
+      end
     end
 
-    class BaseAction
+    class SystemCommand < BaseCommand
+      ##
+      # @param context [VPS::SystemContext]
+      def run(context)
+        raise "#{self.class.name}.run is not yet implemented!"
+      end
+    end
 
+
+    class BaseAction
+      ##
+      # @param context [VPS::SystemContext]
+      def run(context)
+        raise "#{self.class.name}.run is not yet implemented!"
+      end
     end
   end
 end

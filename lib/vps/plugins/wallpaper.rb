@@ -26,14 +26,14 @@ module VPS
             {}
           else
             {
-              path: hash['path']
+              path: force(hash['path'], String)
             }
           end
         end
 
         def process_action_configuration(hash)
           {
-            path: hash['path'] || '/Library/Desktop Pictures/High Sierra.jpg'
+            path: force(hash['path'], String) || '/Library/Desktop Pictures/High Sierra.jpg'
           }
         end
       end
