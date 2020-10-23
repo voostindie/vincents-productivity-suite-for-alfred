@@ -31,9 +31,9 @@ module VPS
         end
       end
 
-      class Repository < BaseRepository
-        def type?
-          Types::Note
+      class NoteRepository < BaseRepository
+        def supported_entity_type
+          EntityTypes::Note
         end
 
         def list
@@ -41,9 +41,9 @@ module VPS
         end
       end
 
-      class Root < TypeCommand
-        def acts_on_type?
-          Types::Note
+      class Root < EntityTypeCommand
+        def supported_entity_type
+          EntityTypes::Note
         end
 
         def option_parser
@@ -58,9 +58,9 @@ module VPS
         end
       end
 
-      class List < TypeCommand
-        def acts_on_type?
-          Types::Note
+      class List < EntityTypeCommand
+        def supported_entity_type
+          EntityTypes::Note
         end
 
         def option_parser

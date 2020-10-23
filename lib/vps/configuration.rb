@@ -39,45 +39,46 @@ module VPS
       @actions
     end
 
-    def supported_types(area)
-      area.keys
-        .filter_map { |name| @registry.plugins[name] }
+    def supported_entity_types(area)
+      plugins_for?(area)
         .map { |plugin| plugin.repositories }
         .flatten
-        .map { |repository| repository.type? }
+        .map { |repository| repository.supported_entity_type }
     end
 
-    def supported_commands(area, type)
-      area.keys
-        .filter_map { |name| @registry.plugins[name] }
+    def supported_commands(area, entity_type)
+      plugins_for?(area)
         .map { |plugin| plugin.commands }
         .flatten
-        .select { |command| command.acts_on_type? == type }
+        .select { |command| command.supported_entity_type == entity_type }
     end
 
-    def resolve_command(area, type_name, command_name)
-      area.keys
-        .filter_map { |name| @registry.plugins[name] }
+    def resolve_command(area, entity_type_name, command_name)
+      plugins_for?(area)
         .map { |plugin| plugin.commands }
         .flatten
-        .select { |command| command.name == command_name && command.acts_on_type?.type_name == type_name }
+        .select { |command| command.name == command_name && command.supported_entity_type.entity_type_name == entity_type_name }
         .first
     end
 
     def command_config(area, command)
-      area[@registry.command_plugin(command).name]
+      area[@registry.plugin_for_command?(command).name]
     end
 
-    def repository_for_type(area, type)
-      area.keys
-        .filter_map { |name| @registry.plugins[name] }
+    def repository_for_entity_type(area, entity_type)
+      plugins_for?(area)
         .map { |plugin| plugin.repositories }
         .flatten
-        .select { |repository| repository.type? == type }
+        .select { |repository| repository.supported_entity_type == entity_type }
         .first
     end
 
     private
+
+    def plugins_for?(area)
+      area.keys
+        .filter_map { |name| @registry.plugins[name] }
+    end
 
     def extract_areas(hash)
       @areas = {}
@@ -100,7 +101,7 @@ module VPS
         plugins = {}
         plugins['area'] = {}
         plugins['paste'] = {}
-        types = [Types::Area, Types::Text]
+        entity_types = [EntityTypes::Area, EntityTypes::Text]
         config.each_pair do |plugin_key, plugin_config|
           next if %w(key name root).include?(plugin_key)
           plugin = @registry.plugins[plugin_key]
@@ -108,12 +109,12 @@ module VPS
             $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
-          plugin.repositories.map { |r| r.type? }.each do |type|
-            if types.include? type
-              $stderr.puts "WARNING: the area #{name} has multiple repositories for type #{type}. Skipping plugin #{plugin_key}"
+          plugin.repositories.map { |r| r.supported_entity_type }.each do |entity_type|
+            if entity_types.include? entity_type
+              $stderr.puts "WARNING: the area #{name} has multiple repositories for type #{entity_type}. Skipping plugin #{plugin_key}"
               next
             end
-            types << type
+            entity_types << entity_type
           end
           plugins[plugin.name] = plugin.configurator.process_area_configuration(area, plugin_config || {}).freeze
         end

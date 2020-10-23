@@ -54,7 +54,7 @@ module VPS
                    .freeze
     end
 
-    def command_plugin(command)
+    def plugin_for_command?(command)
       @plugins.values.select { |p| p.commands.include?(command) }.first
     end
   end

@@ -7,7 +7,7 @@ module VPS
   # 2. Define a new module within the module VPS::Plugins
   # 3. Include this module
   #
-  # For example in {my_plugin.rb}:
+  # For example in +my_plugin.rb+:
   #
   #   module VPS
   #     module Plugins
@@ -28,39 +28,63 @@ module VPS
   # - CollaborationCommand: for a command that acts on instances of a specific Type against a different Type
   # - BaseAction: for an action
   #
-  # You can all but two classes as often as you want: the BaseConfigurator and BaseAction should
-  # only be extended at most once.
+  # You can implement all but two classes as often as you want: the BaseConfigurator and BaseAction may
+  # only be extended at most once. If you do it more than once, VPS will pick the first of each.
   #
   module Plugin
 
     class BaseConfigurator
 
       ##
-      # @return the name of the plugin; defaults to the name of the plugin module, in lower case.
+      # @return the name of the plugin; defaults to the name of the plugin module in lower case if this
+      #         method returns nil.
       def plugin_name
         nil
       end
 
+      ##
+      # Constructs the configuration for this plugin from the configuration hash.
+      # What you create here you get back as part of the Context in the various commands.
+      #
+      # Be strict in what you accept, and feel free to use $stderr to notify the user of issues.
+      #
+      # @return The configuration for this plugin in this area; typically a hash.
+      # @param area The area in the configuration being processed, a hash with :key, :name and :root
+      # @param hash The configuration for this plugin as defined in the configuration.
       def process_area_configuration(area, hash)
         {}
       end
 
+      ##
+      # Constructs the action configuration for this plugin from the configuration hash.
+      # What you create here you get back as part of the Context in the action class.
+      #
+      # Be strict in what you accept, and feel free to use $stderr to notify the user of issues.
+      #
+      # @return The configuration for this plugin when executing the action; typically a hash.
+      # @param hash The configuration for this plugin as defined in the configuration.
       def process_action_configuration(hash)
         {}
       end
 
+      ##
+      # Support method: make sure the value is a String, otherwise return nil.
+      # @param hash_value Value to enforce to a String
       def force_string(hash_value)
         hash_value if hash_value.is_a?(String)
       end
 
+      ##
+      # Support method: make sure the value is a an array of Strings, otherwise return nil.
+      # @param hash_value Value to enforce to an Array of Strings
       def force_string_array(hash_value)
         hash_value if hash_value.is_a?(Array) && hash_value.all? { |e| e.is_a?(String) }
       end
     end
 
     class BaseRepository
-      def type?
-        nil
+      def supported_entity_type
+        raise "#{self.class.name}.supported_entity_type must be implemented!"
       end
 
       # TODO: the repository commands need access to the configuration of the plugin they're part of
@@ -75,8 +99,8 @@ module VPS
         self.class.name.split('::').last.downcase
       end
 
-      def acts_on_type?
-        nil
+      def supported_entity_type
+        raise "#{self.class.name}.supported_entity_type must be implemented!"
       end
 
       def option_parser
@@ -92,11 +116,11 @@ module VPS
       end
     end
 
-    class TypeCommand < BaseCommand
+    class EntityTypeCommand < BaseCommand
 
     end
 
-    class InstanceCommand < BaseCommand
+    class EntityInstanceCommand < BaseCommand
 
     end
 
@@ -107,57 +131,5 @@ module VPS
     class BaseAction
 
     end
-    ##
-    # Creates a new command. This happens whenever the command is executed through the CLI.
-    #
-    # Every command MUST implement this initializer.
-    #
-    # @param context [Context] the application context
-    #   def initialize(context)
-    #     @context = context
-    #   end
-    #
-    #   def is_entity_present?(entity_class)
-    #     entity_name = entity_class.name.split('::').last
-    #     variable = entity_name.upcase + '_ID'
-    #     if @context.environment[variable].nil?
-    #       if @context.arguments.size != 1
-    #         $stderr.puts "Missing ID to the #{entity_name}. This must be passed as the one and only argument"
-    #         $stderr.puts
-    #         $stderr.puts "Here are the help notes for this command:"
-    #         $stderr.puts
-    #         $stderr.puts self.class.option_parser.help
-    #         return false
-    #       end
-    #     end
-    #     true
-    #   end
-    #
-    #   def is_entity_manager_available?(entity_class)
-    #     plugin = @context.configuration.entity_manager_for_class(@context.focus, entity_class)
-    #     if plugin.nil?
-    #       $stderr.puts "No manager found that supports #{entity_class}"
-    #       false
-    #     else
-    #       true
-    #     end
-    #   end
-    #
-    #   def entity_manager_for(entity_class)
-    #     @context.configuration.entity_manager_for_class(@context.focus, entity_class)
-    #   end
-    #
-    #   def triggered_as_snippet?
-    #     if @context.environment['TRIGGERED_AS_SNIPPET'].nil?
-    #       false
-    #     else
-    #       @context.environment['TRIGGERED_AS_SNIPPET'] == 'true'
-    #     end
-    #   end
-    #
-    #   def strip_emojis(string)
-    #     # Not doing anything yet...
-    #     string
-    #   end
   end
 end

@@ -1,8 +1,8 @@
 module VPS
   ##
-  # Defines all different type supported by VPS. A type is a concept like a contact,
+  # Defines all different entity types supported by VPS. An entity type is a concept like a contact,
   # a file, a project, an event.
-  module Types
+  module EntityTypes
 
     ##
     # Base class for entities. All subclasses need to do is define +attr_accessor+s for
@@ -12,7 +12,7 @@ module VPS
       # Every entity has an ID.
       attr_accessor :id
 
-      def self.type_name
+      def self.entity_type_name
         self.name.split('::').last.downcase
       end
 
@@ -139,7 +139,7 @@ module VPS
     class Area
     end
 
-    class File
+    class File < BaseType
     end
 
     class Mail

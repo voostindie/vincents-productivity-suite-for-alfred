@@ -62,9 +62,7 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        type_name = arguments.shift
-        command_name = arguments.shift
-        command = @configuration.resolve_command(@state.focus, type_name, command_name)
+        command = resolve_command(arguments)
         show_command_help(command)
       end
     end
@@ -78,9 +76,7 @@ module VPS
       if arguments.size < 2
         show_overall_help
       else
-        type_name = arguments.shift
-        command_name = arguments.shift
-        command = @configuration.resolve_command(@state.focus, type_name, command_name)
+        command = resolve_command(arguments)
         execute_command(command, arguments, environment)
       end
     end
@@ -91,9 +87,9 @@ module VPS
       @parser.separator ''
       @parser.separator 'Where <type> and <command> are one of: '
       @parser.separator ''
-      @configuration.supported_types(@state.focus).each do |type|
-        @parser.separator "  #{type.type_name}"
-        @configuration.supported_commands(@state.focus, type).each do |command|
+      @configuration.supported_entity_types(@state.focus).each do |entity_type|
+        @parser.separator "  #{entity_type.entity_type_name}"
+        @configuration.supported_commands(@state.focus, entity_type).each do |command|
           help = command.option_parser.banner || '(Sorry, no information provided)'
           @parser.separator "    #{command.name.ljust(10)}: #{help}"
         end
@@ -124,6 +120,16 @@ module VPS
       end
     end
 
+    def resolve_command(arguments)
+      type_name = arguments.shift
+      command_name = arguments.shift
+      command = @configuration.resolve_command(@state.focus, type_name, command_name)
+      if command.nil?
+        raise "Invalid command '#{command_name}' for '#{type_name}'"
+      end
+      command
+    end
+
     ##
     # Executes a command.
     #
@@ -132,7 +138,7 @@ module VPS
     # @param environment [Hash] the environment variables.
     def execute_command(command, arguments, environment)
       configuration = @configuration.command_config(@state.focus, command)
-      repository = @configuration.repository_for_type(@state.focus, command.acts_on_type?)
+      repository = @configuration.repository_for_entity_type(@state.focus, command.supported_entity_type)
       context = Context.new(configuration, repository, arguments, environment)
       if command.can_run?(context)
         output = @output_formatter.format { command.run(context) }
