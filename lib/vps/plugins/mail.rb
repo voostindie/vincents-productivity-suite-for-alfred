@@ -3,7 +3,7 @@ module VPS
     module Mail
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class MailConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
             from: force(hash['from'], String) || nil
@@ -17,7 +17,7 @@ module VPS
         end
 
         def supported_entity_type
-          EntityTypes::Contact
+          EntityType::Contact
         end
 
         def option_parser
@@ -30,7 +30,7 @@ module VPS
         end
 
         def run(context, runner = Jxa::Runner.new('mail'))
-          contact = context.load
+          contact = context.load_instance
           addresses = ["#{contact.name} <#{contact.email}>"].to_json
           from = context.configuration[:from]
           runner.execute('create-email', addresses, from)
@@ -44,7 +44,7 @@ module VPS
         end
 
         def supported_entity_type
-          EntityTypes::Group
+          EntityType::Group
         end
 
         def option_parser
@@ -57,7 +57,7 @@ module VPS
         end
 
         def run(context, runner = Jxa::Runner.new('mail'))
-          group = context.load
+          group = context.load_instance
           addresses = group.people.map { |p| "#{p['name']} <#{p['email']}>" }.to_json
           from = context.configuration[:from]
           runner.execute('create-email', addresses, from)

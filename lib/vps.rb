@@ -1,3 +1,12 @@
+# == Vincent's Productivity Suite
+#
+# If you're looking at this code, then what you probably want to do is mess around with
+# the existing plugins, or create a plugin of your own. For that, see the {VPS::Plugin} module.
+#
+# Just to warn you: I have a strong background in Java and other typed languages. That
+# means I'm not very comfortable with the freedom and flexibility Ruby offers and as a result
+# force myself into a fairly rigid structure. The code works, but it's definitely not the best Ruby
+# you ever encountered. *Ye be warned!*
 module VPS
   ;
 end
@@ -22,7 +31,7 @@ require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/jxa'
 require 'vps/version'
-require 'vps/entity_types'
+require 'vps/entity_type'
 require 'vps/registry'
 require 'vps/configuration'
 require 'vps/state'
@@ -34,7 +43,7 @@ require 'vps/cache_support'
 require 'vps/note_support'
 require 'vps/xcall'
 
-# Extensions
+# String extensions
 class String
   def url_encode
     ERB::Util.url_encode(self)

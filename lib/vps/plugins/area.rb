@@ -3,15 +3,15 @@ module VPS
     module Area
       include Plugin
 
-      class AreaRepository < BaseRepository
+      class AreaRepository < Repository
         def supported_entity_type
-          EntityTypes::Area
+          EntityType::Area
         end
       end
 
       class List < SystemCommand
         def supported_entity_type
-          EntityTypes::Area
+          EntityType::Area
         end
 
         def option_parser
@@ -36,7 +36,7 @@ module VPS
 
       class Focus < SystemCommand
         def supported_entity_type
-          EntityTypes::Area
+          EntityType::Area
         end
 
         def option_parser
@@ -75,7 +75,7 @@ module VPS
         include CacheSupport
 
         def supported_entity_type
-          EntityTypes::Area
+          EntityType::Area
         end
 
         def option_parser
@@ -93,7 +93,7 @@ module VPS
 
       class Commands < SystemCommand
         def supported_entity_type
-          EntityTypes::Area
+          EntityType::Area
         end
 
         def option_parser

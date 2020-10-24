@@ -1,5 +1,5 @@
 module VPS
-  ## The CLI is the entry point into the application. It loads the configuration,
+  # The CLI is the entry point into the application. It loads the configuration,
   # parses command line arguments and acts upon those.
   class Cli
     def initialize(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
@@ -9,7 +9,6 @@ module VPS
       @parser = option_parser
     end
 
-    ##
     # Builds an option parser for the program arguments.
     # @return [OptionParser]
     def option_parser
@@ -104,8 +103,6 @@ module VPS
 
     ##
     # Shows help information on a single command.
-    #
-    # @param command [VPS::Plugin::Command] the command to show information on.
     def show_command_help(runner)
       if runner.help_available?
         puts runner.help

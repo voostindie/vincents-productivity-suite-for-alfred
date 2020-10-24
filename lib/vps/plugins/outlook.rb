@@ -7,7 +7,7 @@ module VPS
     module Outlook
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class OutlookConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
             account: force(hash['account'], String) || area[:name],
@@ -17,12 +17,12 @@ module VPS
         end
       end
 
-      class Repository < BaseRepository
+      class OutlookCalendarRepository < Repository
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
-        def load(context, runner = Jxa::Runner.new('outlook'))
+        def load_instance(context, runner = Jxa::Runner.new('outlook'))
           id = context.environment['EVENT_ID'] || context.arguments[0]
           event = runner.execute('event-details', id)
           people = [Person.new(nil, event['organizer'])]
@@ -47,7 +47,7 @@ module VPS
 
       class List < EntityTypeCommand
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
         def option_parser

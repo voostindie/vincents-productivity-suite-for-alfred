@@ -42,7 +42,7 @@ module VPS
         state.focus['bitbar'][:label]
       end
 
-      class Configurator < BaseConfigurator
+      class BitBarConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
             label: force(hash['label'], String) || area[:name]
@@ -56,7 +56,7 @@ module VPS
         end
       end
 
-      class Refresh < BaseAction
+      class Refresh < Action
         def run(context, runner = Shell::SystemRunner.new)
           plugin = context.configuration.actions['bitbar'][:plugin]
           runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")

@@ -3,7 +3,7 @@ module VPS
     module Obsidian
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class ObsidianConfigurator < Configurator
         include NoteSupport::Configurator
 
         def process_area_configuration(area, hash)
@@ -16,7 +16,7 @@ module VPS
         end
       end
 
-      class NoteRepository < BaseRepository
+      class ObsidianRepository < Repository
         include NoteSupport::FileRepository
       end
 
@@ -30,13 +30,13 @@ module VPS
 
       module ObsidianNote
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
 
         def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
-                   context.load
+                   context.load_instance
                  else
                    create_note(context)
                  end

@@ -5,7 +5,7 @@ module VPS
 
       class View < EntityInstanceCommand
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def option_parser
@@ -18,7 +18,7 @@ module VPS
         end
 
         def run(context, runner = Shell::SystemRunner.new)
-          note = context.load
+          note = context.load_instance
           callback = "x-marked://open?file=#{note.path.url_encode}"
           runner.execute('open', callback)
           "Opened note '#{note.id}' in Marked"

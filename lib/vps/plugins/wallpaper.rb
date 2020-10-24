@@ -1,26 +1,26 @@
-##
-# Changes the desktop wallpaper.
-#
-# The wallpaper to change to must be configured in the +wallpaper+ section of
-# the area, in the single +path+ property. If no wallpaper is defined, the
-# plugin will fallback on a global default.
-#
-# == Configuration sample
-#
-#   areas:
-#     myarea:
-#       wallpaper:
-#         path: '/path/to/my/special/wallpaper.jpg'
-#   actions:
-#     wallpaper:
-#       default: '/Library/Desktop Pictures/High Sierra.jpg' # default value, can be omitted
-#
 module VPS
   module Plugins
+    ##
+    # Changes the desktop wallpaper.
+    #
+    # The wallpaper to change to must be configured in the +wallpaper+ section of
+    # the area, in the single +path+ property. If no wallpaper is defined, the
+    # plugin will fallback on a global default.
+    #
+    # == Configuration sample
+    #
+    #   areas:
+    #     myarea:
+    #       wallpaper:
+    #         path: '/path/to/my/special/wallpaper.jpg'
+    #   actions:
+    #     wallpaper:
+    #       default: '/Library/Desktop Pictures/High Sierra.jpg' # default value, can be omitted
+    #
     module Wallpaper
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class WallpaperConfigurator < Configurator
         def process_area_configuration(area, hash)
           if hash['path'].nil?
             {}
@@ -38,7 +38,7 @@ module VPS
         end
       end
 
-      class Wallpaper < BaseAction
+      class Wallpaper < Action
         def run(context, runner = Jxa::Runner.new('wallpaper'))
           path = if context.area['wallpaper']
                    context.area['wallpaper'][:path]

@@ -39,20 +39,20 @@ module VPS
       private
 
       def new_configurator(plugin_module)
-        instantiate_classes(plugin_module, VPS::Plugin::BaseConfigurator).first ||
-          VPS::Plugin::BaseConfigurator.new
+        instantiate_classes(plugin_module, VPS::Plugin::Configurator).first ||
+          VPS::Plugin::Configurator.new
       end
 
       def new_repositories(plugin_module)
-        instantiate_classes(plugin_module, VPS::Plugin::BaseRepository)
+        instantiate_classes(plugin_module, VPS::Plugin::Repository)
       end
 
       def new_commands(plugin_module)
-        instantiate_classes(plugin_module, VPS::Plugin::BaseCommand)
+        instantiate_classes(plugin_module, VPS::Plugin::Command)
       end
 
       def new_action(plugin_module)
-        instantiate_classes(plugin_module, VPS::Plugin::BaseAction).first
+        instantiate_classes(plugin_module, VPS::Plugin::Action).first
       end
 
       def instantiate_classes(plugin, super_class)

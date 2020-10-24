@@ -3,21 +3,20 @@ module VPS
     module IAWriter
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class IAWriterConfigurator < Configurator
         include NoteSupport::Configurator
 
         def process_area_configuration(area, hash)
           config = {
             location: hash['location'] || area[:name],
             root: File.join(area[:root], hash['path'] || 'Notes'),
-            token: hash['token'] || 'TOKEN_NOT_CONFIGURED',
           }
           process_templates(config, hash)
           config
         end
       end
 
-      class NoteRepository < BaseRepository
+      class IAWriterRepository < Repository
         include NoteSupport::FileRepository
       end
 
@@ -32,7 +31,7 @@ module VPS
       module IAWriterNote
         def run(context, runner = Shell::SystemRunner.new)
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
-                   context.load
+                   context.load_instance
                  else
                    create_note(context)
                  end
@@ -48,7 +47,7 @@ module VPS
         include IAWriterNote
 
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def option_parser

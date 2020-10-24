@@ -3,7 +3,7 @@ module VPS
     module Bear
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class BearConfigurator < Configurator
         include NoteSupport::Configurator
 
         def process_area_configuration(area, hash)
@@ -16,9 +16,9 @@ module VPS
         end
       end
 
-      class BearRepository < BaseRepository
+      class BearRepository < Repository
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def find_all(context, runner = Xcall.instance)
@@ -31,25 +31,25 @@ module VPS
             return []
           end
           JSON.parse(output['notes']).map do |record|
-            EntityTypes::Note.new do |note|
+            EntityType::Note.new do |note|
               note.id = record['identifier']
               note.title = record['title']
             end
           end
         end
 
-        def load(context, runner = Xcall.instance)
+        def load_instance(context, runner = Xcall.instance)
           if context.environment['NOTE_ID'].nil?
             id = context.arguments[0]
             token = context.configuration[:token]
             callback = "bear://x-callback-url/open-note?id=#{id.url_encode}&show_window=no&token=#{token}"
             record = runner.execute(callback)
-            EntityTypes::Note.new do |note|
+            EntityType::Note.new do |note|
               note.id = id
               note.title = record['title'] || nil
             end
           else
-            EntityTypes::Note.from_env(context.environment)
+            EntityType::Note.from_env(context.environment)
           end
         end
 
@@ -67,7 +67,7 @@ module VPS
 
       class List < EntityTypeCommand
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def option_parser
@@ -101,12 +101,12 @@ module VPS
 
       module BearNote
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def run(context, runner = Xcall.instance)
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
-                   context.load
+                   context.load_instance
                  else
                    create_note(context)
                  end

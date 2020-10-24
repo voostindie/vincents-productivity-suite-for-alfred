@@ -3,7 +3,7 @@ module VPS
     module Contacts
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class ContactsConfigurator < Configurator
         def process_area_configuration(area, hash)
           group = force(hash['group'], String) || area[:name]
           {
@@ -14,11 +14,11 @@ module VPS
         end
       end
 
-      class ContactRepository < BaseRepository
+      class ContactRepository < Repository
         include CacheSupport
 
         def supported_entity_type
-          EntityTypes::Contact
+          EntityType::Contact
         end
 
         def cache_enabled?(context)
@@ -28,23 +28,23 @@ module VPS
         def find_all(context, runner = Jxa::Runner.new('contacts'))
           cache(context) do
             contacts = runner.execute('list-people', context.configuration[:group])
-            contacts.map { |contact| EntityTypes::Contact.from_hash(contact) }
+            contacts.map { |contact| EntityType::Contact.from_hash(contact) }
           end
         end
 
-        def load(context, runner = Jxa::Runner.new('contacts'))
+        def load_instance(context, runner = Jxa::Runner.new('contacts'))
           id = context.environment['CONTACT_ID'] || context.arguments[0]
           cache(context, id) do
-            EntityTypes::Contact.from_hash(runner.execute('contact-details', id))
+            EntityType::Contact.from_hash(runner.execute('contact-details', id))
           end
         end
       end
 
-      class GroupRepository < BaseRepository
+      class GroupRepository < Repository
         include CacheSupport
 
         def supported_entity_type
-          EntityTypes::Group
+          EntityType::Group
         end
 
         def cache_enabled?(context)
@@ -54,14 +54,14 @@ module VPS
         def find_all(context, runner = Jxa::Runner.new('contacts'))
           cache(context) do
             groups = runner.execute('list-groups', context.configuration[:prefix])
-            groups.map { |group| EntityTypes::Group.from_hash(group) }
+            groups.map { |group| EntityType::Group.from_hash(group) }
           end
         end
 
-        def load(context, runner = Jxa::Runner.new('contacts'))
+        def load_instance(context, runner = Jxa::Runner.new('contacts'))
           id = context.environment['GROUP_ID'] || context.arguments[0]
           cache(context, id) do
-            EntityTypes::Group.from_hash(runner.execute('group-details', id))
+            EntityType::Group.from_hash(runner.execute('group-details', id))
           end
         end
       end
@@ -101,7 +101,7 @@ module VPS
         include ListSupport
 
         def supported_entity_type
-          EntityTypes::Contact
+          EntityType::Contact
         end
       end
 
@@ -109,14 +109,14 @@ module VPS
         include ListSupport
 
         def supported_entity_type
-          EntityTypes::Group
+          EntityType::Group
         end
       end
 
       class Open < EntityInstanceCommand
 
         def supported_entity_type
-          EntityTypes::Contact
+          EntityType::Contact
         end
 
         def option_parser
@@ -129,7 +129,7 @@ module VPS
         end
 
         def run(context, runner = Shell::SystemRunner.new)
-          contact = context.load
+          contact = context.load_instance
           runner.execute('open', "addressbook://#{contact.id}")
           "Opened #{contact.name} in Contacts"
         end

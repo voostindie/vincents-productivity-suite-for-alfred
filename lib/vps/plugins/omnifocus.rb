@@ -3,7 +3,7 @@ module VPS
     module OmniFocus
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class OmniFocusConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
             folder: force(hash['folder'], String) || area[:name]
@@ -11,27 +11,27 @@ module VPS
         end
       end
 
-      class ProjectRepository < BaseRepository
+      class OmniFocusRepository < Repository
         def supported_entity_type
-          EntityTypes::Project
+          EntityType::Project
         end
 
         def find_all(context, runner = Jxa::Runner.new('omnifocus'))
           projects = runner.execute('list-projects', context.configuration[:folder])
           projects.map do |project|
-            EntityTypes::Project.from_hash(project)
+            EntityType::Project.from_hash(project)
           end
         end
 
-        def load(context, runner = Jxa::Runner.new('omnifocus'))
+        def load_instance(context, runner = Jxa::Runner.new('omnifocus'))
           id = context.environment['PROJECT_ID'] || context.arguments[0]
-          EntityTypes::Project.from_hash(runner.execute('project-details', id))
+          EntityType::Project.from_hash(runner.execute('project-details', id))
         end
       end
 
       class List < EntityTypeCommand
         def supported_entity_type
-          EntityTypes::Project
+          EntityType::Project
         end
 
         def option_parser
@@ -61,7 +61,7 @@ module VPS
 
       class Open < EntityInstanceCommand
         def supported_entity_type
-          EntityTypes::Project
+          EntityType::Project
         end
 
         def option_parser
@@ -74,13 +74,13 @@ module VPS
         end
 
         def run(context, runner = Shell::SystemRunner.new)
-          project = context.load
+          project = context.load_instance
           runner.execute("open omnifocus:///task/#{project.id}")
           "Opened #{project.name} in OmniFocus"
         end
       end
 
-      class Focus < BaseAction
+      class Focus < Action
         def run(context, runner = Jxa::Runner.new('omnifocus'))
           if context.area['omnifocus']
             runner.execute('set-focus', context.area['omnifocus'][:folder])

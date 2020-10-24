@@ -3,9 +3,19 @@ module VPS
   # Support module for plugins that manage notes. The goal is to have feature
   # parity across all note plugins. Currently that's Obsidian, iA Writer and Bear.
   #
-  # All support classes are modules. In your own plugin, first extend some base plugin class
-  # and then include the appropriate module.
+  # For some reason I switch between applications to keep my notes at a somewhat regular
+  # basis, whereas I don't do that for other tools. (Every now and then I do try Things
+  # instead of OmniFocus, but I'm still not won over.)
+  #
+  # Since I keep a lot of notes, being able to handle them through VPS is very important
+  # to me. That explains the birth of this module, I guess.
+  #
+  # All support classes are modules as to not interfere with the class hierarchy. In your
+  # own plugin, first extend some base plugin class and then include the appropriate module.
+  #
+  # See the Obsidian, Bear and IAWriter for examples.
   module NoteSupport
+
     module Configurator
       def process_templates(config, hash)
         config[:templates] = {}
@@ -35,13 +45,13 @@ module VPS
     # This module requires a `:root` value in the plugin configuration, pointing to a directory on disk.
     module FileRepository
       def supported_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def find_all(context)
         notes = Dir.glob("#{context.configuration[:root]}/**/*.md").sort_by { |p| File.basename(p) }
         notes.map do |path|
-          EntityTypes::Note.new do |note|
+          EntityType::Note.new do |note|
             note.id = File.basename(path, '.md')
             note.title = note.id
             note.path = path
@@ -50,14 +60,14 @@ module VPS
         end
       end
 
-      def load(context)
+      def load_instance(context)
         id = context.arguments.join(' ')
         return nil if id.empty?
         matches = Dir.glob("#{context.configuration[:root]}/**/#{id}.md")
         if matches.empty?
           nil
         else
-          EntityTypes::Note.new do |note|
+          EntityType::Note.new do |note|
             note.id = id
             note.title = id
             note.path = matches[0]
@@ -88,7 +98,7 @@ module VPS
 
     module Root
       def supported_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def option_parser
@@ -107,7 +117,7 @@ module VPS
     # List all notes. Only include this if your repository supports the fina_all method.
     module List
       def supported_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def option_parser
@@ -144,17 +154,17 @@ module VPS
       end
 
       def supported_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def collaboration_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def create_note(context)
         template_context = create_template_context(context)
         filename_template = template(context, :filename)
-        note = EntityTypes::Note.new do |n|
+        note = EntityType::Note.new do |n|
           n.title = template(context, :title).render_template(template_context).strip
           n.id = if filename_template.nil?
                    n.title
@@ -166,7 +176,7 @@ module VPS
           n.tags = template(context, :tags)
                      .map { |t| t.render_template(template_context).strip }
         end
-        context.create_or_find(note, EntityTypes::Note)
+        context.create_or_find(note, EntityType::Note)
       end
 
       def create_template_context(context)
@@ -226,7 +236,7 @@ module VPS
       end
 
       def supported_entity_type
-        EntityTypes::Project
+        EntityType::Project
       end
 
       def option_parser
@@ -243,7 +253,7 @@ module VPS
       end
 
       def create_template_context(context)
-        project = context.load
+        project = context.load_instance
         template_context = super
         template_context['input'] = project.name
         template_context['name'] = project.name
@@ -251,7 +261,7 @@ module VPS
       end
 
       def template(context, symbol)
-        project = context.load
+        project = context.load_instance
         custom_config = project.config[application] || {}
         custom_config[symbol.to_s] || super(context, symbol)
       end
@@ -265,7 +275,7 @@ module VPS
       end
 
       def supported_entity_type
-        EntityTypes::Contact
+        EntityType::Contact
       end
 
       def option_parser
@@ -282,7 +292,7 @@ module VPS
       end
 
       def create_template_context(context)
-        contact = context.load
+        contact = context.load_instance
         template_context = super
         template_context['input'] = contact.name
         template_context['name'] = contact.name
@@ -298,11 +308,11 @@ module VPS
       end
 
       def supported_entity_type
-        EntityTypes::Event
+        EntityType::Event
       end
 
       def collaboration_entity_type
-        EntityTypes::Note
+        EntityType::Note
       end
 
       def option_parser
@@ -319,7 +329,7 @@ module VPS
       end
 
       def create_template_context(context)
-        event = context.load
+        event = context.load_instance
         template_context = super
         template_context['input'] = event.title
         template_context['title'] = event.title

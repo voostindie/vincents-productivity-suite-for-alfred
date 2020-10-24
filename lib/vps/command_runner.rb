@@ -45,7 +45,7 @@ module VPS
                 end
 
       if @command.is_a?(VPS::Plugin::EntityInstanceCommand) || @command.is_a?(VPS::Plugin::CollaborationCommand)
-        instance = context.load
+        instance = context.load_instance
         if instance.nil?
           raise "Aborting. Could not load entity instance!"
         end

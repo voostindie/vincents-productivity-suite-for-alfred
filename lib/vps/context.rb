@@ -24,21 +24,21 @@ module VPS
     # Methods below are from BaseRepository, without context. Here we ensure the correct context is passed.
 
     ##
-    # @return [VPS::EntityTypes::BaseType]+
+    # @return [Array<VPS::EntityType::BaseType>]
     def find_all(entity_type = @entity_type_contexts.keys.first)
       entity_type_context = @entity_type_contexts[entity_type]
       entity_type_context[:repository].find_all(entity_type_context[:context])
     end
 
     ##
-    # @return [VPS::EntityTypes::BaseType]
-    def load
+    # @return [VPS::EntityType::BaseType]
+    def load_instance
       entity_type_context = @entity_type_contexts[@entity_type_contexts.keys.first]
-      @entity_instance ||= entity_type_context[:repository].load(entity_type_context[:context])
+      @entity_instance ||= entity_type_context[:repository].load_instance(entity_type_context[:context])
     end
 
     ##
-    # @param instance [VPS::EntityTypes::BaseType]
+    # @param instance [VPS::EntityType::BaseType]
     def create_or_find(instance, entity_type = @entity_type_contexts.keys.first)
       entity_type_context = @entity_type_contexts[entity_type]
       entity_type_context[:repository].create_or_find(entity_type_context[:context], instance)

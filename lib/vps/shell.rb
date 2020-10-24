@@ -1,5 +1,5 @@
-# Exposes way to run external commands in a shell uniformly, in a testable manner.
 module VPS
+  # Exposes way to run external commands in a shell uniformly, in a testable manner.
   module Shell
     class CaptureOutputRunner
       def execute(command)

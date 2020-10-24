@@ -28,7 +28,7 @@ module VPS
         end
 
         def run(context, runner = Jxa::Runner.new('alfred'))
-          runner.execute('paste', text_from(context.load))
+          runner.execute('paste', text_from(context.load_instance))
           nil
         end
 
@@ -41,7 +41,7 @@ module VPS
         include PasteTemplate
 
         def supported_entity_type
-          EntityTypes::Note
+          EntityType::Note
         end
 
         def text_from(note)
@@ -53,7 +53,7 @@ module VPS
         include PasteTemplate
 
         def supported_entity_type
-          EntityTypes::Project
+          EntityType::Project
         end
 
         def text_from(project)
@@ -65,7 +65,7 @@ module VPS
         include PasteTemplate
 
         def supported_entity_type
-          EntityTypes::Contact
+          EntityType::Contact
         end
 
         def text_from(contact)
@@ -77,7 +77,7 @@ module VPS
         include PasteTemplate
 
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
         def text_from(event)
@@ -97,7 +97,7 @@ module VPS
         end
 
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
         def text_from(event)
@@ -109,7 +109,7 @@ module VPS
         include PasteTemplate
 
         def supported_entity_type
-          EntityTypes::Group
+          EntityType::Group
         end
 
         def text_from(group)

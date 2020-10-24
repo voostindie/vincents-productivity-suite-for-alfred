@@ -87,7 +87,7 @@ module VPS
         plugins = {}
         plugins['area'] = {}
         plugins['paste'] = {}
-        entity_types = [EntityTypes::Area, EntityTypes::Text]
+        entity_types = [EntityType::Area]
         config.each_pair do |plugin_key, plugin_config|
           next if %w(key name root).include?(plugin_key)
           plugin = Registry.instance.plugins[plugin_key]

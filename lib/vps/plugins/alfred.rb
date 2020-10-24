@@ -3,7 +3,7 @@ module VPS
     module Alfred
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class AlfredConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
             docs: File.join(area[:root], force(hash['documents'], String) || 'Documents', '/'),
@@ -15,15 +15,15 @@ module VPS
       ##
       # This repository actually doesn't do anything and should be removed once I've implemented
       # a real repository on top of files, which this plugin can then contribute its commands to.
-      class DummyFileRepository < BaseRepository
+      class DummyFileRepository < Repository
         def supported_entity_type
-          EntityTypes::File
+          EntityType::File
         end
       end
 
       module FileBrowser
         def supported_entity_type
-          EntityTypes::File
+          EntityType::File
         end
 
         def option_parser
@@ -64,11 +64,11 @@ module VPS
         end
 
         def supported_entity_type
-          EntityTypes::Project
+          EntityType::Project
         end
 
         def collaboration_entity_type
-          EntityTypes::File
+          EntityType::File
         end
 
         def option_parser
@@ -81,7 +81,7 @@ module VPS
         end
 
         def run(context, runner = Jxa::Runner.new('alfred'))
-          project = context.load
+          project = context.load_instance
           folder = if project.config['alfred']
                      project.config['alfred']['folder'] || project.name
                    else

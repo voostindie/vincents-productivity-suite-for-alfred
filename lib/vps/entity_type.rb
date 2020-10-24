@@ -2,7 +2,7 @@ module VPS
   ##
   # Defines all different entity types supported by VPS. An entity type is a concept like a contact,
   # a file, a project, an event.
-  module EntityTypes
+  module EntityType
 
     ##
     # Base class for entities. All subclasses need to do is define +attr_accessor+s for
@@ -97,17 +97,19 @@ module VPS
     class Project < BaseType
       attr_accessor :name, :note
 
+      ##
+      # Read "YAML Back Matter" from the project note if present.
       def config
         return {} if note.nil?
         yaml = note.
-          gsub("\t", '  ').
-          gsub("’", "'").
-          gsub("“", '"').
-          gsub("”", '"').
           lines.
           drop_while { |l| !l.start_with?('---') }.
           drop(1).
-          join
+          join.
+          gsub("\t", '  ').
+          gsub("’", "'").
+          gsub("“", '"').
+          gsub("”", '"')
         return {} if yaml.empty?
         YAML.load(yaml)
       end
@@ -130,18 +132,10 @@ module VPS
       attr_accessor :path, :title, :text, :tags, :is_new
     end
 
-    # The entities below do nothing (yet); they exist only to make the code safer/better.
-
     class Area < BaseType
     end
 
     class File < BaseType
-    end
-
-    class Mail
-    end
-
-    class Text
     end
   end
 end

@@ -140,7 +140,7 @@ areas:
 
 In case you were wondering: yes, this is [YAML](http://yaml.org).
 
-This sets up a single *area of responsibility* with the Obsidian, OmniFocus, Contacts, Groups, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
+This sets up a single *area of responsibility* with the Obsidian, OmniFocus, Contacts, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
 Once the configuration file exists, use `vps area focus` command in the Terminal, or the `focus` keyword (or ⌃⌥⌘-F) in Alfred to focus on a specific area.
 
@@ -165,7 +165,8 @@ areas:
         calendar:
             name: 'Work'
         alfred:
-            path: 'Projects'
+            documents: 'Documents'
+            reference material: 'Reference Material'
         bitbar:
             label: 'Work'
 ```
@@ -213,7 +214,7 @@ obsidian:
 With:
 
 - `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
-- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
+- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: check the output of `vps note root` to test!
 - `templates`: these are explained below, in a separate section.
 
 #### A note on IDs
@@ -240,12 +241,12 @@ You can:
 
 The available note types are 
 
-- `default` 
-- `plain` (for the `note create` command)
+- `default`: for the settings that apply everywhere
+- `plain`: for the basic `note create` command
+- `today`: for "Today's note"
 - `contact` 
 - `event`
 - `project`
-- `today` (for "Today's note")
 
 Here's an example to give you a better idea:
 
@@ -253,10 +254,14 @@ Here's an example to give you a better idea:
 iawriter:
     templates:
         default:
-                filename: '{{year}}-{{month}}-{{day}} {{input}}'
+            filename: '{{year}}-{{month}}-{{day}} {{input}}'
             title: '{{input}} {{day}}-{{month}}-{{year}}'
             tags:
-                - 'journal/{{year}}'
+                - 'todo'
+        today:
+            filename: '{{year}}-{{month}}-{{day}}'
+            tags:
+                - 'log'
                 - 'todo'
         event:
             text: |
@@ -266,7 +271,7 @@ iawriter:
                 {% endfor %}
 ```
 
-This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. Since these are the defaults, this happens for every note type. But, for events, the text is override with a template that lists the attendees of the event.
+This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event.
 
 The default template for the filename is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 
@@ -281,7 +286,7 @@ The variables available to each template depend on the type of note you're confi
 - `query`: the arguments passed to the command as a string, separated by a space
 - `input`: same as query
 
-You can see here that the arguments are passed both in `query` and in `input`. That's on purpose. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. Yet the original arguments are then still available, in `query`.
+You can see here that the arguments are passed both in `query` and in `input`. That's on purpose. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. Yet the original arguments are then still available if you need them, in `query`.
 
 ##### Plain
 
@@ -340,7 +345,6 @@ With:
 
 - `location`: the location in iA Writer for this area, defaults to the name of the area.
 - `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`.
-- `token`: the authentication token required by iA Writer to control it using URL Commands. See iA Writer's Preferences. Make sure to check the *Enable URL Commands* settings and click on the *Manage...* button to acquire a copy of the token.
 
 This is the same as just:
 
@@ -348,13 +352,11 @@ This is the same as just:
 iawriter:
 ```
 
-With this default configuration it's not possible to create new notes. Make sure to set the `token` to be able to do that.
-
 **And of course you can add a `templates` section!** See the Obsidian plugin for information on how that works.
 
 ### Bear
 
-I've used Bear for a little under a year, and stopped using it in August 2020. This plugin still works however!
+I've used Bear for a little under a year, and stopped using it in August 2020. I went back to sticking my notes in Markdown files on disk. I found that to be more flexible in the end. This plugin is still supported however!!
 
 The configuration values for Bear are:
 
@@ -365,7 +367,7 @@ bear:
 
 With:
 
-- `token`: the authentication token required by Bear to control it using URL Commands. To get your token, switch to Bear, select the Help menu and in there the API Token section.
+- `token`: the authentication token required by Bear to control it using URL Commands. To get your token, switch to Bear, select the Help menu and, in there, the API Token section.
 
 **And of course you can add a `templates` section!** See the Obsidian plugin for information on how that works.
 
@@ -384,6 +386,10 @@ In my work folder, where I have the biggest list of projects, I have created sev
 
 Projects are sorted in the order they appear in OmniFocus, but thanks to Alfred's smart filtering the more you use a project, the higher it will get on the list.
 
+This plugin supports "YAML Back Matter" configuration: if an OmniFocus project *ends* with a piece of YAML, its content is available to every command that works with projects. These commands in turn can use this to their benefit. See the Obsidian (and iA Writer and Bear) note plugins for example, as well as the Alfred plugin.
+
+The YAML Back Matter applies specifically to OmniFocus, but it should be fairly easy to port to other task management applications.
+
 ### Alfred
 
 I store files on disk for an area in two separate directories:
@@ -391,7 +397,7 @@ I store files on disk for an area in two separate directories:
 1. Documents: everything I create myself (or collaborate on with others)
 2. Reference Material: all documents I get from others as reference or support material.
 
-By enabling the `alfred` plugin on top of the OmniFocus plugin, project files can be browsed inside the Reference Material directory.
+By enabling the Alfred plugin I can browse these directories through a global shortcut.
 
 The configuration looks as follows:
 
@@ -405,6 +411,8 @@ With:
 
 * `documents` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Documents`.
 * `reference material` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Reference Material`.
+
+But wait, there's more:
 
 #### Project Files
 
@@ -445,7 +453,7 @@ With:
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
 
-When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area. Since I don't add or delete contacts that much, this is good enough for me!
+When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area. Since I don't add or delete contacts that much, this is good enough for me.
 
 ### Apple Mail
 
@@ -498,7 +506,7 @@ This can save you a lot of repetitive manual work that's easy to forget.
 
 ### Outlook Calendar
 
-WARNING: this plugin is limited, in two ways:
+**WARNING**: this plugin is limited, in two ways:
 
 1. It's sloooooow. The plugin uses scripting to fetch today's calendar events from Outlook. This takes many seconds, at least in my case.
 2. It doesn't find all events for the day. Recurring items that have not been adapted for today are not found.

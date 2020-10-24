@@ -3,7 +3,7 @@ module VPS
     module Calendar
       include Plugin
 
-      class Configurator < BaseConfigurator
+      class CalendarConfigurator < Configurator
         def process_area_configuration(area, hash)
           config = {
             name: force(hash['name'], String) || nil,
@@ -17,26 +17,26 @@ module VPS
         end
       end
 
-      class Repository < BaseRepository
+      class CalendarRepository < Repository
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
         def find_all(context, date = Date.today)
           database = CalendarDatabase.new(context.configuration[:name])
           database.all_events_for(date).map do |record|
-            EntityTypes::Event.new do |e|
+            EntityType::Event.new do |e|
               e.id = record.primary_key.to_s
               e.title = record.title
             end
           end
         end
 
-        def load(context)
+        def load_instance(context)
           database = CalendarDatabase.new(context.configuration[:name])
           id = context.environment['EVENT_ID'] || context.arguments[0]
           record = database.event_by_id(id)
-          event = EntityTypes::Event.new do |e|
+          event = EntityType::Event.new do |e|
             e.id = record.primary_key.to_s
             e.title = record.title
           end
@@ -51,7 +51,7 @@ module VPS
 
       class List < EntityTypeCommand
         def supported_entity_type
-          EntityTypes::Event
+          EntityType::Event
         end
 
         def option_parser
