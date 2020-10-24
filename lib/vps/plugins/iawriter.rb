@@ -40,7 +40,7 @@ module VPS
           location = File.join('/Locations', context.configuration[:location], filename)
           callback = "iawriter://open?path=#{location.url_encode}"
           runner.execute('open', callback)
-          "Opened the note with ID '#{note.id}' in iA Writer"
+          "Opened note '#{note.title}' in iA Writer"
         end
       end
 
@@ -58,15 +58,6 @@ module VPS
             parser.separator ''
             parser.separator 'Where <noteID> is the ID of the note to edit'
           end
-        end
-
-        def run(context)
-          note = context.load
-          open_note(context, note)
-        end
-
-        def resolve_note(context)
-          context.load
         end
       end
 

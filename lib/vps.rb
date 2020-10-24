@@ -32,6 +32,7 @@ require 'vps/cli'
 require 'vps/plugin'
 require 'vps/cache_support'
 require 'vps/note_support'
+require 'vps/xcall'
 
 # Extensions
 class String

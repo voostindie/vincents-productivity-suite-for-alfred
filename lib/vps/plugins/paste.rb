@@ -45,7 +45,7 @@ module VPS
         end
 
         def text_from(note)
-          note.id
+          note.title
         end
       end
 

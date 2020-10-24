@@ -2,305 +2,153 @@ module VPS
   module Plugins
     module Bear
       include Plugin
-      # TODO: fix this plugin for VPS 3.0
-      # TODO: reuse stuff from the Obsidian plugin. Much is the same!
 
       class Configurator < BaseConfigurator
+        include NoteSupport::Configurator
+
         def process_area_configuration(area, hash)
           config = {
-            finders: {},
-            creators: {}
+            tag: hash['tag'] || area[:name],
+            token: hash['token'] || 'TOKEN_NOT_CONFIGURED'
           }
-          if hash['finders']
-            hash['finders'].each_pair do |name, finder|
-              config[:finders][name] = {
-                description: finder['description'] || "No description available",
-                scope: (finder['scope'] || ['global']).filter { |s| %w(global contact event project).include?(s) }.map { |s| s.to_sym },
-                term: finder['term'] || '{{input}}',
-                tags: finder['tags'] || []
-              }
-            end
-          end
-          %w(default plain contact event project).each do |set|
-            creators = if hash['creators'] && hash['creators'][set] then
-                          hash['creators'][set]
-                        else
-                          {}
-                        end
-            config[:creators][set.to_sym] = {
-              title: creators['title'] || nil,
-              text: creators['text'] || nil,
-              tags: creators['tags'] || nil
-            }
-          end
-          config[:creators][:default][:title] ||= '{{input}}'
-          config[:creators][:default][:text] ||= ''
-          config[:creators][:default][:tags] ||= []
+          process_templates(config, hash)
           config
         end
       end
 
-      # class Repository < PluginSupport::Repository
-      #   def self.entity_class
-      #     Types::Note
-      #   end
-      #
-      #   def load_from_context(context)
-      #     raise 'Repository.load_from_context is not supported in Bear'
-      #   end
-      # end
-      #
-      # def self.commands_for(area, entity)
-      #   if entity.is_a?(Types::Project)
-      #     [
-      #       {
-      #         title: 'Create a note in Bear',
-      #         arg: "note project #{entity.id}",
-      #         icon: {
-      #           path: "icons/bear.png"
-      #         }
-      #       },
-      #       *self.add_finders(area, entity.name, :project)
-      #     ]
-      #   elsif entity.is_a?(Types::Contact)
-      #     [
-      #       {
-      #         title: 'Create a note in Bear',
-      #         arg: "note contact #{entity.id}",
-      #         icon: {
-      #           path: "icons/bear.png"
-      #         }
-      #       },
-      #       *self.add_finders(area, entity.name, :contact)
-      #     ]
-      #   elsif entity.is_a?(Types::Event)
-      #     [{
-      #        title: 'Create a note in Bear',
-      #        arg: "note event #{entity.id}",
-      #        icon: {
-      #          path: "icons/bear.png"
-      #        }
-      #      },
-      #      *self.add_finders(area, entity.title, :event)
-      #     ]
-      #   else
-      #     raise "Unsupported entity class for collaboration: #{entity.class}"
-      #   end
-      # end
-      #
-      # def self.add_finders(area, query, type)
-      #   finders = []
-      #   area['bear'][:finders].each_pair do |name, finder|
-      #     if finder[:scope].include?(type)
-      #       finders << {
-      #         title: finder[:description],
-      #         arg: "note find #{name} #{query}",
-      #         icon: {
-      #           path: 'icons/bear.png'
-      #         }
-      #       }
-      #     end
-      #   end
-      #   finders
-      # end
-      #
-      # class Finders
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available global finders'
-      #     end
-      #   end
-      #
-      #   def run
-      #     finders = []
-      #     @context.focus['bear'][:finders].each_pair do |name, finder|
-      #       if finder[:scope].include?(:global)
-      #         finders << {
-      #           uid: name,
-      #           arg: name,
-      #           title: finder[:description]
-      #         }
-      #       end
-      #     end
-      #     finders
-      #   end
-      # end
-      #
-      # class Find
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Find all notes matching the search criteria'
-      #       parser.separator 'Usage: note find <query> [criteria]'
-      #       parser.separator ''
-      #       parser.separator 'Where <query> is a reference to a finder in your configuration.'
-      #     end
-      #   end
-      #
-      #   def run(runner = Shell::SystemRunner.new)
-      #     arguments = @context.arguments
-      #     finder = @context.focus['bear'][:finders][arguments.shift]
-      #     unless finder
-      #       puts "ERROR: finder doesn't exist!"
-      #       return
-      #     end
-      #     context = {'input' => arguments.join(' ')}
-      #     query = [finder[:term].render_template(context)]
-      #     query << finder[:tags].map { |tag| '#' + tag.render_template(context) + '#' }
-      #     term = query.flatten.compact.join(' ').url_encode
-      #     url = "bear://x-callback-url/search?term=#{term}"
-      #     runner.execute("open", url)
-      #     nil
-      #   end
-      # end
-      #
-      # class Plain
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new, empty note, optionally with a title'
-      #       parser.separator 'Usage: note plain [title]'
-      #     end
-      #   end
-      #
-      #   def initialize(context)
-      #     super(context)
-      #     @creator_set = creator_set
-      #   end
-      #
-      #   def creator_set
-      #     :plain
-      #   end
-      #
-      #   def run(runner = Shell::SystemRunner.new)
-      #     context = create_context
-      #     title = template(:title).render_template(context).url_encode
-      #     text = template(:text).render_template(context).url_encode
-      #     tags = template(:tags)
-      #              .map { |t| t.render_template(context) }
-      #              .map { |t| t.url_encode }
-      #              .join(',')
-      #     callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}"
-      #     runner.execute('open', callback)
-      #     "Created a new note in Bear with title '#{context['input']}'"
-      #   end
-      #
-      #   def create_context
-      #     query = @context.arguments.join(' ')
-      #     date = DateTime.now
-      #     {
-      #       'year' => date.strftime('%Y'),
-      #       'month' => date.strftime('%m'),
-      #       'week' => date.strftime('%V'),
-      #       'day' => date.strftime('%d'),
-      #       'query' => query,
-      #       'input' => query
-      #     }
-      #   end
-      #
-      #   def template(sym)
-      #     templates = @context.focus['bear'][:creators]
-      #     templates[creator_set][sym] || templates[:default][sym]
-      #   end
-      # end
-      #
-      # class Project < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for a project'
-      #       parser.separator 'Usage: note project <projectId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <projectId> is the ID of the project to create a note for'
-      #     end
-      #   end
-      #
-      #   def creator_set
-      #     :project
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Project) && is_entity_manager_available?(Types::Project)
-      #   end
-      #
-      #   def run
-      #     @project = @context.load_entity(Types::Project)
-      #     super
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @project.name
-      #     context['name'] = @project.name
-      #     context
-      #   end
-      # end
-      #
-      # class Contact < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for a contact'
-      #       parser.separator 'Usage: note contact <contactId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <contactId> is the ID of the contact to create a note for'
-      #     end
-      #   end
-      #
-      #   def creator_set
-      #     :contact
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Contact) && is_entity_manager_available?(Types::Contact)
-      #   end
-      #
-      #   def run
-      #     @contact = @context.load_entity(Types::Contact)
-      #     super
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @contact.name
-      #     context['name'] = @contact.name
-      #     context
-      #   end
-      # end
-      #
-      # class Event < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for an event'
-      #       parser.separator 'Usage: note event <eventId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <eventId> is the ID of the event to create a note for'
-      #     end
-      #   end
-      #
-      #   def creator_set
-      #     :event
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Event) && is_entity_manager_available?(Types::Event)
-      #   end
-      #
-      #   def run
-      #     @event = @context.load_entity(Types::Event)
-      #     super
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @event.title
-      #     context['title'] = @event.title
-      #     context['names'] = @event.people
-      #     context
-      #   end
-      # end
+      class BearRepository < BaseRepository
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def find_all(context, runner = Xcall.instance)
+          tag = context.configuration[:tag]
+          token = context.configuration[:token]
+          callback = "bear://x-callback-url/search?show_window=no&token=#{token}"
+          callback += "&tag=#{tag}" unless tag.nil?
+          output = runner.execute(callback)
+          if output.nil? || output.empty?
+            return []
+          end
+          JSON.parse(output['notes']).map do |record|
+            EntityTypes::Note.new do |note|
+              note.id = record['identifier']
+              note.title = record['title']
+            end
+          end
+        end
+
+        def load(context, runner = Xcall.instance)
+          if context.environment['NOTE_ID'].nil?
+            id = context.arguments[0]
+            token = context.configuration[:token]
+            callback = "bear://x-callback-url/open-note?id=#{id.url_encode}&show_window=no&token=#{token}"
+            record = runner.execute(callback)
+            EntityTypes::Note.new do |note|
+              note.id = id
+              note.title = record['title'] || nil
+            end
+          else
+            EntityTypes::Note.from_env(context.environment)
+          end
+        end
+
+        def create_or_find(context, note, runner = Xcall.instance)
+          token = context.configuration[:token]
+          title = note.title.url_encode
+          text = note.text.url_encode
+          tags = note.tags.map { |t| t.url_encode }.join(',')
+          callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}&token=#{token}"
+          output = runner.execute(callback)
+          note.id = output['identifier']
+          note
+        end
+      end
+
+      class List < EntityTypeCommand
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'List all notes in this area'
+            parser.separator 'Usage: note list'
+          end
+        end
+
+        def run(context)
+          context.find_all.map do |note|
+            {
+              uid: note.id,
+              title: note.title,
+              subtitle: if context.triggered_as_snippet?
+                          "Paste '#{note.title}' in the frontmost application"
+                        else
+                          "Select an action for '#{note.title}'"
+                        end,
+              arg: if context.triggered_as_snippet?
+                     "[[#{note.title}]]"
+                   else
+                     "#{note.title}"
+                   end,
+              autocomplete: note.title,
+              variables: note.to_env
+            }
+          end
+        end
+      end
+
+      module BearNote
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def run(context, runner = Xcall.instance)
+          note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
+                   context.load
+                 else
+                   create_note(context)
+                 end
+          token = context.configuration[:token]
+          callback = "bear://x-callback-url/open-note?id=#{note.id.url_encode}&token=#{token}"
+          runner.execute(callback)
+          "Opened note '#{note.title}' in Bear"
+        end
+      end
+
+      class Open < EntityInstanceCommand
+        include BearNote
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Open in Bear'
+            parser.separator 'Usage: note edit <noteId>'
+            parser.separator ''
+            parser.separator 'Where <noteID> is the ID of the note to edit'
+          end
+        end
+      end
+
+      class Create < EntityTypeCommand
+        include NoteSupport::PlainTemplateNote, BearNote
+      end
+
+      class Today < EntityTypeCommand
+        include NoteSupport::TodayTemplateNote, BearNote
+      end
+
+      class Project < CollaborationCommand
+        include NoteSupport::ProjectTemplateNote, BearNote
+      end
+
+      class Contact < CollaborationCommand
+        include NoteSupport::ContactTemplateNote, BearNote
+      end
+
+      class Event < CollaborationCommand
+        include NoteSupport::EventTemplateNote, BearNote
+      end
     end
   end
 end

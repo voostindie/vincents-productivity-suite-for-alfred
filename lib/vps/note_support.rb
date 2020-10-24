@@ -19,7 +19,7 @@ module VPS
             filename: force(templates['filename'], String) || nil,
             title: force(templates['title'], String) || nil,
             text: force(templates['text'], String) || nil,
-            tags: force(templates['tags'], String) || nil
+            tags: force_array(templates['tags'], String) || nil
           }
         end
         config[:templates][:default][:filename] ||= nil
@@ -43,6 +43,7 @@ module VPS
         notes.map do |path|
           EntityTypes::Note.new do |note|
             note.id = File.basename(path, '.md')
+            note.title = note.id
             note.path = path
           end
         end
@@ -57,17 +58,24 @@ module VPS
         else
           EntityTypes::Note.new do |note|
             note.id = id
+            note.title = id
             note.path = matches[0]
           end
         end
-
       end
 
       def create_or_find(context, note)
         note.path = File.join(context.configuration[:root], note.id + '.md')
         unless File.exist?(note.path)
+          title = note.title
+          text = note.text
+          tags = note.tags.map { |t| "##{t}" }.join(' ')
+          content = ''
+          content += "# #{title}\n\n" unless title.empty?
+          content += "#{text}" unless content.empty?
+          content += "#{tags}" unless tags.empty?
           File.open(note.path, 'w') do |file|
-            file.puts note.text
+            file.puts content
           end
         end
         note
@@ -128,7 +136,7 @@ module VPS
 
     module TemplateNote
       def application
-        puts self.class.name.split('::')[2].downcase
+        self.class.name.split('::')[2].downcase
       end
 
       def supported_entity_type
@@ -141,27 +149,18 @@ module VPS
 
       def create_note(context)
         template_context = create_template_context(context)
-        title = template(context, :title).render_template(template_context).strip
         filename_template = template(context, :filename)
-        filename = if filename_template.nil?
-                     title
-                   else
-                     filename_template.render_template(template_context).strip
-                   end
-        content = template(context, :text).render_template(template_context)
-        tags = template(context, :tags)
-                 .map { |t| t.render_template(template_context).strip }
-                 .map { |t| "##{t}" }
-                 .join(' ')
-        text = ''
-        text += "# #{title}\n\n" unless title.empty?
-        text += "#{content}" unless content.empty?
-        text += "#{tags}" unless tags.empty?
-
-        filename = Zaru.sanitize!(filename)
         note = EntityTypes::Note.new do |n|
-          n.id = filename
-          n.text = text
+          n.title = template(context, :title).render_template(template_context).strip
+          n.id = if filename_template.nil?
+                   n.title
+                 else
+                   filename_template.render_template(template_context).strip
+                 end
+          n.id = Zaru.sanitize!(n.id)
+          n.text = template(context, :text).render_template(template_context)
+          n.tags = template(context, :tags)
+                     .map { |t| t.render_template(template_context).strip }
         end
         context.create_or_find(note, EntityTypes::Note)
       end
