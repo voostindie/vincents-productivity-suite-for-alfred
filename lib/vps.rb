@@ -27,7 +27,6 @@ require 'zaru'
 
 # Core code
 require 'vps/output_formatter'
-require 'vps/filesystem'
 require 'vps/shell'
 require 'vps/jxa'
 require 'vps/version'
