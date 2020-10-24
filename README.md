@@ -6,16 +6,16 @@ This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothin
 
 But please remember that I've had exactly one person in mind while creating this suite: me. *Your mileage may vary!*
 
-**Update October 2020**: This is version 3.0 of this tool. More than one year after version 2.0, from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small thing, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. But the configuration file hasn't changed.
+**Update October 2020**: This is version 3.0 of this tool. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
 
 ## So, what's this all about?
 
 This is a command-line interface (CLI) as well as an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ruby scripts that make my daily computer work a lot more efficient. So, yes it's macOS only, and specifically it works with:
 
 - Alfred (duh!)
+- Obsidian
 - iA Writer
 - Bear
-- Obsidian
 - OmniFocus
 - Apple Contacts
 - Apple Mail
@@ -24,7 +24,7 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Desktop wallpapers
 - BitBar
 
-A lot of activity at my computer consists of managing projects and tasks in OmniFocus, keeping notes in iA Writer, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly create notes and e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
+A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly edit notes and write e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
 
 An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus.
 
@@ -58,9 +58,7 @@ This CLI and Alfred workflow can:
     - Paste its title into the frontmost application
     - Paste its attendees into the frontmost application
 
-And more!
-
-It may not sound like much, but for me this is an enormous time saver.
+...and more!
 
 ## Installation
 
@@ -190,19 +188,18 @@ Where:
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
 - `root`: the directory under which all files for this reside on disk. The default is set to `~/<name>`.
 
-### iA Writer
+### Obsidian (and note applications in general!)
 
-As of April 2020 I've switched to iA Writer for all my note keeping. I've used Bear for almost a year, and before that I had all my notes in plaintext Markdown notes. I started to miss that, so I switched back.
+Since October 2020 I'm using Obsidian for note keeping. It's my current editor of choice. It uses Markdown files on disk. I prefer that over having all my notes - thousands of them, collected over many years - hidden in some database.
 
-(Bear support is still available, but not actively maintained.)
- 
-The default configuration for iA Writer is the following:
+The Obsidian plugin supports creating notes from scratch or from existing entities (contacts, events, projects) using *templates*. This templating system is explained here, but it **also applies to the other note keeping applications: iA Writer and Bear**. It works across all apps!
+
+Overall instructions on the usage of Obsidian are:
 
 ```yaml
-iawriter:
-    location:
+obsidian:
+    vault:
     path:
-    token:
     templates:
         default:
             filename: null
@@ -213,45 +210,48 @@ iawriter:
 
 With:
 
-- `location`: the location in iA Writer for this area, defaults to the name of the area.
-- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`.
-- `token`: the authentication token required by iA Writer to control it using URL Commands. See iA Writer's Preferences. Make sure to check the *Enable URL Commands* settings and click on the *Manage...* button to acquire a copy of the token.
-
-This is the same as just:
-
-```yaml
-iawriter:
-```
-
-With this default configuration it's not possible to create new notes. Make sure to set the `token` to be able to do that.
+- `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
+- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
+- `templates`: these are explained below, in a separate section.
 
 #### A note on IDs
 
-This plugin works by assuming that the filename of each note, excluding its extension, is unique. That means that you can move notes around in subdirectories (for example to an archive folder) without breaking anything.
+This plugin works by assuming that the filename of each note, excluding its extension, is unique. That means that you can move notes around in subdirectories (for example to an archive folder) without breaking anything. 
 
 What's there to break? Two things:
 
 1. Note selections. If you do a `vps note list` you'll get all note IDs.
-2. Note links. Pressing `;n` allows you to put a link to a note anywhere. This link is not actually a link, but just plaintext: `[[Like This]]`. Several editors support this out of the box. iA Writer does not, as of yet, but that's no problem: a link is just text.
+2. Note links. Pressing `;n` allows you to put a link to a note anywhere. This link is not actually a link, but just plaintext: `[[Like This]]`.
 
-#### Template
+This is, by the way, fully compatible with how Obsidian works.
 
-The iA Writer support in VPS allows you to set up templates for different types of entities. Each template consists of a set of property, where the value of each property is a [Liquid template](https://shopify.github.io/liquid/).
+#### Templates
 
-Each note has a filename, title, text, and a set of tags for the note. The defaults are shown above. 
+The note templating support in VPS allows you to set up templates for different types of entities, and for all parts of a note separately. Every individual property you can configure is actually a [Liquid template](https://shopify.github.io/liquid/).
+
+Each note has a filename, a title, a text and a set of tags, the defaults are shown in the configuration of Obsidian above. 
 
 You can:
 
-- Change the defaults and
-- Override the defaults, partly or in full, for a different template set. The available sets are `default`, `plain`, `contact`, `event`, `project` and `today`.
+- Change the defaults that apply to each type of note.
+- Change settings for a specific type of note. 
 
-For example:
+The available note types are 
+
+- `default` 
+- `plain` (for the `note create` command)
+- `contact` 
+- `event`
+- `project`
+- `today` (for "Today's note")
+
+Here's an example to give you a better idea:
 
 ```yaml
 iawriter:
     templates:
         default:
-		        filename: '{{year}}-{{month}}-{{day}} {{input}}'
+                filename: '{{year}}-{{month}}-{{day}} {{input}}'
             title: '{{input}} {{day}}-{{month}}-{{year}}'
             tags:
                 - 'journal/{{year}}'
@@ -264,11 +264,11 @@ iawriter:
                 {% endfor %}
 ```
 
-This prepends the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. This happens for every note type, since these 2 rules are in the `defaults` section. Then, for events, the text is pre-filled with the list of attendees at the event.
+This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. Since these are the defaults, this happens for every note type. But, for events, the text is override with a template that lists the attendees of the event.
 
-The default template for the filename is `null` (in YAML). If none is specified, the system will use the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
+The default template for the filename is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 
-The available variables depend on the thing you're creating a note for:
+The variables available to each template depend on the type of note you're configuring:
 
 ##### Every note type
 
@@ -279,11 +279,7 @@ The available variables depend on the thing you're creating a note for:
 - `query`: the arguments passed to the command as a string, separated by a space
 - `input`: same as query
 
-The arguments are passed both in `query` and in `input`. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. But, if you want, the arguments are still available.
-
-##### Today
-
-- `input`: empty; there is no input text
+You can see here that the arguments are passed both in `query` and in `input`. That's on purpose. `input` is meant to be overridden by different note types so that the default template (`{{input}}`) is always sensible. Yet the original arguments are then still available, in `query`.
 
 ##### Plain
 
@@ -305,11 +301,11 @@ The arguments are passed both in `query` and in `input`. `input` is meant to be 
 - `input`: the name of the project
 - `name`: the name of the project
 
-For projects managed in OmniFocus (next section) there's a special add-on: you can override the templates for the title, the text and the tags, *per project*. You do that by adding a "Yaml Back Matter" section at the end of the note of the project, like so:
+For projects managed in OmniFocus (see later) there's a special add-on: you can override the templates for the title, the text and the tags, *per project*. You do that by adding a "Yaml Back Matter" section at the end of the note of the project, like so:
 
 ```yaml
 ---
-iawriter:
+<plugin>:
     title: YOUR TITLE TEMPLATE
     text: YOUR TEXT HERE
     tags: YOUR TAGS HERE
@@ -317,56 +313,59 @@ iawriter:
 
 Just to be sure: put this at the **bottom** of the note, not at the top!
 
-### Obsidian
+You can have configurations for different plugins next to each other; VPS will pick the right one.
 
-As of 19-10-2020 I'm trying out Obsidian for keeping notes. Switching from iA Writer to Obsidian was actually very easy, since they both work on top of a directory with files, and the whole ID resolving I built for iA Writer just happens to work for Obsidian as well! Quite nice!
+##### Today
 
-Overall instructions on the usage of Obsidian are:
-
-```yaml
-obsidian:
-    vault:
-    path:
-```
-
-With:
-
-- `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
-- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: run `ls \`vps note root\`` to test!
-
-For the rest, just follow the instructions for iA Writer in the previous section, replacing 'iawriter' with 'obsidian'. Everything works the exact same way: templates, the today note, pulling defaults from OmniFocus. Everything!
+- `input`: empty; there is no input text
 
 Tip: Obsidian has a nice *Daily notes* plugin but if you use VPS I advise you to disable it and use VPS instead. Why? Because VPS gives you much more powerful templates, the template is stored outside of your vault (so, no garbage), and you can trigger it from any application using Alfred's global shortcut, not just from within Obsidian. By setting the filename template to `{{year}}-{{month}}-{{day}}` compatibility is guaranteed.
 
-### Bear
+### iA Writer
 
-(Disclaimer: I'm not using Bear myself anymore, so I don't have this plugin in my own configuration anymore.)
+Between April 2020 and October 2020 I've used iA Writer for all my note keeping, going back to trusty old Markdown on disk, after using Bear for a little under a year. 
 
-Bear's configuration is very similar to iA Writer's. The differences are:
-
-- The settings `path`, `location` and `token` do not apply.
-- Templates are configured under the key `creators` instead of `templates`. 
-- Finders can run often-used searches (see below).
-
-#### Finders
-
-A finder allows you to run a query against Bear, using pre-defined criteria. Here's how to configure:
+The configuration values for iA Writer are:
 
 ```yaml
-bear:
-    finders:
-        description:
-        scope:
-        term:
-        tags:
+iawriter:
+    location:
+    path:
+    token:
 ```
 
 With:
 
-- `description`: your personal description of this finder, shown in the CLI.
-- `scope`: either `global`, `contact`, `event` or `project`. This defines to what entity the finder applies.
-- `term`: the search term to use. This default to `{{input}}` which is the user input on the CLI.
-- `tags`: tags to add to the search command.
+- `location`: the location in iA Writer for this area, defaults to the name of the area.
+- `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`.
+- `token`: the authentication token required by iA Writer to control it using URL Commands. See iA Writer's Preferences. Make sure to check the *Enable URL Commands* settings and click on the *Manage...* button to acquire a copy of the token.
+
+This is the same as just:
+
+```yaml
+iawriter:
+```
+
+With this default configuration it's not possible to create new notes. Make sure to set the `token` to be able to do that.
+
+**And of course you can add a `templates` section!** See the Obsidian plugin for information on how that works.
+
+### Bear
+
+I've used Bear for a little under a year, and stopped using it in August 2020. This plugin still works however!
+
+The configuration values for Bear are:
+
+```yaml
+bear:
+    token:
+```
+
+With:
+
+- `token`: the authentication token required by Bear to control it using URL Commands. To get your token, switch to Bear, select the Help menu and in there the API Token section.
+
+**And of course you can add a `templates` section!** See the Obsidian plugin for information on how that works.
 
 ### OmniFocus
 
@@ -405,6 +404,22 @@ With:
 * `documents` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Documents`.
 * `reference material` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Reference Material`.
 
+#### Project Files
+
+The Alfred plugin also adds a command to projects: you can browse the files belonging to that project.
+
+The way the plugin resolves the directory on disk is by taking the path to the reference material (see previous section) and appending the name of the project to it.
+
+In case of OmniFocus you can have a different specified in the note of the project, in the "YAML Back Matter", for example:
+
+```yaml
+---
+alfred:
+    folder: My Project
+```
+
+This will make Alfred browse the "My Project" folder in the reference material, even if the project is named differently.
+
 ### Apple Contacts
 
 For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I have set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see and use them on all your devices!)
@@ -428,11 +443,11 @@ With:
 
 Contacts are sorted by name. But thanks to Alfred, the more you use a name, the higher it will get in the result list.
 
-When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area.
+When groups are large, fetching their contacts can take some time. To speed up VPS, you can enable the cache. This stores output on disk, speeding up consecutive runs. The cache is pretty dumb; it doesn't automatically refresh in any way. To flush the cache, run `vps area flush`, which deletes all existing caches for the active area. Since I don't add or delete contacts that much, this is good enough for me!
 
 ### Apple Mail
 
-The mail plugin is useful as an extension on top of the Contacts plugin, to send e-mails to contacts.
+The mail plugin adds a command to Contact and Group entities, by allowing you to send e-mails to them.
 
 The configuration looks as follows:
 
@@ -445,9 +460,13 @@ With:
 
 - `from`: in case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail. If the account is not found, Mail will fall back to its default.
 
+So, how do you quickly send a regular mail to a bunch of people? Stick them in a group, select the group in Alfred, select "Write an e-mail", and watch the magic happen ;-)
+
 ### Apple Calendar
 
 This plugin uses SQL to fetch data from the the Apple Calendar cache, and is definitely not perfect. It doesn't always find all events for the day, even though it tries a nice of job of combining one-time events and recurring events. And it's fast.
+
+It also fetches the attendees from the events, and makes them available to other commands.
 
 The configuration looks as follows:
 
@@ -516,6 +535,12 @@ With:
 
 - `label`: the text to show in the menu bar. (Hint: try emoji's!)
 
+
+### Paste
+
+The "Paste" plugin has no configuration and it's automatically enabled for all area's. What it does is provide a command named `paste` to various entity types, allowing you to paste it to the frontmost application. That can save you some typing in the long run.
+
+For events it adds another command: `paste-attendees`, which pastes the names of all attendees from the selected event, straight from you calendar.
 
 ## Performing actions when the focus changes
 
