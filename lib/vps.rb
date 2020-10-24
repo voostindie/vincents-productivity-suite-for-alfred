@@ -29,8 +29,9 @@ require 'vps/state'
 require 'vps/context'
 require 'vps/command_runner'
 require 'vps/cli'
-require 'vps/cache_support'
 require 'vps/plugin'
+require 'vps/cache_support'
+require 'vps/note_support'
 
 # Extensions
 class String
