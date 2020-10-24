@@ -60,29 +60,68 @@ module VPS
           end
           context.state.change_focus(area[:key], context.configuration)
           context.state.persist
+          context = SystemContext.new(context.configuration, context.state, context.arguments)
           context.configuration.actions.each_key do |plugin_name|
             # TODO: create a different kind of context for the action; now it gets the complete configuration.
             # Possible alternative: new area plugin configuration, action configuration
+            # On the other hand: maybe some actions need the complete configuration...
             Registry.instance.plugins[plugin_name].action.run(context)
           end
           "#{area[:name]} is now the focused area"
         end
       end
 
-      # class Flush
-      #   include PluginSupport, CacheSupport
+      class Flush < EntityTypeCommand
+        include CacheSupport
+
+        def supported_entity_type
+          EntityTypes::Area
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Flushes any caches for all plugins in this area'
+            parser.separator 'Usage: area flush'
+          end
+        end
+
+        def run(context)
+          total = flush_plugin_cache(context.area_key)
+          "Flushed #{total} cache file(s) for area #{context.area_key}"
+        end
+      end
+
+      #
+      # class Commands
+      #   include PluginSupport
       #
       #   def self.option_parser
       #     OptionParser.new do |parser|
-      #       parser.banner = 'Flushes any caches for all plugins in this area'
-      #       parser.separator 'Usage: area flush'
+      #       parser.banner = 'List all available commands for the specified contact'
+      #       parser.separator 'Usage: contact commands <contactId>'
+      #       parser.separator ''
+      #       parser.separator 'Where <contactId> is the ID of the contact to act upon'
       #     end
       #   end
       #
-      #   def run
-      #     total = flush_plugin_cache
-      #     "Flushed #{total} cache file(s) for area #{@context.focus[:name]}"
+      #   def can_run?
+      #     is_entity_present?(Types::Contact)
       #   end
+      #
+      #   def run
+      #     contact = Contacts::load_entity(@context)
+      #     commands = []
+      #     commands << {
+      #       title: 'Open in Contacts',
+      #       arg: "contact open #{contact.id}",
+      #       icon: {
+      #         path: "icons/contacts.png"
+      #       }
+      #     }
+      #     commands += @context.collaborator_commands(contact)
+      #     commands.flatten
+      #   end
+      # end
     end
   end
 end

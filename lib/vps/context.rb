@@ -1,17 +1,18 @@
 module VPS
-  class Context
-    attr_reader :configuration, :arguments, :environment
+  class RepositoryContext
+    attr_reader :area_key, :configuration, :arguments, :environment
 
-    def initialize(configuration, arguments, environment)
-      @configuration = configuration
+    def initialize(area, plugin_name, arguments, environment)
+      @area_key = area[:key]
+      @configuration = area[plugin_name]
       @arguments = arguments
       @environment = environment
     end
   end
 
-  class CommandContext < Context
-    def initialize(configuration, arguments, environment, entity_type_contexts = {})
-      super(configuration, arguments, environment)
+  class CommandContext < RepositoryContext
+    def initialize(area, plugin_name, arguments, environment, entity_type_contexts = {})
+      super(area, plugin_name, arguments, environment)
       @entity_type_contexts = entity_type_contexts
       @entity_instance = nil
     end

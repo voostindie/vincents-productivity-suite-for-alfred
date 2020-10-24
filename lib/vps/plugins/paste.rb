@@ -29,11 +29,7 @@ module VPS
         end
 
         def run(context, runner = Jxa::Runner.new('alfred'))
-          # TODO: re-enable caching
-          # entity = cache(@context.arguments.join(' ')) do
-          entity = context.load
-          # end
-          runner.execute('paste', text_from(entity))
+          runner.execute('paste', text_from(context.load))
           nil
         end
 
@@ -126,53 +122,6 @@ module VPS
           group.people.map { |p| "\"#{p['name']}\" <#{p['email']}>" }.join(', ')
         end
       end
-
-      # def self.commands_for(area, entity)
-      #   if entity.is_a?(Types::Note)
-      #     {
-      #       title: 'Paste note name to the frontmost app',
-      #       arg: "text note #{entity.id}",
-      #       icon: {
-      #         path: "icons/clipboard.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Project)
-      #     {
-      #       title: 'Paste project name to the frontmost app',
-      #       arg: "text project #{entity.id}",
-      #       icon: {
-      #         path: "icons/clipboard.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Contact)
-      #     {
-      #       title: 'Paste contact name to the frontmost app',
-      #       arg: "text contact #{entity.id}",
-      #       icon: {
-      #         path: "icons/clipboard.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Event)
-      #     {
-      #       title: 'Paste event title to the frontmost app',
-      #       arg: "text event #{entity.id}",
-      #       icon: {
-      #         path: "icons/clipboard.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Group)
-      #     {
-      #       title: 'Paste group addresses to the frontmost app',
-      #       arg: "text group #{entity.id}",
-      #       icon: {
-      #         path: "icons/clipboard.png"
-      #       }
-      #     }
-      #   else
-      #     raise "Unsupported entity class for collaboration: #{entity.class}"
-      #   end
-      # end
-      #
     end
   end
 end

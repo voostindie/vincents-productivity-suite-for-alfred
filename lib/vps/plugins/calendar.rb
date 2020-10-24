@@ -75,29 +75,6 @@ module VPS
         end
       end
 
-      # class Commands
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available commands for the event'
-      #       parser.separator 'Usage: event commands <eventId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <eventId> is the ID of the event to act upon'
-      #     end
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Event)
-      #   end
-      #
-      #   def run
-      #     event = Calendar::load_entity(@context)
-      #     commands = []
-      #     commands + @context.collaborator_commands(event)
-      #   end
-      # end
-
       class CalendarDatabase
         # Dates in SQLite start on January 1st 2001 instead of the usual January 1st 1970.
         # So we need to compensate.

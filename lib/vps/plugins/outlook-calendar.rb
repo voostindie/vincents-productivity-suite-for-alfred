@@ -3,6 +3,8 @@ module VPS
     module OutlookCalendar
       include Plugin
 
+      # TODO: fix this plugin for VPS 3.0
+
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)
           {

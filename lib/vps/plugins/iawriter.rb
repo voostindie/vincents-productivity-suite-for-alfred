@@ -2,6 +2,8 @@ module VPS
   module Plugins
     module IAWriter
       include Plugin
+      # TODO: fix this plugin for VPS 3.0
+      # TODO: reuse stuff from the Obsidian plugin. Much is the same!
 
       class Configurator < BaseConfigurator
         def process_area_configuration(area, hash)

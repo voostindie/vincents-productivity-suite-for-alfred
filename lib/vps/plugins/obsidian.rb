@@ -222,6 +222,25 @@ module VPS
         end
       end
 
+      class Today < EntityTypeCommand
+        include NoteTemplate
+
+        def supported_entity_type
+          EntityTypes::Note
+        end
+
+        def template_set
+          :today
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create or open today\'s note'
+            parser.separator 'Usage: note today'
+          end
+        end
+      end
+
       class Project < CollaborationCommand
         include NoteTemplate
 
@@ -301,122 +320,44 @@ module VPS
           template_context
         end
       end
-      #
-      # def self.commands_for(area, entity)
-      #   if entity.is_a?(Types::Project)
-      #     {
-      #       title: 'Create a note in Obsidian',
-      #       arg: "note project #{entity.id}",
-      #       icon: {
-      #         path: "icons/obsidian.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Contact)
-      #     {
-      #       title: 'Create a note in Obsidian',
-      #       arg: "note contact #{entity.id}",
-      #       icon: {
-      #         path: "icons/obsidian.png"
-      #       }
-      #     }
-      #   elsif entity.is_a?(Types::Event)
-      #     {
-      #       title: 'Create a note in Obsidian',
-      #       arg: "note event #{entity.id}",
-      #       icon: {
-      #         path: "icons/obsidian.png"
-      #       }
-      #     }
-      #   else
-      #     raise "Unsupported entity class for collaboration: #{entity.class}"
-      #   end
-      # end
-      #
-      #
-      # class Commands < NoteCommand
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available commands for the specified note'
-      #       parser.separator 'Usage: note commands <noteId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <noteID> is the ID of the note to act upon'
-      #     end
-      #   end
-      #
-      #   def run
-      #     note = Obsidian::load_entity(@context)
-      #     commands = []
-      #     commands << {
-      #       title: 'Open in Obsidian',
-      #       arg: "note edit #{note.id}",
-      #       icon: {
-      #         path: "icons/obsidian.png"
-      #       }
-      #     }
-      #     commands << {
-      #       title: 'Open in Marked 2',
-      #       arg: "note view #{note.id}",
-      #       icon: {
-      #         path: "icons/marked.png"
-      #       }
-      #     }
-      #     commands += @context.collaborator_commands(note)
-      #   end
-      # end
-      #
-      #
-      #
 
-      #
-      # class Event < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create a new note for an event'
-      #       parser.separator 'Usage: note event <eventId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <eventId> is the ID of the event to create a note for'
-      #     end
-      #   end
-      #
-      #   def template_set
-      #     :event
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Event) && is_entity_manager_available?(Types::Event)
-      #   end
-      #
-      #   def run
-      #     @event = @context.load_entity(Types::Event)
-      #     super
-      #   end
-      #
-      #   def create_context
-      #     context = super
-      #     context['input'] = @event.title
-      #     context['title'] = @event.title
-      #     context['names'] = @event.people
-      #     context
-      #   end
-      # end
-      #
-      # class Today < Plain
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Create or open today\'s note'
-      #       parser.separator 'Usage: note today'
-      #     end
-      #   end
-      #
-      #   def template_set
-      #     :today
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_manager_available?(Types::Event)
-      #   end
-      # end
+      class Event < CollaborationCommand
+        include NoteTemplate
+
+        def name
+          'note'
+        end
+
+        def supported_entity_type
+          EntityTypes::Event
+        end
+
+        def collaboration_entity_type
+          EntityTypes::Note
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Create or edit a note for an event'
+            parser.separator 'Usage: event note <eventID>'
+            parser.separator ''
+            parser.separator 'Where <eventID> is the ID of the event to create a note for'
+          end
+        end
+
+        def template_set
+          :event
+        end
+
+        def create_template_context(context)
+          event = context.load
+          template_context = super
+          template_context['input'] = event.title
+          template_context['title'] = event.title
+          template_context['names'] = event.people
+          template_context
+        end
+      end
     end
   end
 end

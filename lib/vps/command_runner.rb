@@ -36,15 +36,15 @@ module VPS
                   entity_type_contexts = entity_types.map do |entity_type|
                     repository = resolve_repository(entity_type)
                     plugin = Registry.instance.for_repository(repository)
-                    context = Context.new(@area[plugin.name], @arguments, @environment)
+                    context = RepositoryContext.new(@area, plugin.name, @arguments, @environment)
                     [entity_type, {repository: repository, context: context}]
                   end.to_h
 
                   plugin = Registry.instance.for_command(@command)
-                  CommandContext.new(@area[plugin.name], @arguments, @environment, entity_type_contexts)
+                  CommandContext.new(@area, plugin.name, @arguments, @environment, entity_type_contexts)
                 end
 
-      if @command.is_a?(VPS::Plugin::EntityInstanceCommand)
+      if @command.is_a?(VPS::Plugin::EntityInstanceCommand) || @command.is_a?(VPS::Plugin::CollaborationCommand)
         instance = context.load
         if instance.nil?
           raise "Aborting. Could not load entity instance!"

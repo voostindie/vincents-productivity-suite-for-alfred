@@ -80,47 +80,13 @@ module VPS
         end
       end
 
-
-      #
-      # class Commands
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available commands for the specified project'
-      #       parser.separator 'Usage: project commands <projectId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <projectId> is the ID of the project to act upon'
-      #     end
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Project)
-      #   end
-      #
-      #   def run
-      #     project = OmniFocus::load_entity(@context)
-      #     commands = []
-      #     commands << {
-      #       title: 'Open in OmniFocus',
-      #       arg: "project open #{project.id}",
-      #       icon: {
-      #         path: "icons/omnifocus.png"
-      #       }
-      #     }
-      #     commands += @context.collaborator_commands(project)
-      #   end
-      # end
-      #
-      # class Focus
-      #   include PluginSupport
-      #
-      #   def run(runner = Jxa::Runner.new('omnifocus'))
-      #     if @context.focus['omnifocus']
-      #       runner.execute('set-focus', @context.focus['omnifocus'][:folder])
-      #     end
-      #   end
-      # end
+      class Focus < BaseAction
+        def run(context, runner = Jxa::Runner.new('omnifocus'))
+          if context.area['omnifocus']
+            runner.execute('set-focus', context.area['omnifocus'][:folder])
+          end
+        end
+      end
     end
   end
 end

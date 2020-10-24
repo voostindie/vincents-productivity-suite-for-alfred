@@ -9,24 +9,35 @@ module VPS
           {
             group: group,
             prefix: force(hash['prefix'], String) || group + ' - ',
-            cache: hash['cache'] || false
+            cache_enabled: hash['cache'] || false,
           }
         end
       end
 
       class ContactRepository < BaseRepository
+        include CacheSupport
+
         def supported_entity_type
           EntityTypes::Contact
         end
 
+        def cache_enabled?(context)
+          context.configuration[:cache_enabled]
+        end
+
         def find_all(context, runner = Jxa::Runner.new('contacts'))
-          contacts = runner.execute('list-people', context.configuration[:group])
-          contacts.map { |contact| EntityTypes::Contact.from_hash(contact) }
+          cache(context) do
+            contacts = runner.execute('list-people', context.configuration[:group])
+            contacts.map { |contact| EntityTypes::Contact.from_hash(contact) }
+          end
         end
 
         def load(context, runner = Jxa::Runner.new('contacts'))
           if context.environment['CONTACT_ID'].nil?
-            EntityTypes::Contact.from_hash(runner.execute('contact-details', context.arguments[0]))
+            id = context.arguments[0]
+            cache(context, id) do
+              EntityTypes::Contact.from_hash(runner.execute('contact-details', id))
+            end
           else
             EntityTypes::Contact.from_env(context.environment)
           end
@@ -34,18 +45,29 @@ module VPS
       end
 
       class GroupRepository < BaseRepository
+        include CacheSupport
+
         def supported_entity_type
           EntityTypes::Group
         end
 
+        def cache_enabled?(context)
+          context.configuration[:cache_enabled]
+        end
+
         def find_all(context, runner = Jxa::Runner.new('contacts'))
-          groups = runner.execute('list-groups', context.configuration[:prefix])
-          groups.map { |group| EntityTypes::Group.from_hash(group) }
+          cache(context) do
+            groups = runner.execute('list-groups', context.configuration[:prefix])
+            groups.map { |group| EntityTypes::Group.from_hash(group) }
+          end
         end
 
         def load(context, runner = Jxa::Runner.new('contacts'))
           if context.environment['GROUP_ID'].nil?
-            EntityTypes::Group.from_hash(runner.execute('group-details', context.arguments[0]))
+            id = context.arguments[0]
+            cache(context, id) do
+              EntityTypes::Group.from_hash(runner.execute('group-details', id))
+            end
           else
             EntityTypes::Group.from_env(context.environment)
           end
@@ -53,8 +75,6 @@ module VPS
       end
 
       module ListSupport
-        extend CacheSupport
-
         def name
           'list'
         end
@@ -67,13 +87,7 @@ module VPS
           end
         end
 
-        def cache_enabled?(context)
-          context.configuration[:cache]
-        end
-
         def run(context)
-          # TODO: fix caching!
-          # cache(context) do
           context.find_all.map do |entity|
             {
               uid: entity.id,
@@ -88,7 +102,6 @@ module VPS
               variables: entity.to_env
             }
           end
-          # end
         end
       end
 
@@ -109,6 +122,7 @@ module VPS
       end
 
       class Open < EntityInstanceCommand
+
         def supported_entity_type
           EntityTypes::Contact
         end
@@ -128,38 +142,6 @@ module VPS
           nil
         end
       end
-
-      #
-      # class Commands
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available commands for the specified contact'
-      #       parser.separator 'Usage: contact commands <contactId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <contactId> is the ID of the contact to act upon'
-      #     end
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Contact)
-      #   end
-      #
-      #   def run
-      #     contact = Contacts::load_entity(@context)
-      #     commands = []
-      #     commands << {
-      #       title: 'Open in Contacts',
-      #       arg: "contact open #{contact.id}",
-      #       icon: {
-      #         path: "icons/contacts.png"
-      #       }
-      #     }
-      #     commands += @context.collaborator_commands(contact)
-      #     commands.flatten
-      #   end
-      # end
     end
   end
 end

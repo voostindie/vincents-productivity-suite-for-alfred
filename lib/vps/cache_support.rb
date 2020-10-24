@@ -5,13 +5,13 @@ module VPS
   # This is a dumb cache; there's no logic to automatically refresh it or anything. Flushing the caching
   # must be done explicitly.
   #
-  # Implementors have to do 3 things
-  # 1. Include PluginSupport *first*
-  # 2. Override the `cache_enabled?` function
-  # 3. Wrap the internals of the run command in a cache block, like so:
+  # Implementors - typically Repositories - have to do 3 things
+  # 1. Include this module
+  # 2. Override the `cache_enabled?` method
+  # 3. Wrap the work that should be cached in a `cache` block, like so:
   #
-  #   def run
-  #     cache do
+  #   def do_stuff(context)
+  #     cache(context) do
   #       # compute heavy output here
   #     end
   #   end
@@ -33,15 +33,15 @@ module VPS
         from_cache(context, id)
       else
         data = yield block
-        to_cache(context, id, data)
+        to_cache(context, id, data) if cache_enabled?(context)
       end
     end
 
     ##
     # Flushes *all* caches for *all* plugins in a single area
-    def flush_plugin_cache
+    def flush_plugin_cache(area_key)
       count = 0
-      Dir.glob(File.join(Dir.home, CACHE_PREFIX + @context.focus[:key].downcase + '-*')) do |f|
+      Dir.glob(File.join(Dir.home, CACHE_PREFIX + area_key + '-*')) do |f|
         File.delete(f)
         count += 1
       end
@@ -53,10 +53,10 @@ module VPS
     def cache_filename(context, id = nil)
       @cache_filename ||= File.join(Dir.home,
                                     CACHE_PREFIX +
-                                      context.configuration[:key].downcase +
+                                      context.area_key +
                                       '-' +
-                                      self.class.name.split('::')[2..].map { |n| n.downcase }.join('-') +
-                                      (id.nil? ? '' : "-#{hash_code(id)}"))
+                                      supported_entity_type.entity_type_name + '-' +
+                                      (id.nil? ? 'all' : "-#{hash_code(id)}"))
     end
 
     ##

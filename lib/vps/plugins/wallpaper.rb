@@ -33,24 +33,21 @@ module VPS
 
         def process_action_configuration(hash)
           {
-            path: force(hash['path'], String) || '/Library/Desktop Pictures/High Sierra.jpg'
+            path: force(hash['path'], String) || '/Library/Desktop Pictures/Frog.jpg'
           }
         end
       end
 
-      #
-      # class Replace
-      #   include PluginSupport
-      #
-      #   def run(runner = Jxa::Runner.new('wallpaper'))
-      #     path = if @context.focus['wallpaper']
-      #              @context.focus['wallpaper'][:path]
-      #            else
-      #              nil
-      #            end || @context.configuration.actions['wallpaper'][:path]
-      #     runner.execute('change-wallpaper', path)
-      #   end
-      # end
+      class Wallpaper < BaseAction
+        def run(context, runner = Jxa::Runner.new('wallpaper'))
+          path = if context.area['wallpaper']
+                   context.area['wallpaper'][:path]
+                 else
+                   nil
+                 end || context.configuration.actions['wallpaper'][:path]
+          runner.execute('change-wallpaper', path)
+        end
+      end
     end
   end
 end

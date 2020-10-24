@@ -53,38 +53,46 @@ module VPS
         include FileBrowser
 
         def initialize
-          @description = "reference material"
+          @description = 'reference material'
           @symbol = :refs
         end
       end
 
-      # class ProjectFiles < CollaborationCommand
-      #   def option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'Browse files in Alfred for a project'
-      #       parser.separator 'Usage: files project <projectId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <projectId> is the ID of the project to browse'
-      #     end
-      #   end
-      #
-      #   def supported_entity_type
-      #     EntityTypes::Project
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(EntityTypes::Project) && is_entity_manager_available?(EntityTypes::Project)
-      #   end
-      #
-      #   def run(context, runner = Jxa::Runner.new('alfred'))
-      #     project = @context.load_entity(EntityTypes::Project)
-      #     area = @context.focus
-      #     folder = strip_emojis(project.name)
-      #     path = File.join(area[:root], area['alfred'][:refs], folder) + '/'
-      #     runner.execute('browse', path)
-      #     "Opened Alfred for directory '#{path}'"
-      #   end
-      # end
+      class ProjectFiles < CollaborationCommand
+        def name
+          'files'
+        end
+
+        def supported_entity_type
+          EntityTypes::Project
+        end
+
+        def collaboration_entity_type
+          EntityTypes::File
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Browse files in Alfred for a project'
+            parser.separator 'Usage: project files <projectId>'
+            parser.separator ''
+            parser.separator 'Where <projectId> is the ID of the project to browse'
+          end
+        end
+
+        def run(context, runner = Jxa::Runner.new('alfred'))
+          project = context.load
+          pp project.config
+          folder = if project.config['alfred']
+                     project.config['alfred']['folder'] || project.name
+                   else
+                     project.name
+                   end
+          path = File.join(context.configuration[:refs], folder) + '/'
+          runner.execute('browse', path)
+          "Opened Alfred for directory '#{path}'"
+        end
+      end
     end
   end
 end
