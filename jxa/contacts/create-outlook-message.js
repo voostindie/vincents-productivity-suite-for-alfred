@@ -7,12 +7,12 @@
  * - the e-mail address to send mail from (optional).
  */
 function run(arguments) {
-    var to = arguments[0];
+    let to = arguments[0];
     if (to == null) {
         throw "No e-mail address specified";
     }
-    var outlook = Application('Microsoft Outlook');
-    var message = outlook.OutgoingMessage().make();
+    let outlook = Application('Microsoft Outlook');
+    let message = outlook.OutgoingMessage().make();
     message.toRecipients.push(outlook.ToRecipient({emailAddress: {address: to}}));
     outlook.open(message);
     outlook.activate();

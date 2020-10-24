@@ -5,16 +5,16 @@
  * Requires one argument: the id of thw contact to retrieve details for.
  */
 function run(argv) {
-    var contactId = argv[0];
+    let contactId = argv[0];
     if (contactId == null) {
         throw "No contact ID specified as argument";
     }
 
-    var contact = Application('Contacts')
+    let contact = Application('Contacts')
         .people
         .byId(contactId);
 
-    var result = {
+    let result = {
         id: contact.id(),
         name: contact.name(),
         email: contact.emails.value()[0]

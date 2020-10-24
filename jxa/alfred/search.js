@@ -12,7 +12,7 @@ function run(arguments) {
         throw ('No search argument specified')
     }
 
-    var query = arguments[0];
+    let query = arguments[0];
 
     Application('Alfred 3').search(query);
     Application('System Events').keyCode(RETURN_KEYCODE);

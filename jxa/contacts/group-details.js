@@ -17,7 +17,6 @@ function run(argv) {
     let names = people.name();
     let emails = people.emails.value();
     var i = 0;
-
     let list = ids.map(function(id) {
         return {
             id: id,

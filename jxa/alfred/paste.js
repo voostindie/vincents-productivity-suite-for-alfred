@@ -13,11 +13,11 @@ function run(arguments) {
         throw ('No text specified')
     }
 
-    var text = arguments.join(' ');
+    let text = arguments.join(' ');
 
-    var app = Application.currentApplication();
+    let app = Application.currentApplication();
     app.includeStandardAdditions = true;
-    var clipboard = app.theClipboard;
+    let clipboard = app.theClipboard;
 
     app.setTheClipboardTo(text);
     Application('System Events').keystroke('v', {using: 'command down'});

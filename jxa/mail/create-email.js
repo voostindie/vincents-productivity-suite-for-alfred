@@ -7,14 +7,14 @@
  * - the e-mail address to send mail from (optional).
  */
 function run(arguments) {
-    var to = arguments[0];
+    let to = arguments[0];
     if (to == null) {
         throw "No e-mail address specified";
     }
 
-    var mail = Application('Mail');
-    var message = mail.OutgoingMessage().make();
-    var from = arguments[1];
+    let mail = Application('Mail');
+    let message = mail.OutgoingMessage().make();
+    let from = arguments[1];
     if (from != null) {
         message.sender = from;
     }
