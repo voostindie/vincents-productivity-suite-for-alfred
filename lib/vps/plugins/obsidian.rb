@@ -28,10 +28,33 @@ module VPS
         include NoteSupport::List
       end
 
-      class Open < EntityInstanceCommand
+      module ObsidianNote
         def supported_entity_type
           EntityTypes::Note
         end
+
+
+        def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
+          note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
+                   context.load
+                 else
+                   create_note(context)
+                 end
+          if note.is_new
+            # Focus on Obsidian and give it some time, so that it can find the new file
+            jxa_runner.execute('activate')
+            sleep(0.5)
+          end
+          vault = context.configuration[:vault]
+          file = note.path[context.configuration[:root].size..]
+          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
+          shell_runner.execute('open', callback)
+          nil # No output here, as Obsidian has its own notification
+        end
+      end
+
+      class Open < EntityInstanceCommand
+        include ObsidianNote
 
         def option_parser
           OptionParser.new do |parser|
@@ -40,30 +63,6 @@ module VPS
             parser.separator ''
             parser.separator 'Where <noteID> is the ID of the note to edit'
           end
-        end
-
-        def run(context, runner = Shell::SystemRunner.new)
-          note = context.load
-          vault = context.configuration[:vault]
-          file = note.path[context.configuration[:root].size..]
-          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
-          runner.execute('open', callback)
-          nil
-        end
-      end
-
-      module ObsidianNote
-        def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
-          note = create_note(context)
-          # Focus on Obsidian and give it some time, so that it can find the new file
-          jxa_runner.execute('activate')
-          sleep(0.5)
-          # Now open the file
-          vault = context.configuration[:vault]
-          file = note.path[context.configuration[:root].size..]
-          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
-          shell_runner.execute('open', callback)
-          nil # No output here, as Obsidian has its own notification
         end
       end
 

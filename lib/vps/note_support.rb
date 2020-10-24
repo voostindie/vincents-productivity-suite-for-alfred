@@ -45,6 +45,7 @@ module VPS
             note.id = File.basename(path, '.md')
             note.title = note.id
             note.path = path
+            note.is_new = false
           end
         end
       end
@@ -60,12 +61,14 @@ module VPS
             note.id = id
             note.title = id
             note.path = matches[0]
+            note.is_new = false
           end
         end
       end
 
       def create_or_find(context, note)
         note.path = File.join(context.configuration[:root], note.id + '.md')
+        note.is_new = false
         unless File.exist?(note.path)
           title = note.title
           text = note.text
@@ -77,6 +80,7 @@ module VPS
           File.open(note.path, 'w') do |file|
             file.puts content
           end
+          note.is_new = true
         end
         note
       end

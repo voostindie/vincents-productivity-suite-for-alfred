@@ -127,7 +127,7 @@ module VPS
     end
 
     class Note < BaseType
-      attr_accessor :path, :title, :text, :tags
+      attr_accessor :path, :title, :text, :tags, :is_new
     end
 
     # The entities below do nothing (yet); they exist only to make the code safer/better.
