@@ -10,7 +10,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Opens the specified note in Marked for viewing'
+            parser.banner = 'Open in Marked'
             parser.separator 'Usage: note view <noteId>'
             parser.separator ''
             parser.separator 'Where <noteID> is the ID of the note to view'

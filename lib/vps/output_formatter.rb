@@ -47,7 +47,7 @@ module VPS
             else
               "- #{entry[id].ljust(width)}: #{entry[:title]}"
             end
-          end.join("\n")
+          end.join("\n")+ "\n"
         elsif !result.nil?
           result
         else
@@ -62,10 +62,6 @@ module VPS
       ##
       # Runs a block, captures its output, formats it for Alfred and returns it.
       def self.format(result)
-        result = yield
-        if result.nil?
-          return
-        end
         if result.is_a? Array
           output = {
             items: result
@@ -74,7 +70,7 @@ module VPS
         elsif !result.nil?
           result
         else
-          {}
+          nil
         end
       end
     end

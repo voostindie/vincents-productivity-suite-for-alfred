@@ -91,37 +91,44 @@ module VPS
         end
       end
 
-      #
-      # class Commands
-      #   include PluginSupport
-      #
-      #   def self.option_parser
-      #     OptionParser.new do |parser|
-      #       parser.banner = 'List all available commands for the specified contact'
-      #       parser.separator 'Usage: contact commands <contactId>'
-      #       parser.separator ''
-      #       parser.separator 'Where <contactId> is the ID of the contact to act upon'
-      #     end
-      #   end
-      #
-      #   def can_run?
-      #     is_entity_present?(Types::Contact)
-      #   end
-      #
-      #   def run
-      #     contact = Contacts::load_entity(@context)
-      #     commands = []
-      #     commands << {
-      #       title: 'Open in Contacts',
-      #       arg: "contact open #{contact.id}",
-      #       icon: {
-      #         path: "icons/contacts.png"
-      #       }
-      #     }
-      #     commands += @context.collaborator_commands(contact)
-      #     commands.flatten
-      #   end
-      # end
+      class Commands < SystemCommand
+        def supported_entity_type
+          EntityTypes::Area
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'List all available commands for entities of the specified type in this area'
+            parser.separator 'Usage: area commands <type> <entityID>'
+            parser.separator ''
+            parser.separator 'This command is fairly useless outside of Alfred!'
+          end
+        end
+
+        ##
+        # @param context [SystemContext]
+        def run(context)
+          type_name = context.arguments.shift
+          raise 'No type specified' if type_name.nil?
+          id = context.arguments.join(' ')
+          raise 'No id specified' if id.empty?
+          context.configuration
+            .available_commands(context.area)
+            .select { |entity_type, _| entity_type.entity_type_name == type_name }
+            .map { |_, commands| commands }
+            .flatten
+            .reject { |command| command.is_a?(VPS::Plugin::EntityTypeCommand) }
+            .map do |command|
+            {
+              title: command.option_parser.banner,
+              arg: "#{type_name} #{command.name} #{id}",
+              icon: {
+                path: "icons/#{Registry.instance.for_command(command).name}.png"
+              }
+            }
+          end
+        end
+      end
     end
   end
 end

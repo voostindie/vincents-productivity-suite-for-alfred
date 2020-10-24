@@ -10,11 +10,10 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            name = entity_name
             parser.banner = "Paste #{description} to the frontmost app"
-            parser.separator "Usage: #{name} paste <#{name}Id>"
+            parser.separator "Usage: #{entity_name} paste <#{entity_name}Id>"
             parser.separator ''
-            parser.separator "Where <#{name}Id> is the ID of the #{name} to paste."
+            parser.separator "Where <#{entity_name}Id> is the ID of the #{entity_name} to paste."
             parser.separator ''
             parser.separator 'This plugin obviously has very little use outside of Alfred...'
           end
@@ -25,7 +24,7 @@ module VPS
         end
 
         def description
-          "a #{entity_name} name"
+          entity_name
         end
 
         def run(context, runner = Jxa::Runner.new('alfred'))
@@ -81,10 +80,6 @@ module VPS
           EntityTypes::Event
         end
 
-        def description
-          'an event'
-        end
-
         def text_from(event)
           event.title
         end
@@ -94,13 +89,12 @@ module VPS
         include PasteTemplate
 
         def name
-          'paste-att'
+          'paste-attendees'
         end
 
         def description
-          'all attendees from an event'
+          'event attendees'
         end
-
 
         def supported_entity_type
           EntityTypes::Event

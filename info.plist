@@ -854,7 +854,7 @@ ruby exe/vps -a area list
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>focusedappvariable</key>
 				<false/>
 				<key>focusedappvariablename</key>
@@ -909,7 +909,7 @@ ruby exe/vps -a area list
 				<integer>102</integer>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps note plain $*</string>
+ruby exe/vps note create $*</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -936,7 +936,7 @@ ruby exe/vps note plain $*</string>
 				<key>text</key>
 				<string>{query}</string>
 				<key>title</key>
-				<string></string>
+				<string>Vincent's Productivity Suite</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.notification</string>
@@ -972,7 +972,7 @@ ruby exe/vps note plain $*</string>
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a note commands $*</string>
+ruby exe/vps -a area commands note $*</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1296,7 +1296,7 @@ ruby exe/vps note today</string>
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a project commands
+ruby exe/vps -a area commands project $*
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -1526,8 +1526,7 @@ ruby exe/vps $*</string>
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a contact commands $*
-</string>
+ruby exe/vps -a area commands contact $*</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1705,7 +1704,7 @@ ruby exe/vps -a contact list</string>
 				<integer>102</integer>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a text group $*</string>
+ruby exe/vps -a group paste $*</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -1798,7 +1797,7 @@ ruby exe/vps -a text group $*</string>
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a group commands $*
+ruby exe/vps -a area commands group $*
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -1984,7 +1983,7 @@ ruby exe/vps -a group list</string>
 				<string></string>
 				<key>script</key>
 				<string>PATH=$RUBY_PATH:$PATH
-ruby exe/vps -a event commands
+ruby exe/vps -a area commands event $*
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -2783,7 +2782,7 @@ See the README for more information.</string>
 		<key>DDE54F64-57B5-4EE8-BCF5-3F2FE5A1ABBD</key>
 		<dict>
 			<key>note</key>
-			<string>Lists all available actions for a project</string>
+			<string>Lists all available actions for a note</string>
 			<key>xpos</key>
 			<integer>750</integer>
 			<key>ypos</key>

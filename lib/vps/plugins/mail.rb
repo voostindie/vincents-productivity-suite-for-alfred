@@ -22,7 +22,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Prepare an email to the specified contact'
+            parser.banner = 'Write an e-mail'
             parser.separator 'Usage: group mail <contactId>'
             parser.separator ''
             parser.separator 'Where <contactId> is the ID of the contact to write a mail to'
@@ -49,7 +49,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Prepare an email to the specified group'
+            parser.banner = 'Write an e-mail'
             parser.separator 'Usage: group mail <groupId>'
             parser.separator ''
             parser.separator 'Where <groupId> is the ID of the group to write a mail to'

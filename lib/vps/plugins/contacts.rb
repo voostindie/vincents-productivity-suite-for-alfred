@@ -33,13 +33,9 @@ module VPS
         end
 
         def load(context, runner = Jxa::Runner.new('contacts'))
-          if context.environment['CONTACT_ID'].nil?
-            id = context.arguments[0]
-            cache(context, id) do
-              EntityTypes::Contact.from_hash(runner.execute('contact-details', id))
-            end
-          else
-            EntityTypes::Contact.from_env(context.environment)
+          id = context.environment['CONTACT_ID'] || context.arguments[0]
+          cache(context, id) do
+            EntityTypes::Contact.from_hash(runner.execute('contact-details', id))
           end
         end
       end
@@ -63,13 +59,9 @@ module VPS
         end
 
         def load(context, runner = Jxa::Runner.new('contacts'))
-          if context.environment['GROUP_ID'].nil?
-            id = context.arguments[0]
-            cache(context, id) do
-              EntityTypes::Group.from_hash(runner.execute('group-details', id))
-            end
-          else
-            EntityTypes::Group.from_env(context.environment)
+          id = context.environment['GROUP_ID'] || context.arguments[0]
+          cache(context, id) do
+            EntityTypes::Group.from_hash(runner.execute('group-details', id))
           end
         end
       end
@@ -129,7 +121,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Open the specified contact in Contacts'
+            parser.banner = 'Open in Contacts'
             parser.separator 'Usage: contact open <contactId>'
             parser.separator ''
             parser.separator 'Where <contactId> is the ID of the contact to open'
@@ -139,7 +131,7 @@ module VPS
         def run(context, runner = Shell::SystemRunner.new)
           contact = context.load
           runner.execute('open', "addressbook://#{contact.id}")
-          nil
+          "Opened #{contact.name} in Contacts"
         end
       end
     end

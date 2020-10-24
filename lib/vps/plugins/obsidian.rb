@@ -130,7 +130,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Opens the specified note in Obsidian for editing'
+            parser.banner = 'Open in Obsidian'
             parser.separator 'Usage: note edit <noteId>'
             parser.separator ''
             parser.separator 'Where <noteID> is the ID of the note to edit'
@@ -258,7 +258,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Create or edit a note for a project'
+            parser.banner = 'Edit this project\'s note'
             parser.separator 'Usage: project note <projectId>'
             parser.separator ''
             parser.separator 'Where <projectId> is the ID of the project to create a note for'
@@ -301,7 +301,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Create or edit a note for a contact'
+            parser.banner = 'Edit this contact\'s note'
             parser.separator 'Usage: contact note <contactID>'
             parser.separator ''
             parser.separator 'Where <contactID> is the ID of the project to create a note for'
@@ -338,7 +338,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Create or edit a note for an event'
+            parser.banner = 'Edit this event\'s note'
             parser.separator 'Usage: event note <eventID>'
             parser.separator ''
             parser.separator 'Where <eventID> is the ID of the event to create a note for'

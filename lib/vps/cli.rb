@@ -78,7 +78,7 @@ module VPS
       else
         runner = CommandRunner.new(@configuration, @state, arguments, environment)
         output = runner.execute
-        puts @output_formatter.format(output)
+        print @output_formatter.format(output)
       end
     end
 

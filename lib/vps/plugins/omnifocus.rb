@@ -66,7 +66,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Open the specified project in OmniFocus'
+            parser.banner = 'Open in OmniFocus'
             parser.separator 'Usage: project open <projectId>'
             parser.separator ''
             parser.separator 'Where <projectId> is the ID of the project to open'
@@ -76,7 +76,7 @@ module VPS
         def run(context, runner = Shell::SystemRunner.new)
           project = context.load
           runner.execute("open omnifocus:///task/#{project.id}")
-          nil
+          "Opened #{project.name} in OmniFocus"
         end
       end
 

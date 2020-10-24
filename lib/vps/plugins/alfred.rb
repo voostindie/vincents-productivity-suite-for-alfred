@@ -73,7 +73,7 @@ module VPS
 
         def option_parser
           OptionParser.new do |parser|
-            parser.banner = 'Browse files in Alfred for a project'
+            parser.banner = 'Browse project files'
             parser.separator 'Usage: project files <projectId>'
             parser.separator ''
             parser.separator 'Where <projectId> is the ID of the project to browse'
@@ -82,7 +82,6 @@ module VPS
 
         def run(context, runner = Jxa::Runner.new('alfred'))
           project = context.load
-          pp project.config
           folder = if project.config['alfred']
                      project.config['alfred']['folder'] || project.name
                    else

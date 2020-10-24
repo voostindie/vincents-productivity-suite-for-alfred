@@ -46,7 +46,10 @@ module VPS
   end
 
   class SystemContext
-    attr_reader :configuration, :area, :state, :arguments
+    ##
+    # @return [Configuration]
+    attr_reader :configuration
+    attr_reader :area, :state, :arguments
 
     def initialize(configuration, state, arguments)
       @configuration = configuration
