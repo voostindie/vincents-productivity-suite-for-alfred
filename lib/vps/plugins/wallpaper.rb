@@ -1,7 +1,6 @@
 module VPS
   module Plugins
-    ##
-    # Changes the desktop wallpaper.
+    # Plugin that changes the desktop wallpaper when the focus changes.
     #
     # The wallpaper to change to must be configured in the +wallpaper+ section of
     # the area, in the single +path+ property. If no wallpaper is defined, the
@@ -39,7 +38,7 @@ module VPS
       end
 
       class Wallpaper < Action
-        def run(context, runner = Jxa::Runner.new('wallpaper'))
+        def run(context, runner = JxaRunner.new('wallpaper'))
           path = if context.area['wallpaper']
                    context.area['wallpaper'][:path]
                  else

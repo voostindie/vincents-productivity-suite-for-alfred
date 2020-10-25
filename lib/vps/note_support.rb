@@ -1,5 +1,4 @@
 module VPS
-  ##
   # Support module for plugins that manage notes. The goal is to have feature
   # parity across all note plugins. Currently that's Obsidian, iA Writer and Bear.
   #
@@ -10,13 +9,60 @@ module VPS
   # Since I keep a lot of notes, being able to handle them through VPS is very important
   # to me. That explains the birth of this module, I guess.
   #
+  # == Note templating
+  #
+  # This module adds templating supporting to notes, for all entity types.
+  # Imagine creating a note with the minutes of a meeting at a press of a button, from
+  # the event in the calendar itself, producing a note with all the title, date and
+  # attendees all pre-filled!
+  #
+  # === Template sets
+  #
+  # This module supports 6 different template sets, and 4 templates per set. The sets are:
+  #
+  # 1. +default+: default settings for all templates
+  # 2. +plain+: for plain text notes ("note create")
+  # 3. +contact+: for notes on contacts ("contact note")
+  # 4. +event+: for notes on events ("event note")
+  # 5. +project+: for notes on projects ("project note")
+  # 6. +today+: templates for "Today's note" ("note today")
+  #
+  # === Templates
+  #
+  # The 4 templates in each set are.
+  #
+  # 1. +filename+
+  # 2. +title+
+  # 3. +text+
+  # 4. +tags+
+  #
+  # Each of these templates is handled as a Liquid template: https://shopify.github.io/liquid/.
+  #
+  # === Variables
+  #
+  # The set of variables available in each template depends on the entity (typicall they add
+  # the properties of the entity), but the following set is always available:
+  #
+  # - +year+
+  # - +month+
+  # - +week+
+  # - +day+
+  # - +query+
+  # - +input+
+  #
+  # == How to use
+  #
   # All support classes are modules as to not interfere with the class hierarchy. In your
   # own plugin, first extend some base plugin class and then include the appropriate module.
   #
-  # See the Obsidian, Bear and IAWriter for examples.
+  # See the {VPS::Plugins::Obsidian}, {VPS::Plugins::Bear} and {VPS::Plugins::IAWriter} for examples.
   module NoteSupport
 
     module Configurator
+      # Pulls template definitions from the input hash and stores them in the configuration hash
+      # @param config [Hash<Symbol, Object>]
+      # @param hash [Hash<String, Object>]
+      # @return [Hash<Symbol, Object>]
       def process_templates(config, hash)
         config[:templates] = {}
         %w(default plain contact event project today).each do |set|
@@ -113,7 +159,6 @@ module VPS
       end
     end
 
-    ##
     # List all notes. Only include this if your repository supports the fina_all method.
     module List
       def supported_entity_type
@@ -131,18 +176,19 @@ module VPS
         context.find_all.map do |note|
           {
             uid: note.id,
-            title: note.id,
+            title: note.title,
             subtitle: if context.triggered_as_snippet?
-                        "Paste '#{note.id}' in the frontmost application"
+                        "Paste '#{note.title}' in the frontmost application"
                       else
-                        "Select an action for '#{note.id}'"
+                        "Select an action for '#{note.title}'"
                       end,
             arg: if context.triggered_as_snippet?
-                   "[[#{note.id}]]"
+                   "[[#{note.title}]]"
                  else
-                   "#{note.id}"
+                   "#{note.title}"
                  end,
-            autocomplete: note.id,
+            autocomplete: note.title,
+            variables: note.to_env
           }
         end
       end

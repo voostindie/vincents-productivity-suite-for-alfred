@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Plugin for Marked, for viewing notes.
     module Marked
       include Plugin
 
@@ -17,7 +18,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Shell::SystemRunner.new)
+        def run(context, runner = Shell::SystemRunner.instance)
           note = context.load_instance
           callback = "x-marked://open?file=#{note.path.url_encode}"
           runner.execute('open', callback)

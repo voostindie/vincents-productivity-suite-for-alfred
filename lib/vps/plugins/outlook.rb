@@ -1,6 +1,5 @@
 module VPS
   module Plugins
-    ##
     # Support for Outlook Calendar.
     #
     # Note: this plugin is slooooooow, and also unmaintained. I'm not using it at the moment.
@@ -22,8 +21,9 @@ module VPS
           EntityType::Event
         end
 
-        def load_instance(context, runner = Jxa::Runner.new('outlook'))
+        def load_instance(context, runner = JxaRunner.new('outlook'))
           id = context.environment['EVENT_ID'] || context.arguments[0]
+          return nil if id.nil?
           event = runner.execute('event-details', id)
           people = [Person.new(nil, event['organizer'])]
           event['attendees'].each do |attendee|
@@ -37,7 +37,7 @@ module VPS
           EventTypes::Event.from_hash(event)
         end
 
-        def find_all(context, runner = Jxa::Runner.new('outlook'))
+        def find_all(context, runner = JxaRunner.new('outlook'))
           events = runner.execute('list-events',
                                   context.configuration[:account],
                                   context.configuration[:calendar])

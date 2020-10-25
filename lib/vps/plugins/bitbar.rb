@@ -57,7 +57,7 @@ module VPS
       end
 
       class Refresh < Action
-        def run(context, runner = Shell::SystemRunner.new)
+        def run(context, runner = Shell::SystemRunner.instance)
           plugin = context.configuration.actions['bitbar'][:plugin]
           runner.execute("open -g bitbar://refreshPlugin?name=#{plugin}")
         end

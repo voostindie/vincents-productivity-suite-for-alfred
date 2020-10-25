@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Plugin on top of Apple Contacts, offering access to both Contacts and Groups.
     module Contacts
       include Plugin
 
@@ -25,15 +26,16 @@ module VPS
           context.configuration[:cache_enabled]
         end
 
-        def find_all(context, runner = Jxa::Runner.new('contacts'))
+        def find_all(context, runner = JxaRunner.new('contacts'))
           cache(context) do
             contacts = runner.execute('list-people', context.configuration[:group])
             contacts.map { |contact| EntityType::Contact.from_hash(contact) }
           end
         end
 
-        def load_instance(context, runner = Jxa::Runner.new('contacts'))
+        def load_instance(context, runner = JxaRunner.new('contacts'))
           id = context.environment['CONTACT_ID'] || context.arguments[0]
+          return nil if id.nil?
           cache(context, id) do
             EntityType::Contact.from_hash(runner.execute('contact-details', id))
           end
@@ -51,14 +53,14 @@ module VPS
           context.configuration[:cache_enabled]
         end
 
-        def find_all(context, runner = Jxa::Runner.new('contacts'))
+        def find_all(context, runner = JxaRunner.new('contacts'))
           cache(context) do
             groups = runner.execute('list-groups', context.configuration[:prefix])
             groups.map { |group| EntityType::Group.from_hash(group) }
           end
         end
 
-        def load_instance(context, runner = Jxa::Runner.new('contacts'))
+        def load_instance(context, runner = JxaRunner.new('contacts'))
           id = context.environment['GROUP_ID'] || context.arguments[0]
           cache(context, id) do
             EntityType::Group.from_hash(runner.execute('group-details', id))
@@ -128,7 +130,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Shell::SystemRunner.new)
+        def run(context, runner = Shell::SystemRunner.instance)
           contact = context.load_instance
           runner.execute('open', "addressbook://#{contact.id}")
           "Opened #{contact.name} in Contacts"

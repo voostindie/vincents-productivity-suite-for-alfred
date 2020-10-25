@@ -1,5 +1,4 @@
 module VPS
-  ##
   # Formats output depending on the "display": the console or Alfred.
   #
   # The idea is this: you have code that produces the result to output, either
@@ -11,10 +10,7 @@ module VPS
   # So, you do this:
   #
   #   formatter = OutputFormatter::Console # console output
-  #   output = formatter {
-  #     # Code that produces output here
-  #   }
-  #   puts output
+  #   print format(output)
   #
   # Just replace Console with Alfred and Bob's your uncle.
   #
@@ -28,49 +24,47 @@ module VPS
   #
   # See https://www.alfredapp.com/help/workflows/inputs/script-filter/json/
   module OutputFormatter
-    ##
     # Formatter for console output
     module Console
-      ##
-      # Runs a block, captures its output, formats it for the console and returns it.
-      def self.format(result)
-        if result.is_a? Array
-          id = if result.size > 0 && result[0][:uid].nil?
+      # @param output [StringArray,nil] output to format for the console
+      # @return [String]
+      def self.format(output)
+        if output.is_a?(Array)
+          id = if output.size > 0 && output[0][:uid].nil?
                  :arg
                else
                  :uid
                end
-          width = result.map { |entry| entry[id].size}.max
-          result.map do |entry|
+          width = output.map { |entry| entry[id].size}.max
+          output.map do |entry|
             if entry[id] == entry[:title]
               "- #{entry[id]}"
             else
               "- #{entry[id].ljust(width)}: #{entry[:title]}"
             end
           end.join("\n")+ "\n"
-        elsif !result.nil?
-          result
+        elsif !output.nil?
+          output
         else
           ''
         end
       end
     end
 
-    ##
     # Formatter for Alfred output
     module Alfred
-      ##
-      # Runs a block, captures its output, formats it for Alfred and returns it.
-      def self.format(result)
-        if result.is_a? Array
+      # @param output [String,Array,nil] output to format for Alfred
+      # @return [String]
+      def self.format(output)
+        if output.is_a? Array
           output = {
-            items: result
+            items: output
           }
           output.to_json
-        elsif !result.nil?
-          result
+        elsif !output.nil?
+          output
         else
-          nil
+          ''
         end
       end
     end

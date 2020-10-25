@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Plugin for OmniFocus, for managing projects.
     module OmniFocus
       include Plugin
 
@@ -16,15 +17,16 @@ module VPS
           EntityType::Project
         end
 
-        def find_all(context, runner = Jxa::Runner.new('omnifocus'))
+        def find_all(context, runner = JxaRunner.new('omnifocus'))
           projects = runner.execute('list-projects', context.configuration[:folder])
           projects.map do |project|
             EntityType::Project.from_hash(project)
           end
         end
 
-        def load_instance(context, runner = Jxa::Runner.new('omnifocus'))
+        def load_instance(context, runner = JxaRunner.new('omnifocus'))
           id = context.environment['PROJECT_ID'] || context.arguments[0]
+          return nil if id.nil?
           EntityType::Project.from_hash(runner.execute('project-details', id))
         end
       end
@@ -41,7 +43,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Jxa::Runner.new('omnifocus'))
+        def run(context, runner = JxaRunner.new('omnifocus'))
           context.find_all.map do |project|
             {
               uid: project.id,
@@ -73,7 +75,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Shell::SystemRunner.new)
+        def run(context, runner = Shell::SystemRunner.instance)
           project = context.load_instance
           runner.execute("open omnifocus:///task/#{project.id}")
           "Opened #{project.name} in OmniFocus"
@@ -81,7 +83,7 @@ module VPS
       end
 
       class Focus < Action
-        def run(context, runner = Jxa::Runner.new('omnifocus'))
+        def run(context, runner = JxaRunner.new('omnifocus'))
           if context.area['omnifocus']
             runner.execute('set-focus', context.area['omnifocus'][:folder])
           end

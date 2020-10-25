@@ -1,5 +1,14 @@
 module VPS
   module Plugins
+    # Plugin for Apple Calendar, to fetch events and their attendees.
+    #
+    # This module offers just 1 repository and 2 commands, but there's a lot of code to make it work.
+    # The code dives directly in the underlying database from Calendar to fetch today's event.
+    # It requires some tricky queries, and still it's not perfect: the database is a _cache_.
+    # Sometimes events don't show up (yet).
+    #
+    # But in practice it works pretty reliable, even with a calendar synced from Microsoft Office 365.
+    # Go figure.
     module Calendar
       include Plugin
 
@@ -35,6 +44,7 @@ module VPS
         def load_instance(context)
           database = CalendarDatabase.new(context.configuration[:name])
           id = context.environment['EVENT_ID'] || context.arguments[0]
+          return nil if id.nil?
           record = database.event_by_id(id)
           event = EntityType::Event.new do |e|
             e.id = record.primary_key.to_s

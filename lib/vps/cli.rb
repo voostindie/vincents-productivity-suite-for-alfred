@@ -1,6 +1,6 @@
 module VPS
   # The CLI is the entry point into the application. It loads the configuration,
-  # parses command line arguments and acts upon those.
+  # parses command line arguments runs the show.
   class Cli
     def initialize(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
       @configuration = configuration = Configuration::load(config_file)
@@ -38,8 +38,9 @@ module VPS
     ##
     # Runs the application based on the arguments provided.
     #
-    # @param arguments [Array] the program arguments.
-    # @param environment [Hash] the environment variables.
+    # @param arguments [Array<String>] the program arguments.
+    # @param environment [Hash<String, String>] the environment variables.
+    # @return void
     def run(arguments = ARGV, environment = ENV)
       @parser.order!(arguments)
       if arguments.size < 1
@@ -56,7 +57,8 @@ module VPS
     ##
     # Shows help information; either overall help or plugin-specific help.
     #
-    # @param arguments [Array] the program arguments.
+    # @param arguments [Array<String>] the program arguments.
+    # @return void
     def run_help(arguments)
       if arguments.size < 2
         show_overall_help
@@ -69,8 +71,9 @@ module VPS
     ##
     # Runs a command, provided that one can be derived from the program arguments.
     #
-    # @param arguments [Array] the program arguments.
-    # @param environment [Hash] the environment variables.
+    # @param arguments [Array<String>] the program arguments.
+    # @param environment [Hash<String, String>] the environment variables.
+    # @return void
     def run_command(arguments, environment)
       if arguments.size < 2
         show_overall_help
@@ -83,6 +86,7 @@ module VPS
 
     ##
     # Shows overall help information, including information on each individual plugin.
+    # @return void
     def show_overall_help
       @parser.separator ''
       @parser.separator 'Where <type> and <command> are one of: '
@@ -103,6 +107,8 @@ module VPS
 
     ##
     # Shows help information on a single command.
+    # @param runner [CommandRunner]
+    # @return void
     def show_command_help(runner)
       if runner.help_available?
         puts runner.help

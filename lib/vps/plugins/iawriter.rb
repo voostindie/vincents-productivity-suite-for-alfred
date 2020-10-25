@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Plugin for IA Writer, for keeping notes in plaintext files.
     module IAWriter
       include Plugin
 
@@ -29,7 +30,7 @@ module VPS
       end
 
       module IAWriterNote
-        def run(context, runner = Shell::SystemRunner.new)
+        def run(context, runner = Shell::SystemRunner.instance)
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else

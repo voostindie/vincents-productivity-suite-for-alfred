@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Plugin for Obsidian, for keeping notes in plaintext files.
     module Obsidian
       include Plugin
 
@@ -34,7 +35,7 @@ module VPS
         end
 
 
-        def run(context, shell_runner = Shell::SystemRunner.new, jxa_runner = Jxa::Runner.new('obsidian'))
+        def run(context, shell_runner = Shell::SystemRunner.instance, jxa_runner = JxaRunner.new('obsidian'))
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else

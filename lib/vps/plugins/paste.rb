@@ -1,5 +1,10 @@
 module VPS
   module Plugins
+    # Plugin that paste values from entities to the front-most app. This plugin is automatically
+    # enabled. It has no configuration, so that's easy. You get these commands for free with each
+    # entity that has a supporting repository.
+    #
+    # (To see how this plugin is automatically enabled: see {Configuration})
     module Paste
       include Plugin
 
@@ -27,16 +32,20 @@ module VPS
           entity_name
         end
 
-        def run(context, runner = Jxa::Runner.new('alfred'))
+        def run(context, runner = JxaRunner.new('alfred'))
           runner.execute('paste', text_from(context.load_instance))
           nil
         end
 
+        # @param entity [VPS::EntityType::BaseType]
+        # @return [String]
+        # @abstract
         def text_from(entity)
           nil
         end
       end
 
+      # Command to paste a note title to the front-most app
       class Note < EntityInstanceCommand
         include PasteTemplate
 
@@ -49,6 +58,7 @@ module VPS
         end
       end
 
+      # Command to paste a project name to the front-most app
       class Project < EntityInstanceCommand
         include PasteTemplate
 
@@ -61,6 +71,7 @@ module VPS
         end
       end
 
+      ## Command to paste a contact name to the front-most app
       class Contact < EntityInstanceCommand
         include PasteTemplate
 
@@ -73,6 +84,7 @@ module VPS
         end
       end
 
+      # Command to paste an event title to the front-most app
       class Event < EntityInstanceCommand
         include PasteTemplate
 
@@ -85,6 +97,7 @@ module VPS
         end
       end
 
+      # Command to paste a list of event attendees to the front-most app
       class EventAttendees < EntityInstanceCommand
         include PasteTemplate
 
@@ -105,6 +118,7 @@ module VPS
         end
       end
 
+      # Command to paste a list of people from a group to the front-most app
       class Group < EntityInstanceCommand
         include PasteTemplate
 

@@ -1,14 +1,22 @@
 module VPS
   module Plugins
+    # Commands on the areas used within the system themselves.
+    #
+    # This may seem a bit of a hack, to use the plugin system itself to have built-in commands on
+    # areas show up. I call it... pure elegance! :-)
     module Area
       include Plugin
 
+      # Repository for areas; it doesn't actually do anything.
+      # This class is needed only to make the commands show up. Since: if the supporting repository
+      # isn't there, the command will be filtered out!
       class AreaRepository < Repository
         def supported_entity_type
           EntityType::Area
         end
       end
 
+      # Lists all available areas
       class List < SystemCommand
         def supported_entity_type
           EntityType::Area
@@ -22,7 +30,7 @@ module VPS
 
         def run(context)
           focus = context.area[:key]
-          context.configuration.areas.map do |area|
+          context.configuration.areas.values.map do |area|
             postfix = area[:key].eql?(focus) ? ' (focused)' : ''
             {
               uid: area[:key],
@@ -34,6 +42,7 @@ module VPS
         end
       end
 
+      # Sets the focus to an area, and runs all enabled actions.
       class Focus < SystemCommand
         def supported_entity_type
           EntityType::Area
@@ -53,7 +62,7 @@ module VPS
             $stderr.puts "Exactly one argument required: the name of the area to focus on"
             return nil
           end
-          area = context.configuration.area(context.arguments[0])
+          area = context.configuration.areas[context.arguments[0]]
           if area.nil?
             $stderr.puts "Unknown area: #{context.arguments[0]}"
             return nil
@@ -71,6 +80,7 @@ module VPS
         end
       end
 
+      # Flush all disk caches for the active area, see {VPS::CacheSupport} for more information.
       class Flush < EntityTypeCommand
         include CacheSupport
 
@@ -91,6 +101,8 @@ module VPS
         end
       end
 
+      # Lists all available commands in this area. This command purely exists to support the
+      # Alfred workflow, allowing it to show a list of things to do for a selected entity.
       class Commands < SystemCommand
         def supported_entity_type
           EntityType::Area
@@ -105,8 +117,6 @@ module VPS
           end
         end
 
-        ##
-        # @param context [SystemContext]
         def run(context)
           type_name = context.arguments.shift
           raise 'No type specified' if type_name.nil?

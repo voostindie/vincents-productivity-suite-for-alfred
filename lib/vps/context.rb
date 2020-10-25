@@ -1,6 +1,13 @@
 module VPS
   class RepositoryContext
-    attr_reader :area_key, :configuration, :arguments, :environment
+    # @return [String]
+    attr_reader :area_key
+    # @return [Configuration]
+    attr_reader :configuration
+    # @return [Array<String>]
+    attr_reader :arguments
+    # @return [Hash<String, String>]
+    attr_reader :environment
 
     def initialize(area, plugin_name, arguments, environment)
       @area_key = area[:key]
@@ -17,13 +24,14 @@ module VPS
       @entity_instance = nil
     end
 
+    # @return [Boolean]
     def triggered_as_snippet?
       environment['TRIGGERED_AS_SNIPPET'] == 'true'
     end
 
-    # Methods below are from BaseRepository, without context. Here we ensure the correct context is passed.
+    # Methods below are from {VPS::Plugin::Repository}, but without context.
+    # Through this context we ensure that each repository is passed the correct context.
 
-    ##
     # @return [Array<VPS::EntityType::BaseType>]
     def find_all(entity_type = @entity_type_contexts.keys.first)
       entity_type_context = @entity_type_contexts[entity_type]
@@ -31,7 +39,7 @@ module VPS
     end
 
     ##
-    # @return [VPS::EntityType::BaseType]
+    # @return [VPS::EntityType::BaseType, nil]
     def load_instance
       entity_type_context = @entity_type_contexts[@entity_type_contexts.keys.first]
       @entity_instance ||= entity_type_context[:repository].load_instance(entity_type_context[:context])
@@ -46,10 +54,14 @@ module VPS
   end
 
   class SystemContext
-    ##
     # @return [Configuration]
     attr_reader :configuration
-    attr_reader :area, :state, :arguments
+    # @return [Hash<String, Object>]
+    attr_reader :area
+    # @return [State]
+    attr_reader :state
+    # @return [Array<String>]
+    attr_reader :arguments
 
     def initialize(configuration, state, arguments)
       @configuration = configuration

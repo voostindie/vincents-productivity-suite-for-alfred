@@ -1,5 +1,6 @@
 module VPS
   module Plugins
+    # Alfred plugin to allow easy access to files in the area: documents, reference material and per-project.
     module Alfred
       include Plugin
 
@@ -12,10 +13,10 @@ module VPS
         end
       end
 
-      ##
-      # This repository actually doesn't do anything and should be removed once I've implemented
-      # a real repository on top of files, which this plugin can then contribute its commands to.
-      class DummyFileRepository < Repository
+      # Repository for areas; it doesn't actually do anything with files (yet).
+      # This class is needed to make the commands on files show up. Since: if the supporting repository
+      # isn't there, the command will be filtered out!
+      class FileRepository < Repository
         def supported_entity_type
           EntityType::File
         end
@@ -33,14 +34,14 @@ module VPS
           end
         end
 
-        def run(context, runner = Jxa::Runner.new('alfred'))
+        def run(context, runner = JxaRunner.new('alfred'))
           path = context.configuration[@symbol]
           runner.execute('browse', path)
           "Opened Alfred for directory '#{path}'"
         end
       end
 
-      class Docs < EntityTypeCommand
+      class Documents < EntityTypeCommand
         include FileBrowser
 
         def initialize
@@ -49,7 +50,7 @@ module VPS
         end
       end
 
-      class Refs < EntityTypeCommand
+      class Reference < EntityTypeCommand
         include FileBrowser
 
         def initialize
@@ -80,7 +81,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Jxa::Runner.new('alfred'))
+        def run(context, runner = JxaRunner.new('alfred'))
           project = context.load_instance
           folder = if project.config['alfred']
                      project.config['alfred']['folder'] || project.name

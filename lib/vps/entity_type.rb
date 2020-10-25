@@ -11,9 +11,10 @@ module VPS
     # @abstract
     class BaseType
 
-      # Every entity has an ID.
+      # @return [String] every entity has an ID.
       attr_accessor :id
 
+      # @return [String] name of the entity as used in the CLI. Defaults to the class name in lower case.
       def self.entity_type_name
         self.name.split('::').last.downcase
       end
@@ -25,6 +26,8 @@ module VPS
       #     c.id = 'id'
       #     c.name = 'Contact Name'
       #   end
+      # @yieldparam [BaseType]
+      # @yieldreturn [BaseType]
       def initialize
         yield self
       end
@@ -82,8 +85,6 @@ module VPS
         end
         entity
       end
-
-      private
 
       # Helper method that returns the prefix for the entity class in the environment.
       # E.g. +VPS::Entities::Contact+ becomes +CONTACT_+.

@@ -1,5 +1,9 @@
 module VPS
   module Plugins
+    # Plugin for the note-keeping app Bear.
+    #
+    # *Warning*: I'm not using Bear myself anymore, so I'm not guaranteeing this plugin is going
+    # to work perfectly!
     module Bear
       include Plugin
 
@@ -41,6 +45,7 @@ module VPS
         def load_instance(context, runner = Xcall.instance)
           if context.environment['NOTE_ID'].nil?
             id = context.arguments[0]
+            return nil if id.nil?
             token = context.configuration[:token]
             callback = "bear://x-callback-url/open-note?id=#{id.url_encode}&show_window=no&token=#{token}"
             record = runner.execute(callback)
@@ -66,37 +71,7 @@ module VPS
       end
 
       class List < EntityTypeCommand
-        def supported_entity_type
-          EntityType::Note
-        end
-
-        def option_parser
-          OptionParser.new do |parser|
-            parser.banner = 'List all notes in this area'
-            parser.separator 'Usage: note list'
-          end
-        end
-
-        def run(context)
-          context.find_all.map do |note|
-            {
-              uid: note.id,
-              title: note.title,
-              subtitle: if context.triggered_as_snippet?
-                          "Paste '#{note.title}' in the frontmost application"
-                        else
-                          "Select an action for '#{note.title}'"
-                        end,
-              arg: if context.triggered_as_snippet?
-                     "[[#{note.title}]]"
-                   else
-                     "#{note.title}"
-                   end,
-              autocomplete: note.title,
-              variables: note.to_env
-            }
-          end
-        end
+        include NoteSupport::List
       end
 
       module BearNote

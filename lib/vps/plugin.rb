@@ -96,7 +96,7 @@ module VPS
       # @param area [Hash] The area in the configuration being processed,
       #             a hash with +:key+, +:name+ and +:root+
       # @param hash [Hash] The configuration for this plugin as defined in the configuration.
-      # @return [Hash] The configuration for this plugin in this area; typically a hash.
+      # @return [Hash] the configuration for this plugin in this area; typically a hash.
       def process_area_configuration(area, hash)
         {}
       end
@@ -107,7 +107,7 @@ module VPS
       #
       # Be strict in what you accept, and feel free to use +$stderr+ to notify the user of issues.
       #
-      # @return [Hash] The configuration for this plugin when executing the action; typically a hash.
+      # @return [Hash] the configuration for this plugin when executing the action; typically a hash.
       # @param hash [Hash] The configuration for this plugin as defined in the configuration.
       def process_action_configuration(hash)
         {}

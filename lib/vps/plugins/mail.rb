@@ -1,5 +1,8 @@
 module VPS
   module Plugins
+    # Plugin for Apple Mail that adds a couple of commands to Contacts and Groups.
+    #
+    # Without the Contacts plugin, this plugin is pretty useless!
     module Mail
       include Plugin
 
@@ -29,7 +32,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Jxa::Runner.new('mail'))
+        def run(context, runner = JxaRunner.new('mail'))
           contact = context.load_instance
           addresses = ["#{contact.name} <#{contact.email}>"].to_json
           from = context.configuration[:from]
@@ -56,7 +59,7 @@ module VPS
           end
         end
 
-        def run(context, runner = Jxa::Runner.new('mail'))
+        def run(context, runner = JxaRunner.new('mail'))
           group = context.load_instance
           addresses = group.people.map { |p| "#{p['name']} <#{p['email']}>" }.to_json
           from = context.configuration[:from]
