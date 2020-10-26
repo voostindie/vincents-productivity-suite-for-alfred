@@ -106,18 +106,24 @@ module VPS
       # Read "YAML Back Matter" from the project note if present.
       # @return [Hash, nil]
       def config
-        return {} if note.nil?
-        yaml = note.
-          lines.
-          drop_while { |l| !l.start_with?('---') }.
-          drop(1).
-          join.
-          gsub("\t", '  ').
-          gsub("’", "'").
-          gsub("“", '"').
-          gsub("”", '"')
-        return {} if yaml.empty?
-        YAML.load(yaml)
+        @config ||=
+          if note.nil?
+            {}
+          else
+            yaml = note.
+              lines.
+              drop_while { |l| !l.start_with?('---') }.
+              drop(1).
+              join.
+              gsub("\t", '  ').
+              gsub("’", "'").
+              gsub("“", '"').
+              gsub("”", '"')
+            if yaml.empty?
+              {}
+            end
+            YAML.load(yaml)
+          end
       end
     end
 
