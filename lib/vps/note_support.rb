@@ -131,7 +131,7 @@ module VPS
           tags = note.tags.map { |t| "##{t}" }.join(' ')
           content = ''
           content += "# #{title}\n\n" unless title.empty?
-          content += "#{text}" unless content.empty?
+          content += "#{text}" unless text.empty?
           content += "#{tags}" unless tags.empty?
           File.open(note.path, 'w') do |file|
             file.puts content
