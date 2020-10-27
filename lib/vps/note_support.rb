@@ -272,6 +272,24 @@ module VPS
           parser.separator 'Usage: note today'
         end
       end
+
+      def create_template_context(context)
+        yesterday = DateTime.now - 1
+        tomorrow = DateTime.now + 1
+        template_context = super
+        template_context.merge!(
+          {
+            'yesterday_year' => yesterday.strftime('%Y'),
+            'yesterday_month' => yesterday.strftime('%m'),
+            'yesterday_week' => yesterday.strftime('%V'),
+            'yesterday_day' => yesterday.strftime('%d'),
+            'tomorrow_year' => tomorrow.strftime('%Y'),
+            'tomorrow_month' => tomorrow.strftime('%m'),
+            'tomorrow_week' => tomorrow.strftime('%V'),
+            'tomorrow_day' => tomorrow.strftime('%d')
+          })
+        template_context
+      end
     end
 
     module ProjectTemplateNote
