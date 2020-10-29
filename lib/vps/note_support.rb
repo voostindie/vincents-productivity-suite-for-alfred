@@ -125,14 +125,14 @@ module VPS
       def create_or_find(context, note)
         note.path = File.join(context.configuration[:root], note.id + '.md')
         note.is_new = false
-        unless File.exist?(note.path)
+        if !File.exist?(note.path) || File.size(note.path) == 0
           title = note.title
           text = note.text
           tags = note.tags.map { |t| "##{t}" }.join(' ')
           content = ''
-          content += "# #{title}\n\n" unless title.empty?
-          content += "#{text}" unless text.empty?
-          content += "#{tags}" unless tags.empty?
+          content += "# #{title}\n" unless title.empty?
+          content += "\n#{text}" unless text.empty?
+          content += "\n#{tags}" unless tags.empty?
           File.open(note.path, 'w') do |file|
             file.puts content
           end
