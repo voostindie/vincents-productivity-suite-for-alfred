@@ -523,6 +523,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>AD47292E-0501-460D-930A-42AE9FCC9B64</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>63A075A2-7B8F-43E7-8925-22B2EEFF1497</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<array>
 			<dict>
@@ -666,6 +679,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>E802EC61-2DB3-465B-B96A-970121A8B034</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>AD47292E-0501-460D-930A-42AE9FCC9B64</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>EA0F68E9-2E61-4920-B0B5-C16E5B296294</key>
 		<array>
 			<dict>
@@ -735,7 +761,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
+				<string>E802EC61-2DB3-465B-B96A-970121A8B034</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -1446,19 +1472,6 @@ ruby exe/vps -a project list
 			<string>alfred.workflow.trigger.snippet</string>
 			<key>uid</key>
 			<string>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>triggerid</key>
-				<string>paste</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.external</string>
-			<key>uid</key>
-			<string>FF356FFC-C7C5-4183-9278-121203F94B87</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -2442,6 +2455,70 @@ ruby exe/vps -a area flush</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>E802EC61-2DB3-465B-B96A-970121A8B034</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>triggerid</key>
+				<string>paste</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>FF356FFC-C7C5-4183-9278-121203F94B87</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{clipboard:1}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>63A075A2-7B8F-43E7-8925-22B2EEFF1497</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>seconds</key>
+				<string>1</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.delay</string>
+			<key>uid</key>
+			<string>AD47292E-0501-460D-930A-42AE9FCC9B64</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>This is Vincent's Productivity Suite for Alfred.
@@ -2616,6 +2693,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>340</integer>
 		</dict>
+		<key>63A075A2-7B8F-43E7-8925-22B2EEFF1497</key>
+		<dict>
+			<key>xpos</key>
+			<integer>525</integer>
+			<key>ypos</key>
+			<integer>2385</integer>
+		</dict>
 		<key>64628FC8-936D-4869-B6FD-5F87C86143E1</key>
 		<dict>
 			<key>note</key>
@@ -2750,6 +2834,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>1445</integer>
 		</dict>
+		<key>AD47292E-0501-460D-930A-42AE9FCC9B64</key>
+		<dict>
+			<key>xpos</key>
+			<integer>440</integer>
+			<key>ypos</key>
+			<integer>2415</integer>
+		</dict>
 		<key>ADE417A6-3768-436F-B3B6-181614AA540D</key>
 		<dict>
 			<key>xpos</key>
@@ -2844,6 +2935,13 @@ See the README for more information.</string>
 			<key>ypos</key>
 			<integer>1415</integer>
 		</dict>
+		<key>E802EC61-2DB3-465B-B96A-970121A8B034</key>
+		<dict>
+			<key>xpos</key>
+			<integer>270</integer>
+			<key>ypos</key>
+			<integer>2385</integer>
+		</dict>
 		<key>EA0F68E9-2E61-4920-B0B5-C16E5B296294</key>
 		<dict>
 			<key>xpos</key>
@@ -2882,9 +2980,9 @@ See the README for more information.</string>
 		<key>FF356FFC-C7C5-4183-9278-121203F94B87</key>
 		<dict>
 			<key>xpos</key>
-			<integer>525</integer>
+			<integer>60</integer>
 			<key>ypos</key>
-			<integer>905</integer>
+			<integer>2385</integer>
 		</dict>
 	</dict>
 	<key>variables</key>
