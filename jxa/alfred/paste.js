@@ -1,9 +1,9 @@
 #!/usr/bin/osascript -l JavaScript
 /*
- * Paste text to the frontmost app. This uses the clipboard, as the text to paste
- * may hold things like emoji's. You can't just "keystroke" those.
+ * Paste text to the frontmost app. This triggers the Alfred workflow,
+ * which in turn uses the clipboard.
  *
- * Open issue: resetting the clipbaord after pasting doesn't really work well.
+ * The text to paste may hold things like emoji's. You can't just "keystroke" those.
  *
  * Requires one argument: the text to paste.
  */
@@ -15,14 +15,8 @@ function run(arguments) {
 
     let text = arguments.join(' ');
 
-    let app = Application.currentApplication();
-    app.includeStandardAdditions = true;
-    let clipboard = app.theClipboard;
+    let app = Application('Alfred');
+    app.runTrigger('paste', {inWorkflow: 'nl.ulso.vps', withArgument: text});
 
-    app.setTheClipboardTo(text);
-    Application('System Events').keystroke('v', {using: 'command down'});
-    delay(0.2);
-
-    app.setTheClipboardTo(clipboard);
     return true;
 }

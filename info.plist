@@ -731,6 +731,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>FF356FFC-C7C5-4183-9278-121203F94B87</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>6F1E821E-BF71-4D08-8D82-C0CD10D138CF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Vincent Oostindie</string>
@@ -1433,6 +1446,19 @@ ruby exe/vps -a project list
 			<string>alfred.workflow.trigger.snippet</string>
 			<key>uid</key>
 			<string>8F77D1C9-C5B7-438A-BAFF-6FDE7BECFE38</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>triggerid</key>
+				<string>paste</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>FF356FFC-C7C5-4183-9278-121203F94B87</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -2852,6 +2878,13 @@ See the README for more information.</string>
 			<integer>60</integer>
 			<key>ypos</key>
 			<integer>770</integer>
+		</dict>
+		<key>FF356FFC-C7C5-4183-9278-121203F94B87</key>
+		<dict>
+			<key>xpos</key>
+			<integer>525</integer>
+			<key>ypos</key>
+			<integer>905</integer>
 		</dict>
 	</dict>
 	<key>variables</key>
