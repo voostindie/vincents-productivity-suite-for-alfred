@@ -101,6 +101,25 @@ module VPS
         end
       end
 
+      # Outputs the name of the focused area.
+      class Current < SystemCommand
+        def supported_entity_type
+          EntityType::Area
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Prints the name of the area that has focus'
+            parser.separator 'Usage: area current'
+          end
+        end
+
+        def run(context)
+          context.area[:name]
+        end
+
+      end
+
       # Lists all available commands in this area. This command purely exists to support the
       # Alfred workflow, allowing it to show a list of things to do for a selected entity.
       class Commands < SystemCommand
