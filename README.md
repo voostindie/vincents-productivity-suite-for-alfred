@@ -25,6 +25,7 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Outlook Calendar
 - Desktop wallpapers
 - BitBar
+- GeekTool
 
 A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly edit notes and write e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
 
@@ -571,7 +572,7 @@ actions:
 
 See below for details on configuration of each action.
 
-### Show the name of the focused area in BitBar
+### Show the focused area in BitBar
 
 [BitBar](https://getbitbar.com) is a nice utility that can show all kinds of texts in the menubar. I use it to show the name of the focused area, so that I always know for sure which area I'm working in. (That's getting more and more important, with any new plugin this tool gets.)
 
@@ -592,6 +593,19 @@ With:
 - `plugin` (optional): the exact name of the plugin. You only need to set this if you changed the name of the symlink.
 
 To override what BitBar shows in the menubar for the focused, see the BitBar configuration on area level, described above.
+
+### Show the focused area in GeekTool
+
+Lately I've been experimenting a bit with my desktop setup. Currently I use just one desktop and have set the menubar and Dock to hide automatically. That means I don't get to see the active area all the time with BitBar. Solution: [GeekTool](https://www.tynsoe.org/v2/geektool/). I've set up a couple of *geeklets* that show up at the bottom of my screen and that are hardly ever covered by windows: the currently playing track, a clock, and the name of the active area.
+
+The geeklet to show the active area simply calls `vps area current`, which outputs the name of the focused area. On top of that VPS offers a plugin to tell GeekTool to refresh certain geeklets whenever the focus changes. To enable that plugin, add GeekTool to the `actions` configuration:
+
+```yaml
+geektool:
+    geeklets:
+```
+
+The geeklets property expects a list of geeklet *names* to refresh. Setting a name is optional in GeekTool, but for this plugin to work you'll have to configure them. (The alternative is to use IDs. But these are long, random and can't easily be copied.)
 
 ### Change the desktop wallpaper
 
