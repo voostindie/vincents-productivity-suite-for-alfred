@@ -6,8 +6,10 @@ module VPS
   # that process is then kept in here, in memory.
   class Configuration
 
-    # @return [String] default location of the configuration file: +~/.vpsrc+
-    DEFAULT_FILE = File.join(Dir.home, '.vpsrc').freeze
+    ROOT = File.join(Dir.home, '.vps')
+
+    # @return [String] default location of the configuration file: +~/.vps/config.yaml+
+    DEFAULT_FILE = File.join(ROOT, 'config.yaml').freeze
 
     # The configuration of the individual areas, keyed on the plugin name, as well as 3 other
     # values, keyed on symbol: +:key+, +:name+ and +:root+
@@ -54,6 +56,13 @@ module VPS
         .to_h
     end
 
+    def plugins_for(area)
+      area
+        .keys
+        .reject { |key| key.is_a?(Symbol) }
+        .filter_map { |name| Registry.instance.plugins[name] }
+    end
+
     private
 
     def commands_per_entity_type(area, entity_type)
@@ -62,13 +71,6 @@ module VPS
         .flatten
         .sort_by { |command| command.name }
         .select { |command| command.supported_entity_type == entity_type }
-    end
-
-    def plugins_for(area)
-      area
-        .keys
-        .reject { |key| key.is_a?(Symbol) }
-        .filter_map { |name| Registry.instance.plugins[name] }
     end
 
     def extract_areas(hash)
@@ -116,6 +118,7 @@ module VPS
 
     def extract_actions(hash)
       @actions = {}
+      @actions['alfred'] = Registry.instance.plugins['alfred'].configurator.process_action_configuration({}).freeze
       (hash['actions'] || {}).each_pair do |key, config|
         plugin = Registry.instance.plugins[key]
         if plugin.nil? || plugin.action.nil?

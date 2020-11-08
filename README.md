@@ -6,7 +6,19 @@ This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothin
 
 But please remember that I've had exactly one person in mind while creating this suite: me. *Your mileage may vary!*
 
-**Update October 2020**: This is version 3.0 of this tool. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
+**Update November 2020**: Hot on the heels of version 3.0, version 4.0 is out! A new major release, because the contracts with you, the user, are broken. Specifically:
+
+- The configuration file is now expected to be in `~/.vps/config.yaml`. To migrate:
+    - Create `~/.vps`
+    - Move `~/.vpsrc` to `~/.vps/config.yaml`
+    - Delete all files with prefix `.vps` from your home folder. (These are typically caches.)
+- The Alfred workflow is now generated whenever you change focus. This ensures that hotkeys and keywords are only enabled when the required entity type is supported in the area. Plus, it sets the action icons to the correct applications. To migrate:
+    - Delete the current VPS workflow from Alfred.
+    - Change the focus at least once through the command line
+    - It might be necessary to restart Alfred after this. That's just needed this one time though.
+- Due to the way VPS is now setup, with a stable code directory - all changes are stored under `~/.vps` it's now theoratically possible to release an actual Gem from this code.
+
+**Update October 2020**: Version 3.0 of VPS is out. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
 
 **A note on the code**: I'm not particularly proud of the code in this project. True Rubyists probably will avert their eyes in disgust. Unit tests are also seriously lacking. But hey, I've been running this tool for several years now day in day out, and it gets the job done!
 
@@ -77,16 +89,13 @@ After all this, an `exe/vps help` should work. For easier use on the command-lin
 
 ### Alfred
 
-1. Go to Alfred's plugin directory: `cd ~/Library/Application\ Support/Alfred/Alfred.alfredpreferences/workflows`
-2. Set up a symlink to the git clone: `ln -s /path/to/vincents-productivity-suite-for-alfred`
-
-This will make the "Vincent's Productivity Suite" workflow automatically show up in Alfred and any `git pull` you do will immediately work in Alfred too.
+Make sure the 'Alfred' plugin is enabled in the `action` section of the configuration. Then, change focus once. Every time you change the focus the Alfred workflow is rebuild, specifically for the area you've selected. This includes registering the workflow in Alfred.
 
 ### About Ruby versions
 
 I'm taking care that this plugin works with the Ruby version that comes with the latest macOS. At the moment that's `2.6.3`. But I actually use the latest version of Ruby myself. To manage multiple Ruby versions I use [rbenv](https://github.com/rbenv/rbenv) as provided by [Homebrew](https://brew.sh).
 
-To make Alfred use the same version of Ruby as the command-line tools, you can set up the `RUBY_PATH` workflow environment variable. For me it points to `/Users/vincent/.rbenv/shims`.
+The Alfred workflow by default uses the same version of Ruby as the command-line does, but you can override it in the Alfred plugin. See below.
 
 I haven't yet found a way to make the BitBar plugin use the same version. it always uses the system Ruby. But I'm making sure that also works.
 
@@ -127,7 +136,7 @@ I have some idea on how to fix this, but haven't come around to trying this out 
 
 ## How to configure
 
-Create a file `.vpsrc` in your home folder and put something like this in there:
+Create a file `.vps/config.yaml` that looks something like this:
 
 ```yaml
 areas:
@@ -138,8 +147,6 @@ areas:
         calendar:
         alfred:
 ```
-
-In case you were wondering: yes, this is [YAML](http://yaml.org).
 
 This sets up a single *area of responsibility* with the Obsidian, OmniFocus, Contacts, Calendar and Alfred plugins enabled. These plugins all have default configurations, which is why you don't see anything here.
 
@@ -546,7 +553,6 @@ With:
 
 - `label`: the text to show in the menu bar. (Hint: try emoji's!)
 
-
 ### Paste
 
 The "Paste" plugin has no configuration and it's automatically enabled for all area's. What it does is provide a command named `paste` to various entity types, allowing you to paste it to the frontmost application. That can save you some typing in the long run.
@@ -555,22 +561,48 @@ For events it adds another command: `paste-attendees`, which pastes the names of
 
 ## Performing actions when the focus changes
 
-Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently there are three for:
+Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently there are five for:
 
-1. Showing the name of the focused area in BitBar
-2. Changing the desktop wallpaper
-3. Changing the focus in OmniFocus
+1. Rebuilding the Alfred workflow
+2. Showing the name of the focused area in BitBar
+3. Changing the desktop wallpaper
+4. Changing the focus in OmniFocus
+5. Refreshing geeklets from GeekTool
+
+The `alfred` plugin is always enabled, even if it's not in your configuration. The only reason to add it is to configure the Ruby environment.
 
 To enable all actions, add this to your configuration:
 
 ```yaml
 actions:
+    alfred:
     bitbar:
     wallpaper:
     omnifocus:
+    geektool:
 ```
 
 See below for details on configuration of each action.
+
+### Updating the Alfred workflow
+
+As mentioned, the `alfred` action is enabled by default. The only reason to explicitly configure a different Ruby environment, like so:
+
+```yaml
+alfred:
+    ruby: /path/to/ruby
+```
+
+This is useful in my own case, because I use rbenv. When running VPS without a specific configuration, VPS is locked to a specific version of Ruby: the global default at the time I set up the configuration. E.g. `/Users/vincent/.rbenv/versions/2.7.2/bin/ruby`. This works, but it breaks when a new version of Ruby comes out, I replace the global default and delete the old one. The Alfred workflow is then still using 2.7.2.
+
+The solution:
+
+```yaml
+alfred:
+    ruby: ~/.rbenv/shims/ruby
+```
+
+This ensures that the Alfred workflow always uses the global default, whatever it is.
 
 ### Show the focused area in BitBar
 

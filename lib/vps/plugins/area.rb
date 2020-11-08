@@ -141,6 +141,7 @@ module VPS
           raise 'No type specified' if type_name.nil?
           id = context.arguments.join(' ')
           raise 'No id specified' if id.empty?
+          root = File.expand_path('../../..', File.dirname(File.realdirpath(__FILE__)))
           context.configuration
             .available_commands(context.area)
             .select { |entity_type, _| entity_type.entity_type_name == type_name }
@@ -152,7 +153,7 @@ module VPS
               title: command.option_parser.banner,
               arg: "#{type_name} #{command.name} #{id}",
               icon: {
-                path: "icons/#{Registry.instance.for_command(command).name}.png"
+                path: "#{root}/icons/#{Registry.instance.for_command(command).name}.png"
               }
             }
           end

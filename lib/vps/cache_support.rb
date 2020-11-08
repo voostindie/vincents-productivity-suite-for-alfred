@@ -19,7 +19,7 @@ module VPS
   #   end
   module CacheSupport
 
-    CACHE_PREFIX = '.vps.cache.'.freeze
+    CACHE_PREFIX = File.join(Dir.home, '.vps', 'caches').freeze
     private_constant :CACHE_PREFIX
 
     # Is the cache enabled? Override this method, or it never will be!
@@ -51,7 +51,7 @@ module VPS
     # @return [Integer] the number of caches flushed
     def flush_plugin_cache(area_key)
       count = 0
-      Dir.glob(File.join(Dir.home, CACHE_PREFIX + area_key + '-*')) do |f|
+      Dir.glob(File.join(CACHE_PREFIX, area_key + '-*')) do |f|
         File.delete(f)
         count += 1
       end
@@ -61,20 +61,12 @@ module VPS
     private
 
     def cache_filename(context, id = nil)
-      @cache_filename ||= File.join(Dir.home,
-                                    CACHE_PREFIX +
-                                      context.area_key +
+      @cache_filename ||= File.join(CACHE_PREFIX,
+                                    context.area_key +
                                       '-' +
-                                      supported_entity_type.entity_type_name + '-' +
-                                      (id.nil? ? 'all' : "-#{hash_code(id)}"))
-    end
-
-    ##
-    # Source: https://stackoverflow.com/questions/22740252/how-to-generate-javas-string-hashcode-using-ruby#26063180
-    def hash_code(string)
-      string.each_char.reduce(0) do |result, char|
-        [((result << 5) - result) + char.ord].pack('L').unpack('l').first
-      end
+                                      supported_entity_type.entity_type_name +
+                                      '-' +
+                                      (id.nil? ? 'all' : id.hash_code.to_s))
     end
 
     def cache_present?(context, id)

@@ -3,7 +3,7 @@ module VPS
   class State
 
     # @return [String] the default file name of the state file: +`~/.vpsrc.state`+
-    DEFAULT_FILE = (Configuration::DEFAULT_FILE + '.state').freeze
+    DEFAULT_FILE = File.join(Configuration::ROOT, 'state.yaml').freeze
 
     # Loads the state from disk
     # @param path [String] location to load the state from.
