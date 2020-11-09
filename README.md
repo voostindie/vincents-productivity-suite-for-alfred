@@ -16,7 +16,7 @@ But please remember that I've had exactly one person in mind while creating this
     - Delete the current VPS workflow from Alfred.
     - Change the focus at least once through the command line
     - It might be necessary to restart Alfred after this. That's just needed this one time though.
-- Due to the way VPS is now setup, with a stable code directory - all changes are stored under `~/.vps` it's now theoretically possible to release an actual Gem from this code.
+- Due to the way VPS is now set up, with a stable code directory - all changes are stored under `~/.vps` it's now theoretically possible to release an actual Gem from this code.
 
 **Update October 2020**: Version 3.0 of VPS is out. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
 
@@ -39,41 +39,69 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - BitBar
 - GeekTool
 
-A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people in Contacts. This workflow gives me the means to quickly edit notes and write e-mails and refer to projects and people, either through keyboard shortcuts, keywords, or snippets.
+A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people and groups in Contacts. This CLI and the workflow on top of it give me the means to quickly edit notes and write e-mails and refer to projects and people, either through the terminal, keyboard shortcuts, keywords, or snippets.
 
 An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus.
 
-This CLI and Alfred workflow can:
+To give you an idea of what the CLI and Alfred workflow can do, here is the output of `vps help` on my own configuration, for the area with the most extensive area (work):
 
-- Set focus to an area and
-    - Show the name of the area (or a nice label) in BitBar
-    - Change the desktop wallpaper
-    - Change the focus in Alfred
-- Create new notes according to a template in iA Writer
-- Browse documents in Alfred
-- Browse reference material in Alfred
-- Select a note and:
-    - Open it in iA Writer / Obsidian / Bear for editing
-    - Open it in Marked 2 for viewing
-- Select a contact and:
-    - Open it in Contacts
-    - Create a note for it
-    - Write an e-mail
-    - Paste its name into the frontmost application
-- Select a contact group and:
-    - Create a note for it
-    - Paste all contacts in it into the frontmost application
-- Select a project and:
-    - Open it in OmniFocus
-    - Create a note for it
-    - Browse project files with Alfred's built-in file browser
-    - Paste its name into the frontmost application
-- Select an event and:
-    - Create a note for it
-    - Paste its title into the frontmost application
-    - Paste its attendees into the frontmost application
+```
+Usage: vps [options] <type> <command> [arguments]
+    -a, --[no-]alfred                Generate output in Alfred format
+    -f, --focus [AREA]               Force the focus to the specified area temporarily
+    -v, --version                    Show the version number and exit
 
-...and more!
+To get information on all available plugins: vps help
+
+Where <type> and <command> are one of:
+
+  area
+    commands  : List all available commands for entities of the specified type in this area
+    current   : Prints the name of the area that has focus
+    flush     : Flushes any caches for all plugins in this area
+    focus     : Set the focus to the specified area
+    list      : List all available areas
+  contact
+    list      : List all available contacts in this area
+    mail      : Write an e-mail
+    note      : Edit this contact's note
+    open      : Open in Contacts
+    paste     : Paste contact to the frontmost app
+  event
+    list      : List all events for today in this area
+    markdown  : Paste event as Markdown to the frontmost app
+    note      : Edit this event's note
+    paste     : Paste event to the frontmost app
+    paste-attendees: Paste event attendees to the frontmost app
+  file
+    documents : Browse documents in Alfred
+    reference : Browse reference material in Alfred
+  group
+    list      : List all available groups in this area
+    mail      : Write an e-mail
+    paste     : Paste group to the frontmost app
+  note
+    create    : Create a new, empty note, optionally with a title
+    list      : List all notes in this area
+    open      : Open in Obsidian
+    paste     : Paste note to the frontmost app
+    root      : Return the root path on disk to the notes
+    today     : Create or open today's note
+    view      : Open in Marked
+  project
+    files     : Browse project files
+    list      : List all available projects in this area
+    markdown  : Paste project as Markdown to the frontmost app
+    note      : Edit this project's note
+    open      : Open in OmniFocus
+    paste     : Paste project to the frontmost app
+
+  help <type> <command>: show help on a specific command
+
+Note that the types and commands available depend on the focused area.
+```
+
+What you see here is that the CLI and workflow act on *entities*, like projects, contacts, files and notes. Under the hood, VPS triggers macOS applications according to the configuration. For notes, for example, you can use either Obsidian, Bear or iA Writer. The CLI commands, hotkeys and keywords are always the same. You remember the hotkey for creating a new note once, and it will continue to work, even if you switch from one application to another!
 
 ## Installation
 
@@ -89,7 +117,7 @@ After all this, an `exe/vps help` should work. For easier use on the command-lin
 
 ### Alfred
 
-Make sure the 'Alfred' plugin is enabled in the `action` section of the configuration. Then, change focus once. Every time you change the focus the Alfred workflow is rebuild, specifically for the area you've selected. This includes registering the workflow in Alfred.
+Make sure the 'Alfred' plugin is enabled in the `action` section of the configuration. Then, change focus once. Every time you change the focus the Alfred workflow is rebuilt, specifically for the area you've selected. This includes registering the workflow in Alfred.
 
 ### About Ruby versions
 
@@ -125,14 +153,6 @@ Using the shared prefix `;` and no suffix for snippets:
 - `;p`: copies a project's name into the frontmost application.
 - `;g`: copies all contacts from a contact group into the frontmost application
 - `;n`: copies a note's ID into the frontmost application as a Wiki-link
-
-### Icons
-
-Unfortunately the icons in the Alfred workflow are hardcoded, and independent of the active plugins in an area. That means, for example, that you see an Obsidian icon, even if you configured the focused area to use iA Writer or Bear.
-
-Of course you can change the icons yourself in the workflow through Alfred, but any changes made by me might override that at some point.
-
-I have some idea on how to fix this, but haven't come around to trying this out and implementing it for real. It's not high on my priority list, because I use one set of tools across all areas. 
 
 ## How to configure
 
@@ -177,11 +197,13 @@ areas:
             reference material: 'Reference Material'
         bitbar:
             label: 'Work'
+actions:
+    alfred:
 ```
 
 Again, this is the exact same configuration as the one mentioned earlier. From this full example, you probably get the gist. Below there's detailed information on every separate plugin.
 
-To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `obsidian` section, creating notes is not possible in that area. Alternatively you can select a different plugin that supports the same entities, to have the same shortcuts magically use a different application when you switch focus!
+To define an additional area, just add one at the same level as 'work'. Name it however you like. To disable a certain feature for an area, remove its reference completely. E.g. if you remove the `obsidian` section and don't add one for another notes app, creating notes is not possible in that area. Alternatively you can select a different plugin that supports the same entities, to have the same shortcuts magically use a different application when you switch focus!
 
 ### Areas
 
@@ -197,7 +219,7 @@ Where:
 
 - `key`: the technical key. It doesn't really matter what it is, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
-- `root`: the directory under which all files for this reside on disk. The default is set to `~/<name>`.
+- `root`: the directory under which all files for this area reside on disk. The default is set to `~/<name>`.
 
 ### Obsidian (and note applications in general!)
 
@@ -279,7 +301,7 @@ iawriter:
                 {% endfor %}
 ```
 
-This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, appends it to the title in DD-MM-YY format and also adds two tags. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event.
+This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, append it to the title in DD-MM-YY format and also add two tags. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event (pulled from the calender).
 
 The default template for the filename is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 
@@ -538,6 +560,45 @@ Where:
 - `calendar`: the name of the calendar to fetch events from. This defaults to `Calendar`.
 - `me`: your e-mail address. This defaults to nothing. Filling this in ensures that your own name is filtered from the list of attendees for a meeting.
 
+### Markdown
+
+The Markdown plugin pulls data from projects and events and pastes it to the frontmost application as Markdown. That Markdown looks as follows:
+
+```
+## <title>
+
+text
+```
+
+Configuration:
+
+```yaml
+markdown:
+    level:
+    link:
+```
+
+With:
+
+* `level` (optional): the level of the Markdown heading for the pasted text. It defaults to 2.
+* `link` (optional): whether the name of the project and attendees of events should be generated as [[wikilinks]] or not. It defaults to `false`.
+
+In case of using OmniFocus for projects, the title and text for a project can be defined in the YAML Back Matter of the project, defined under the key `markdown`. If there is no YAML Back Matter, the project name is used as the title of the Markdown, and text is omitted.
+
+In case of an event, the text of the is set to the list of attendees of the event.
+
+### Marked
+
+The Marked plugin adds a single command to notes: `view`, for showing the note in the Marked 2. The configuration couldn't be simpler:
+
+Configuration:
+
+```yaml
+marked:
+```
+
+Don't enable this plugin when you keep notes in Bear. It doesn't work in that case, because there are no files on disk that Marked can open.
+
 ### BitBar
 
 In case you enable the BitBar action that's triggered when the focus changes (see below), you can override the name that the BitBar will show as a label. By default it's the name of the area.
@@ -586,14 +647,14 @@ See below for details on configuration of each action.
 
 ### Updating the Alfred workflow
 
-As mentioned, the `alfred` action is enabled by default. The only reason to explicitly configure a different Ruby environment, like so:
+As mentioned, the `alfred` action is enabled by default. The only reason to explicitly configure it is to use a different Ruby environment, like so:
 
 ```yaml
 alfred:
     ruby: /path/to/ruby
 ```
 
-This is useful in my own case, because I use rbenv. When running VPS without a specific configuration, VPS is locked to a specific version of Ruby: the global default at the time I set up the configuration. E.g. `/Users/vincent/.rbenv/versions/2.7.2/bin/ruby`. This works, but it breaks when a new version of Ruby comes out, I replace the global default and delete the old one. The Alfred workflow is then still using 2.7.2.
+This is useful in my own case, because I use rbenv. When running VPS without a specific configuration, VPS is locked to a specific version of Ruby: the global default at the time the configuration was set up. E.g. `/Users/vincent/.rbenv/versions/2.7.2/bin/ruby`. This works, but it breaks when a new version of Ruby comes out, I replace the global default and delete the old one. The Alfred workflow is then still using 2.7.2, which no longer exists.
 
 The solution:
 
@@ -625,19 +686,6 @@ With:
 - `plugin` (optional): the exact name of the plugin. You only need to set this if you changed the name of the symlink.
 
 To override what BitBar shows in the menubar for the focused, see the BitBar configuration on area level, described above.
-
-### Show the focused area in GeekTool
-
-Lately I've been experimenting a bit with my desktop setup. Currently I use just one desktop and have set the menubar and Dock to hide automatically. That means I don't get to see the active area all the time with BitBar. Solution: [GeekTool](https://www.tynsoe.org/v2/geektool/). I've set up a couple of *geeklets* that show up at the bottom of my screen and that are hardly ever covered by windows: the currently playing track, a clock, and the name of the active area.
-
-The geeklet to show the active area simply calls `vps area current`, which outputs the name of the focused area. On top of that VPS offers a plugin to tell GeekTool to refresh certain geeklets whenever the focus changes. To enable that plugin, add GeekTool to the `actions` configuration:
-
-```yaml
-geektool:
-    geeklets:
-```
-
-The geeklets property expects a list of geeklet *names* to refresh. Setting a name is optional in GeekTool, but for this plugin to work you'll have to configure them. (The alternative is to use IDs. But these are long, random and can't easily be copied.)
 
 ### Change the desktop wallpaper
 
@@ -678,6 +726,19 @@ omnifocus:
 That's it. The section has no default settings as of yet.
 
 What this action does is pick the very first OmniFocus window it can find, and change its focus. For me this is just fine, since I always have exactly one OmniFocus window open anyway.
+
+### Show the focused area in GeekTool
+
+Lately I've been experimenting a bit with my desktop setup. Currently I use just one desktop and have set the menubar and Dock to hide automatically. That means I don't get to see the active area all the time with BitBar. Solution: [GeekTool](https://www.tynsoe.org/v2/geektool/). I've set up a couple of *geeklets* that show up at the bottom of my screen and that are hardly ever covered by windows: the currently playing track, a clock, and the name of the active area.
+
+The geeklet to show the active area simply calls `vps area current`, which outputs the name of the focused area. On top of that VPS offers a plugin to tell GeekTool to refresh certain geeklets whenever the focus changes. To enable that plugin, add GeekTool to the `actions` configuration:
+
+```yaml
+geektool:
+    geeklets:
+```
+
+The geeklets property expects a list of geeklet *names* to refresh. Setting a name is optional in GeekTool, but for this plugin to work you'll have to configure them. (The alternative is to use IDs. But these are long, random and can't easily be copied.)
 
 ## About the icon
 

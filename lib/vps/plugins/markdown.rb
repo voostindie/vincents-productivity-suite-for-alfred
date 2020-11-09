@@ -78,7 +78,7 @@ module VPS
         end
 
         def text(context, event)
-          people = event.people.map {|p| "[[#{p}]]" }.join(', ')
+          people = event.people.map {|p| link(context, p) }.join(', ')
           "With #{people}" unless people.empty?
         end
       end
