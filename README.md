@@ -27,17 +27,19 @@ But please remember that I've had exactly one person in mind while creating this
 This is a command-line interface (CLI) as well as an [Alfred](https://www.alfredapp.com) workflow on top of a set of Ruby scripts that make my daily computer work a lot more efficient. So, yes it's macOS only, and specifically it works with:
 
 - Alfred (duh!)
-- Obsidian
-- iA Writer
-- Bear
-- OmniFocus
 - Apple Contacts
 - Apple Mail
 - Apple Calendar
-- Outlook Calendar
-- Desktop wallpapers
+- Bear
 - BitBar
+- Desktop wallpapers
 - GeekTool
+- iA Writer
+- Markdown editors
+- Marked 2
+- Obsidian
+- OmniFocus
+- Outlook Calendar
 
 A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people and groups in Contacts. This CLI and the workflow on top of it give me the means to quickly edit notes and write e-mails and refer to projects and people, either through the terminal, keyboard shortcuts, keywords, or snippets.
 
