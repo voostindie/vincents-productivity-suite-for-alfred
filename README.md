@@ -16,7 +16,7 @@ But please remember that I've had exactly one person in mind while creating this
     - Delete the current VPS workflow from Alfred.
     - Change the focus at least once through the command line
     - It might be necessary to restart Alfred after this. That's just needed this one time though.
-- Due to the way VPS is now setup, with a stable code directory - all changes are stored under `~/.vps` it's now theoratically possible to release an actual Gem from this code.
+- Due to the way VPS is now setup, with a stable code directory - all changes are stored under `~/.vps` it's now theoretically possible to release an actual Gem from this code.
 
 **Update October 2020**: Version 3.0 of VPS is out. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
 
