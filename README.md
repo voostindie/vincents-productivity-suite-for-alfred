@@ -103,6 +103,10 @@ Where <type> and <command> are one of:
 Note that the types and commands available depend on the focused area.
 ```
 
+The accompanying Alfred workflow looks like this (at least, a tiny portion of it; the complete one has 19 rows...):
+
+![](alfred-screenshot.png)
+
 What you see here is that the CLI and workflow act on *entities*, like projects, contacts, files and notes. Under the hood, VPS triggers macOS applications according to the configuration. For notes, for example, you can use either Obsidian, Bear or iA Writer. The CLI commands, hotkeys and keywords are always the same. You remember the hotkey for creating a new note once, and it will continue to work, even if you switch from one application to another!
 
 ## Installation

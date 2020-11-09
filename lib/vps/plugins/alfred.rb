@@ -174,7 +174,7 @@ module VPS
             disabled: false,
             readme: 'Add the Alfred action to your VPS configuration to update this workflow automatically when the focus changes.',
             webaddress: 'https://github.com/voostindie/vincents-productivity-suite-for-alfred',
-            version: 'GENERATED'
+            version: 'GENERATED - ' + DateTime.now.to_s
           )
           @workflow.scope = @context.area[:key]
         end
@@ -189,16 +189,20 @@ module VPS
 
         def add_open_config
           @workflow.row
+          @workflow.column
           config = @workflow.keyword('vps', 'Edit the VPS configuration')
+          @workflow.column
           file = @workflow.open_file(Configuration::DEFAULT_FILE)
           @workflow.wire(config, file)
         end
 
         def add_flush_caches
           @workflow.row
+          @workflow.column
           flush = @workflow.keyword('flush', 'Flush all caches for the active area')
+          @workflow.column
           script = @workflow.script("#{@config[:vps]} area flush")
-          @workflow.column(3)
+          @workflow.column
           @notification = @workflow.notification('{query}', 'Vincent\'s Productivity Suite')
           @workflow.wire(flush, script, @notification)
         end
@@ -258,6 +262,7 @@ module VPS
           @workflow.row
           hotkey = @workflow.hotkey(',')
           keyword = @workflow.keyword('note', 'Create note {query}')
+          @workflow.column
           script = @workflow.script("#{@config[:vps]} note create $*")
           @workflow.wire(hotkey, keyword, script, @notification)
           @icons[keyword] = plugin_name
@@ -270,6 +275,7 @@ module VPS
           script = @workflow.script("#{@config[:vps]} note today")
           @workflow.wire(hotkey, script, @notification)
           @workflow.row
+          @workflow.column
           keyword = @workflow.keyword('today', 'Open today\'s note')
           @workflow.wire(keyword, script)
           @icons[script] = plugin_name
@@ -279,6 +285,7 @@ module VPS
           [{h: 'R', k: 'refs', c: 'reference'}, {h: 'D', k: 'docs', c: 'documents'}].each do |b|
             @workflow.row
             hotkey = @workflow.hotkey(b[:h])
+            @workflow.column(2)
             script = @workflow.script_filter("#{@config[:vps]} file #{b[:c]}", keyword: b[:k])
             @workflow.wire(hotkey, script)
             @icons[script] = 'alfred'
