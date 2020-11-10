@@ -589,7 +589,7 @@ With:
 * `level` (optional): the level of the Markdown heading for the pasted text. It defaults to 2.
 * `link` (optional): whether the name of the project and attendees of events should be generated as [[wikilinks]] or not. It defaults to `false`.
 
-In case of using OmniFocus for projects, the title and text for a project can be defined in the YAML Back Matter of the project, defined under the key `markdown`. If there is no YAML Back Matter, the project name is used as the title of the Markdown, and text is omitted.
+In case of using OmniFocus for projects, the title and text for a project can be defined in the YAML Back Matter of the project, defined under the key `markdown`. If there is no YAML Back Matter, the project name is used as the title of the Markdown, and text is omitted. Note that the configuration in OmniFocus are not just strings of characters, but actual Liquid templates. You can use mostly the same variables as for other notes: day, month, year and week.
 
 In case of an event, the text of the is set to the list of attendees of the event.
 

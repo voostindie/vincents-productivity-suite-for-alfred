@@ -213,7 +213,8 @@ module VPS
           focus_list = @workflow.script_filter("#{@config[:vps]} area list", keyword: 'focus', title: 'Focus on area of responsibility {query}')
           @workflow.column
           focus_action = @workflow.script("#{@config[:vps]} area focus $*")
-          @workflow.wire(f, focus_list, focus_action, @notification)
+          @workflow.wire(f, focus_list, focus_action)
+          @workflow.wire(focus_list, @notification)
         end
 
         def add_entity_actions

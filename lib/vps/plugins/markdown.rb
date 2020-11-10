@@ -29,6 +29,13 @@ module VPS
 
         def run(context, runner = JxaRunner.new('alfred'))
           entity = context.load_instance
+          date = DateTime.now
+          @template_context = {
+            'year' => date.strftime('%Y'),
+            'month' => date.strftime('%m'),
+            'week' => date.strftime('%V'),
+            'day' => date.strftime('%d'),
+          }
           output = '#' * context.configuration[:level] + ' '
           output += title(context, entity)
           output += "\n"
@@ -57,12 +64,18 @@ module VPS
 
         def title(context, project)
           config = project.config['markdown'] || {}
-          config['title'] || link(context, project.name)
+          if config['title'].nil?
+            link(context, project.name)
+          else
+            config['title'].render_template(@template_context)
+          end
         end
 
         def text(context, project)
           config = project.config['markdown'] || {}
-          config['text']
+          unless config['text'].nil?
+            config['text'].render_template(@template_context)
+          end
         end
       end
 
@@ -78,7 +91,7 @@ module VPS
         end
 
         def text(context, event)
-          people = event.people.map {|p| link(context, p) }.join(', ')
+          people = event.people.map { |p| link(context, p) }.join(', ')
           "With #{people}" unless people.empty?
         end
       end
