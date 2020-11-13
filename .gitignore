@@ -1,2 +1,6 @@
-doc/
-vpsrc.yaml
+/.bundle
+/vendor/bundle
+/doc
+/.yardoc
+/coverage
+/.ruby-version
