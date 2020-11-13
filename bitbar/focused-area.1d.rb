@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -W0
 #
 # Sets the name of the focused area in the BitBar
 # <https://getbitbar.com>

@@ -18,4 +18,5 @@ require 'vps/configuration'
 require 'vps/state'
 require 'vps/plugin'
 
+require 'vps/plugins/alfred'
 require 'vps/plugins/bitbar'
