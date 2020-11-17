@@ -55,6 +55,7 @@ module VPS
                            .map { |p| p.name }
                            .reject { |n| n == context.configuration[:me] }
                            .map { |n| context.configuration[:replacements][n] || n }
+                           .uniq
           event
         end
       end
