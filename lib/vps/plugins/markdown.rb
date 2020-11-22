@@ -92,7 +92,7 @@ module VPS
 
         def text(context, event)
           people = event.people.map { |p| link(context, p) }.join(', ')
-          "With #{people}" unless people.empty?
+          "With #{people}." unless people.empty?
         end
       end
     end

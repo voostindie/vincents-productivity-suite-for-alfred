@@ -104,25 +104,27 @@ module VPS
       attr_accessor :name, :note
 
       # Read "YAML Back Matter" from the project note if present.
-      # @return [Hash, nil]
+      # @return [Hash]
       def config
         @config ||=
           if note.nil?
             {}
           else
-            yaml = note.
-              lines.
-              drop_while { |l| !l.start_with?('---') }.
-              drop(1).
-              join.
-              gsub("\t", '  ').
-              gsub("’", "'").
-              gsub("“", '"').
-              gsub("”", '"')
+            yaml = note
+                     .lines
+                     .drop_while { |l| !l.start_with?('---') }
+                     .drop(1)
+                     .join
+                     .gsub("\t", '  ')
+                     .gsub("’", "'")
+                     .gsub("“", '"')
+                     .gsub("”", '"')
+                     .strip
             if yaml.empty?
               {}
+            else
+              YAML.load(yaml)
             end
-            YAML.load(yaml)
           end
       end
     end

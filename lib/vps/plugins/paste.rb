@@ -33,7 +33,9 @@ module VPS
         end
 
         def run(context, runner = JxaRunner.new('alfred'))
-          runner.execute('paste', text_from(context.load_instance))
+          entity = context.load_instance
+          text = text_from(entity)
+          runner.execute('paste', text)
           nil
         end
 

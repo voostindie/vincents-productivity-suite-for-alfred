@@ -123,7 +123,8 @@ module VPS
       end
 
       def create_or_find(context, note)
-        note.path = File.join(context.configuration[:root], note.id + '.md')
+        path = note.path.nil? ? note.id : note.path
+        note.path = File.join(context.configuration[:root], path + '.md')
         note.is_new = false
         if !File.exist?(note.path) || File.size(note.path) == 0
           title = note.title
@@ -182,11 +183,7 @@ module VPS
                       else
                         "Select an action for '#{note.title}'"
                       end,
-            arg: if context.triggered_as_snippet?
-                   "[[#{note.title}]]"
-                 else
-                   "#{note.title}"
-                 end,
+            arg: note.title,
             autocomplete: note.title,
             variables: note.to_env
           }
@@ -212,10 +209,11 @@ module VPS
         filename_template = template(context, :filename)
         note = EntityType::Note.new do |n|
           n.title = template(context, :title).render_template(template_context).strip
-          n.id = if filename_template.nil?
+          n.path = filename_template.render_template(template_context).strip unless filename_template.nil?
+          n.id = if n.path.nil?
                    n.title
                  else
-                   filename_template.render_template(template_context).strip
+                   File.basename(n.path)
                  end
           n.id = Zaru.sanitize!(n.id)
           n.text = template(context, :text).render_template(template_context)
