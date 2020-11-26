@@ -24,7 +24,8 @@ module VPS
           vps = File.join(root, 'exe', 'vps')
           {
             root: root,
-            vps: "#{ruby} #{vps} -a"
+            vps: "#{ruby} #{vps} -a",
+            notifications: hash['notifications'].nil? ? true : hash['notifications']
           }
         end
       end
@@ -140,6 +141,7 @@ module VPS
           create_workflow
           add_external_paste_trigger
           add_open_config
+          add_notification
           add_flush_caches
           add_focus_area
           add_entity_actions
@@ -196,6 +198,14 @@ module VPS
           @workflow.wire(config, file)
         end
 
+        def add_notification
+          if @config[:notifications]
+            @workflow.row
+            @workflow.column(5)
+            @notification = @workflow.notification('{query}', 'Vincent\'s Productivity Suite')
+          end
+        end
+
         def add_flush_caches
           @workflow.row
           @workflow.column
@@ -203,7 +213,6 @@ module VPS
           @workflow.column
           script = @workflow.script("#{@config[:vps]} area flush")
           @workflow.column
-          @notification = @workflow.notification('{query}', 'Vincent\'s Productivity Suite')
           @workflow.wire(flush, script, @notification)
         end
 
@@ -339,6 +348,7 @@ module VPS
           # If the array is ['1', '2', '3'+, you'll get connections from +1+ to +2+ and from +2+ to +3+.
           # @return Void
           def wire(*uids)
+            uids.compact!
             i = 0
             while i < uids.size - 1 do
               @connections[uids[i]] ||= []

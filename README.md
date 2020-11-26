@@ -653,14 +653,26 @@ See below for details on configuration of each action.
 
 ### Updating the Alfred workflow
 
-As mentioned, the `alfred` action is enabled by default. The only reason to explicitly configure it is to use a different Ruby environment, like so:
+As mentioned, the `alfred` action is enabled by default. The only reason to explicitly configure it is to override some of its settings:
 
 ```yaml
 alfred:
     ruby: /path/to/ruby
+    notifications: false
 ```
 
-This is useful in my own case, because I use rbenv. When running VPS without a specific configuration, VPS is locked to a specific version of Ruby: the global default at the time the configuration was set up. E.g. `/Users/vincent/.rbenv/versions/2.7.2/bin/ruby`. This works, but it breaks when a new version of Ruby comes out, I replace the global default and delete the old one. The Alfred workflow is then still using 2.7.2, which no longer exists.
+Where
+
+- `ruby`: the path to the Ruby executable to use from Alfred; see below.
+- `notifications`: whether the Alfred actions from VPS should trigger macOS notifications; defaults to `true`.
+
+#### Configuring Ruby
+
+When running VPS without a specific configuration, VPS configures the Alfred workflow with the Ruby that was used to call VPS itself. This works
+most of the time, but can lead to surprises in some cases, for example when using rbenv and replacing the current Ruby.
+
+When running VPS under rbenv, the Ruby version is set to something like
+`/Users/vincent/.rbenv/versions/2.7.2/bin/ruby`. This works until I replace Ruby 2.7.2 with a newer version. Then all of a sudden the Alfred workflow is broken.
 
 The solution:
 
