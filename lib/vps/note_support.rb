@@ -94,6 +94,12 @@ module VPS
         EntityType::Note
       end
 
+      # @return [Boolean] whether the file should include frontmatter or not. If yes, any tags will be written
+      # in the frontmatter; if not, tags will be added at the bottom of the file, prepended with '#'.
+      def frontmatter?(context)
+        false
+      end
+
       def find_all(context)
         notes = Dir.glob("#{context.configuration[:root]}/**/*.md").sort_by { |p| File.basename(p) }
         notes.map do |path|
@@ -129,11 +135,20 @@ module VPS
         if !File.exist?(note.path) || File.size(note.path) == 0
           title = note.title
           text = note.text
-          tags = note.tags.map { |t| "##{t}" }.join(' ')
           content = ''
-          content += "# #{title}\n" unless title.empty?
-          content += "\n#{text}" unless text.empty?
-          content += "\n#{tags}" unless tags.empty?
+          if frontmatter?(context)
+            tags = note.tags.join(', ')
+            unless tags.empty?
+              content += "---\ntags: [#{tags}]\n---\n"
+            end
+            content += "# #{title}\n" unless title.empty?
+            content += "\n#{text}" unless text.empty?
+          else
+            tags = note.tags.map { |t| "##{t}" }.join(' ')
+            content += "# #{title}\n" unless title.empty?
+            content += "\n#{text}" unless text.empty?
+            content += "\n#{tags}" unless tags.empty?
+          end
           File.open(note.path, 'w') do |file|
             file.puts content
           end

@@ -11,6 +11,7 @@ module VPS
           config = {
             location: hash['location'] || area[:name],
             root: File.join(area[:root], hash['path'] || 'Notes'),
+            frontmatter: hash['frontmatter'] == true
           }
           process_templates(config, hash)
           config
@@ -19,6 +20,10 @@ module VPS
 
       class IAWriterRepository < Repository
         include NoteSupport::FileRepository
+
+        def frontmatter?(context)
+          context.configuration[:frontmatter]
+        end
       end
 
       class Root < EntityTypeCommand

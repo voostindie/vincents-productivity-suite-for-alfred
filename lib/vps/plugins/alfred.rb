@@ -25,7 +25,7 @@ module VPS
           {
             root: root,
             vps: "#{ruby} #{vps} -a",
-            notifications: hash['notifications'].nil? ? true : hash['notifications']
+            notifications: hash['notifications'] == true
           }
         end
       end

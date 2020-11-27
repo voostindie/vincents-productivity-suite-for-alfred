@@ -239,6 +239,7 @@ Overall instructions on the usage of Obsidian are:
 obsidian:
     vault:
     path:
+    frontmatter:
     templates:
         default:
             filename: null
@@ -252,6 +253,7 @@ With:
 - `vault`: the name (or ID) of the Vault in Obsidian. This defaults to the area name.
 - `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`. Tip: check the output of `vps note root` to test!
 - `templates`: these are explained below, in a separate section.
+- `frontmatter`: whether tags should be written to the note as YAML frontmatter or not, in which case they are added at the bottom of the file, prepended with a `#`. Defaults to `false`.
 
 #### A note on IDs
 
@@ -374,13 +376,14 @@ The configuration values for iA Writer are:
 iawriter:
     location:
     path:
-    token:
+    frontmatter:
 ```
 
 With:
 
 - `location`: the location in iA Writer for this area, defaults to the name of the area.
 - `path`: the root of the notes on disk, defaults to the root of the area followed by `Notes`.
+- `frontmatter`: whether tags should be written to the note as YAML frontmatter or not, in which case they are added at the bottom of the file, prepended with a `#`. Defaults to `false`. Note that this is mostly for interoperability with other apps. iA Writer itself does **not** recognize tags configured in the frontmatter!
 
 This is the same as just:
 

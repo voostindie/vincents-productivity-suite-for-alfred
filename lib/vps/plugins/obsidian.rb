@@ -10,7 +10,8 @@ module VPS
         def process_area_configuration(area, hash)
           config = {
             root: File.join(area[:root], force(hash['path'], String) || 'Notes'),
-            vault: force(hash['vault'], String) || area[:name]
+            vault: force(hash['vault'], String) || area[:name],
+            frontmatter: hash['frontmatter'] == true
           }
           process_templates(config, hash)
           config
@@ -19,6 +20,10 @@ module VPS
 
       class ObsidianRepository < Repository
         include NoteSupport::FileRepository
+
+        def frontmatter?(context)
+          context.configuration[:frontmatter]
+        end
       end
 
       class Root < EntityTypeCommand
@@ -33,7 +38,6 @@ module VPS
         def supported_entity_type
           EntityType::Note
         end
-
 
         def run(context, shell_runner = Shell::SystemRunner.instance, jxa_runner = JxaRunner.new('obsidian'))
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
