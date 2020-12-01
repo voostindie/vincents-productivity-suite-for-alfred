@@ -21,10 +21,12 @@ module VPS
             RbConfig::CONFIG["ruby_install_name"] + RbConfig::CONFIG["EXEEXT"]).
             sub(/.*\s.*/m, '"\&"')
           root = File.expand_path('../../..', File.dirname(File.realdirpath(__FILE__)))
-          vps = File.join(root, 'exe', 'vps')
+          script = File.join(root, 'exe', 'vps')
           {
             root: root,
-            vps: "#{ruby} #{vps} -a",
+            ruby: ruby,
+            script: script,
+            vps: "#{ruby} #{script} -a",
             notifications: hash['notifications'] == true
           }
         end

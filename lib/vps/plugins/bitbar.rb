@@ -34,12 +34,25 @@ module VPS
       include Plugin
 
       ##
-      # Returns the label for the currently focused area.
+      # Returns the output for BitBar
       # This method is called by the `focused-area.1d.rb` BitBar plugin.
-      def self.label(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
+      def self.output(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
         configuration = VPS::Configuration::load(config_file)
         state = VPS::State::load(state_file, configuration)
-        state.focus['bitbar'][:label]
+
+        ruby = configuration.actions['alfred'][:ruby]
+        script = configuration.actions['alfred'][:script]
+
+        output = [state.focus['bitbar'][:label], '---']
+        configuration.areas.each_pair do |key, area|
+          next if key == state.focus[:key]
+          name = area[:name]
+          line = <<~EOL.strip
+            #{name}|terminal=false bash="#{ruby}" param1="#{script}" param2=area param3=focus param4=#{key}
+          EOL
+          output << line
+        end
+        output.join("\n")
       end
 
       class BitBarConfigurator < Configurator
