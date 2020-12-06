@@ -23,6 +23,10 @@ module VPS
           EntityType::Contact
         end
 
+        def enabled?(context, contact)
+          !contact.email.nil?
+        end
+
         def option_parser
           OptionParser.new do |parser|
             parser.banner = 'Write an e-mail'
