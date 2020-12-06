@@ -9,7 +9,7 @@ module VPS
 
         def process_area_configuration(area, hash)
           config = {
-            root: File.join(area[:root], force(hash['path'], String) || 'Notes'),
+            root: File.realdirpath(File.join(area[:root], force(hash['path'], String) || 'Notes')),
             vault: force(hash['vault'], String) || area[:name],
             frontmatter: hash['frontmatter'] == true
           }
