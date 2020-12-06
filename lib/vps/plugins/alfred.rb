@@ -83,6 +83,11 @@ module VPS
           'files'
         end
 
+        def enabled?(context, project)
+          path = resolve_path(context, project)
+          Dir.exist?(path)
+        end
+
         def supported_entity_type
           EntityType::Project
         end
@@ -102,14 +107,18 @@ module VPS
 
         def run(context, runner = JxaRunner.new('alfred'))
           project = context.load_instance
+          path = resolve_path(context, project)
+          runner.execute('browse', path)
+          "Opened Alfred for directory '#{path}'"
+        end
+
+        def resolve_path(context, project)
           folder = if project.config['alfred']
                      project.config['alfred']['folder'] || project.name
                    else
                      project.name
                    end
-          path = File.join(context.configuration[:refs], folder) + '/'
-          runner.execute('browse', path)
-          "Opened Alfred for directory '#{path}'"
+          File.join(context.configuration[:refs], folder) + '/'
         end
       end
 
@@ -230,9 +239,9 @@ module VPS
 
         def add_entity_actions
           types = @context.configuration.plugins_for(@context.area)
-                    .map { |p| p.repositories }
-                    .flatten
-                    .map { |r| r.supported_entity_type.entity_type_name }
+                          .map { |p| p.repositories }
+                          .flatten
+                          .map { |r| r.supported_entity_type.entity_type_name }
           %w(note project contact group event).each do |entity_type_name|
             if types.include?(entity_type_name)
               plugin_name = @context.configuration.plugins_for(@context.area).find do |p|
@@ -294,7 +303,7 @@ module VPS
         end
 
         def add_file_browsers
-          [{h: 'R', k: 'refs', c: 'reference'}, {h: 'D', k: 'docs', c: 'documents'}].each do |b|
+          [{ h: 'R', k: 'refs', c: 'reference' }, { h: 'D', k: 'docs', c: 'documents' }].each do |b|
             @workflow.row
             hotkey = @workflow.hotkey(b[:h])
             @workflow.column(2)

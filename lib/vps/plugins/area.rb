@@ -67,13 +67,8 @@ module VPS
             $stderr.puts "Unknown area: #{context.arguments[0]}"
             return nil
           end
-          context.state.change_focus(area[:key], context.configuration)
-          context.state.persist
-          context = SystemContext.new(context.configuration, context.state, context.arguments)
+          context.change_focus(area)
           context.configuration.actions.each_key do |plugin_name|
-            # TODO: create a different kind of context for the action; now it gets the complete configuration.
-            # Possible alternative: new area plugin configuration, action configuration
-            # On the other hand: maybe some actions need the complete configuration...
             Registry.instance.plugins[plugin_name].action.run(context)
           end
           "#{area[:name]} is now the focused area"
@@ -139,24 +134,31 @@ module VPS
         def run(context)
           type_name = context.arguments.shift
           raise 'No type specified' if type_name.nil?
-          id = context.arguments.join(' ')
-          raise 'No id specified' if id.empty?
+          instance = load_instance(context, type_name)
+          raise "Entity not found" if instance.nil?
+
           root = File.expand_path('../../..', File.dirname(File.realdirpath(__FILE__)))
           context.configuration
-            .available_commands(context.area)
-            .select { |entity_type, _| entity_type.entity_type_name == type_name }
-            .map { |_, commands| commands }
-            .flatten
-            .reject { |command| command.is_a?(VPS::Plugin::EntityTypeCommand) }
-            .map do |command|
-            {
-              title: command.option_parser.banner,
-              arg: "#{type_name} #{command.name} #{id}",
-              icon: {
-                path: "#{root}/icons/#{Registry.instance.for_command(command).name}.png"
-              }
-            }
-          end
+                 .available_commands(context.area)
+                 .select { |entity_type, _| entity_type.entity_type_name == type_name }
+                 .map { |_, commands| commands }
+                 .flatten
+                 .reject { |command| command.is_a?(VPS::Plugin::EntityTypeCommand) }
+                 .select { |command| command.enabled?(context.for_command(command), instance) }
+                 .map { |command|
+                   {
+                     title: command.option_parser.banner,
+                     arg: "#{type_name} #{command.name} #{instance.id}",
+                     icon: {
+                       path: "#{root}/icons/#{Registry.instance.for_command(command).name}.png"
+                     }
+                   }
+                 }
+        end
+
+        def load_instance(context, type_name)
+          repository = context.resolve_repository(type_name)
+          repository.load_instance(context.for_repository(repository))
         end
       end
     end

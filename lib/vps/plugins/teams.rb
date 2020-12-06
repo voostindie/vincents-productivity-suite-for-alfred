@@ -12,6 +12,10 @@ module VPS
           EntityType::Event
         end
 
+        def enabled?(context, event)
+          (event.notes || '') =~ /<https:\/\/teams.microsoft.com\/l\/meetup-join.*>/
+        end
+
         def option_parser
           OptionParser.new do |parser|
             parser.banner = 'Join Teams meeting'

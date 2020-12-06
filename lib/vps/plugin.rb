@@ -216,6 +216,10 @@ module VPS
     # Examples: "view this contact", "edit this note"
     # @abstract
     class EntityInstanceCommand < Command
+      # @return [Boolean] whether this command is enabled for the given instance.
+      def enabled?(context, instance)
+        true
+      end
     end
 
     # Command that acts on an instance of one entity type, for another entity type.
@@ -227,6 +231,11 @@ module VPS
       # @abstract
       def collaboration_entity_type
         raise "#{self.class.name}.collaboration_entity_type is not yet implemented!"
+      end
+
+      # @return [Boolean] whether this command is enabled for the given instance.
+      def enabled?(context, instance)
+        true
       end
     end
 
