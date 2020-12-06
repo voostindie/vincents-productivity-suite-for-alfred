@@ -49,6 +49,7 @@ module VPS
           event = EntityType::Event.new do |e|
             e.id = record.primary_key.to_s
             e.title = record.title
+            e.notes = record.notes
           end
           event.people = record
                            .people
@@ -180,7 +181,8 @@ module VPS
                    CI.ZISDETACHED,
                    CI.ZMYATTENDEESTATUS,
                    CI.ZORGANIZERCOMMONNAME,
-                   CI.ZORGANIZERADDRESSSTRING
+                   CI.ZORGANIZERADDRESSSTRING,
+                   CI.ZNOTES
             FROM ZCALENDARITEM CI
             WHERE CI.Z_PK = ?
           EOS
@@ -213,12 +215,12 @@ module VPS
 
       class Event
         attr_reader :primary_key, :public_id, :title, :start_date, :start_time, :end_date, :end_time,
-                    :organizer, :attendee_status
+                    :organizer, :attendee_status, :notes
 
         attr_accessor :people
 
         def initialize(primary_key, public_id, title, start_date, end_date,
-                       organizer_name, organizer_address, attendee_status)
+                       organizer_name, organizer_address, attendee_status, notes = nil)
           @primary_key = primary_key
           @public_id = public_id
           @title = title
@@ -228,6 +230,7 @@ module VPS
           @end_time = @end_date.strftime('%H:%M')
           @organizer = Person.new(organizer_name, organizer_address)
           @attendee_status = convert_attendee_status(attendee_status)
+          @notes = notes
           @people = []
           @people << @organizer if @organizer.name != 'UNKNOWN'
         end
@@ -257,9 +260,9 @@ module VPS
         # Constructs a single event from an SQLite row selection; all fields from database
         # must be passed as is!
         def initialize(primary_key, public_id, title, start_date, end_date,
-                       is_detached, attendee_status, organizer_name, organizer_address)
+                       is_detached, attendee_status, organizer_name, organizer_address, notes = nil)
           super(primary_key, public_id, title, start_date, end_date,
-                organizer_name, organizer_address, attendee_status)
+                organizer_name, organizer_address, attendee_status, notes)
           @is_detached = CalendarDatabase::to_boolean(is_detached)
         end
       end

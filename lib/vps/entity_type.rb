@@ -132,7 +132,7 @@ module VPS
     # Represents an event with a title and people associated with it, like the organizer
     # and the attendees.
     class Event < BaseType
-      attr_accessor :title, :people
+      attr_accessor :title, :people, :notes
     end
 
     # Represents a group with a name and a list of people.

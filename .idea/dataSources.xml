@@ -10,5 +10,11 @@
         <property name="enable_load_extension" value="true" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="Calendar" read-only="true" uuid="c4567b5f-5906-4cae-be9a-d9fedd0931c2">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$USER_HOME$/Library/Calendars/Calendar Cache</jdbc-url>
+    </data-source>
   </component>
 </project>
