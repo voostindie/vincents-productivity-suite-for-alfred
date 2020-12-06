@@ -40,6 +40,7 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Obsidian
 - OmniFocus
 - Outlook Calendar
+- Teams
 
 A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people and groups in Contacts. This CLI and the workflow on top of it give me the means to quickly edit notes and write e-mails and refer to projects and people, either through the terminal, keyboard shortcuts, keywords, or snippets.
 
@@ -70,6 +71,7 @@ Where <type> and <command> are one of:
     open      : Open in Contacts
     paste     : Paste contact to the frontmost app
   event
+    join      : Join Teams meeting
     list      : List all events for today in this area
     markdown  : Paste event as Markdown to the frontmost app
     note      : Edit this event's note
@@ -568,6 +570,18 @@ Where:
 - `account`: the name of the account in Outlook. This defaults to the name of the area.
 - `calendar`: the name of the calendar to fetch events from. This defaults to `Calendar`.
 - `me`: your e-mail address. This defaults to nothing. Filling this in ensures that your own name is filtered from the list of attendees for a meeting.
+
+### Teams
+
+The Teams plugin allows you to join virtual meetings from the calendar in the Microsoft Teams app. Without a plugin that acts on events enabled in the same area, like the Apple Calendar plugin, this plugin has no use.
+
+The plugin has no configuration of its own, so all you need to do to enable it, is:
+
+```yaml
+teams:
+```
+
+This adds a `join` command to events, in case the event note contains a link to a Teams meeting. 
 
 ### Markdown
 
