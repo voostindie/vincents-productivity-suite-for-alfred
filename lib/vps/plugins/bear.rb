@@ -12,7 +12,8 @@ module VPS
 
         def process_area_configuration(area, hash)
           config = {
-            tag: hash['tag'] || area[:name],
+            #tag: hash['tag'] || area[:name],
+            tag: hash['tag'],
             token: hash['token'] || 'TOKEN_NOT_CONFIGURED'
           }
           process_templates(config, hash)
@@ -28,8 +29,10 @@ module VPS
         def find_all(context, runner = Xcall.instance)
           tag = context.configuration[:tag]
           token = context.configuration[:token]
+          term = context.arguments.join(' ').url_encode
           callback = "bear://x-callback-url/search?show_window=no&token=#{token}"
           callback += "&tag=#{tag}" unless tag.nil?
+          callback += "&term=#{term}" unless term.empty?
           output = runner.execute(callback)
           if output.nil? || output.empty?
             return []
@@ -42,11 +45,12 @@ module VPS
           end
         end
 
-        def load_instance(context, runner = Xcall.instance)
+        def load_instance(context, runner = Xcall.instance, jxa_runner = JxaRunner.new('Bear'))
           if context.environment['NOTE_ID'].nil?
             id = context.arguments[0]
             return nil if id.nil?
             token = context.configuration[:token]
+            jxa_runner.execute('activate')
             callback = "bear://x-callback-url/open-note?id=#{id.url_encode}&show_window=no&token=#{token}"
             record = runner.execute(callback)
             EntityType::Note.new do |note|
@@ -58,14 +62,20 @@ module VPS
           end
         end
 
-        def create_or_find(context, note, runner = Xcall.instance)
+        def create_or_find(context, note, runner = Xcall.instance, jxa_runner = JxaRunner.new('Bear'))
           token = context.configuration[:token]
           title = note.title.url_encode
-          text = note.text.url_encode
+          #trimming the text here to avoid the double new lines between the text and the tags
+          text = note.text.strip.url_encode
           tags = note.tags.map { |t| t.url_encode }.join(',')
-          callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}&token=#{token}"
+          callback = "bear://x-callback-url/create?title=#{title}&tags=#{tags}&token=#{token}"
           output = runner.execute(callback)
           note.id = output['identifier']
+          if !text.empty?
+            callback = "bear://x-callback-url/add-text?id=#{note.id}&mode=prepend&text=#{text}&new_line=no"
+            output = runner.execute(callback)
+          end
+          jxa_runner.execute('activate')
           note
         end
       end
@@ -79,7 +89,7 @@ module VPS
           EntityType::Note
         end
 
-        def run(context, runner = Xcall.instance)
+        def run(context, runner = Xcall.instance, jxa_runner = JxaRunner.new('Bear'))
           note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else
@@ -88,6 +98,7 @@ module VPS
           token = context.configuration[:token]
           callback = "bear://x-callback-url/open-note?id=#{note.id.url_encode}&token=#{token}"
           runner.execute(callback)
+          jxa_runner.execute('activate')
           "Opened note '#{note.title}' in Bear"
         end
       end

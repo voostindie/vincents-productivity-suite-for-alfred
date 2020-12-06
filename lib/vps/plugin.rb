@@ -163,7 +163,7 @@ module VPS
       # @return [VPS::EntityType::BaseType, nil]
       # @abstract
       def load_instance(context)
-        raise "#{self.class.name}.load is not yet implemented!"
+        raise "#{self.class.name}.load_instance is not yet implemented!"
       end
 
       # Persists an instance, or, if this would lead to a duplicate, return the original.
