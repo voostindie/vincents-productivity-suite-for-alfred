@@ -9,6 +9,10 @@ module VPS
           EntityType::Note
         end
 
+        def enabled?(context, note)
+          !note.path.nil?
+        end
+
         def option_parser
           OptionParser.new do |parser|
             parser.banner = 'Open in Marked'

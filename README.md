@@ -46,7 +46,7 @@ A lot of activity at my computer consists of managing projects and tasks in Omni
 
 An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus.
 
-To give you an idea of what the CLI and Alfred workflow can do, here is the output of `vps help` on my own configuration, for the area with the most extensive area (work):
+To give you an idea of what the CLI and Alfred workflow can do, here is the output of `vps help` on my own configuration, for the area with the most extensive configuration (work):
 
 ```
 Usage: vps [options] <type> <command> [arguments]
@@ -125,7 +125,7 @@ After all this, an `exe/vps help` should work. For easier use on the command-lin
 
 ### Alfred
 
-Make sure the 'Alfred' plugin is enabled in the `action` section of the configuration. Then, change focus once. Every time you change the focus the Alfred workflow is rebuilt, specifically for the area you've selected. This includes registering the workflow in Alfred.
+Just change focus once, through the CLI. Every time you change the focus the Alfred workflow is rebuilt, specifically for the area you've selected. This includes registering the workflow in Alfred. (The very first time you might have to restart Alfred.)
 
 ### About Ruby versions
 
@@ -272,7 +272,7 @@ This is, by the way, fully compatible with how Obsidian works.
 
 The note templating support in VPS allows you to set up templates for different types of entities, and for all parts of a note separately. Every individual property you can configure is actually a [Liquid template](https://shopify.github.io/liquid/).
 
-Each note has a filename, a title, a text and a set of tags, the defaults are shown in the configuration of Obsidian above. 
+Each note has a filename, a title, a text and a set of tags. The defaults are shown in the configuration of Obsidian above. 
 
 You can:
 
@@ -284,9 +284,9 @@ The available note types are
 - `default`: for the settings that apply everywhere
 - `plain`: for the basic `note create` command
 - `today`: for "Today's note"
-- `contact` 
-- `event`
-- `project`
+- `contact`: for notes based on a contact
+- `event`: for notes based on an event
+- `project`: for notes based on a project
 
 Here's an example to give you a better idea:
 
@@ -311,9 +311,9 @@ iawriter:
                 {% endfor %}
 ```
 
-This sets up the defaults to prepend the current date to every note filename in YY-MM-DD format, append it to the title in DD-MM-YY format and also add two tags. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event (pulled from the calender).
+This sets up the defaults to prepend the current date to every note filename in YYYY-MM-DD format, append it to the title in DD-MM-YYYY format and also add a "todo" tag. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event (pulled from the calender).
 
-The default template for the filename is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
+The default template for the filename - if you don't configure anything - is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 
 The variables available to each template depend on the type of note you're configuring:
 
@@ -366,7 +366,7 @@ You can have configurations for different plugins next to each other; VPS will p
 
 - `input`: empty; there is no input text
 
-Tip: Obsidian has a nice *Daily notes* plugin but if you use VPS I advise you to disable it and use VPS instead. Why? Because VPS gives you much more powerful templates, the template is stored outside of your vault (so, no garbage), and you can trigger it from any application using Alfred's global shortcut, not just from within Obsidian. By setting the filename template to `{{year}}-{{month}}-{{day}}` compatibility is guaranteed.
+Tip: Obsidian has a nice *Daily notes* plugin that works nicely with the `vps note today` command. Note that VPS's templates are more powerful than those from Obsidian. Also, you can trigger it from any application using Alfred's global shortcut, not just from within Obsidian. By setting the filename template to `{{year}}-{{month}}-{{day}}` compatibility is guaranteed.
 
 ### iA Writer
 
@@ -511,11 +511,11 @@ With:
 
 - `from`: in case you have several accounts configured in Mail, here you can configure which one to use for the area. The format of this field is `Name <address>`. Both the name of the address must match *exactly* what's configured in Mail. If the account is not found, Mail will fall back to its default.
 
-So, how do you quickly send a regular mail to a bunch of people? Stick them in a group, select the group in Alfred, select "Write an e-mail", and watch the magic happen ;-)
+So, how do you quickly send a mail to a bunch of people? Stick them in a group, select the group in Alfred, select "Write an e-mail", and watch the magic happen ;-)
 
 ### Apple Calendar
 
-This plugin uses SQL to fetch data from the the Apple Calendar cache, and is definitely not perfect. It doesn't always find all events for the day, even though it tries a nice of job of combining one-time events and recurring events. And it's fast.
+This plugin uses SQL to fetch data from the the Apple Calendar cache, and is definitely not perfect. It doesn't always find all events for the day, even though it does a nice of job of combining one-time events and recurring events. And it's fast.
 
 It also fetches the attendees from the events, and makes them available to other commands.
 
@@ -620,7 +620,7 @@ Configuration:
 marked:
 ```
 
-Don't enable this plugin when you keep notes in Bear. It doesn't work in that case, because there are no files on disk that Marked can open.
+There's no point enabling this plugin when you keep your notes in Bear. It won't show up in that case, because there are no files on disk that Marked can open.
 
 ### BitBar
 
@@ -635,25 +635,25 @@ bitbar:
 
 With:
 
-- `label`: the text to show in the menu bar. (Hint: try emoji's!)
+- `label`: the text to show in the menu bar. (Tip: you can use emoji's as short titles, and you can configure the label in several ways, like setting the font, the size, the color... See the [BitBar Plugin API documentation](https://github.com/matryer/bitbar#plugin-api).)
 
 ### Paste
 
-The "Paste" plugin has no configuration and it's automatically enabled for all area's. What it does is provide a command named `paste` to various entity types, allowing you to paste it to the frontmost application. That can save you some typing in the long run.
+The "Paste" plugin has no configuration and it's automatically enabled for all area's. What it does is provide a command named `paste` to various entity types, allowing you to paste it to the frontmost application. That can save you some typing in the long run. It's what makes keyboard shortcuts like `;c` in Alfred work.
 
 For events it adds another command: `paste-attendees`, which pastes the names of all attendees from the selected event, straight from you calendar.
 
 ## Performing actions when the focus changes
 
-Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently there are five for:
+Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently these are available:
 
 1. Rebuilding the Alfred workflow
-2. Showing the name of the focused area in BitBar
+2. Refreshing the name of the area in BitBar
 3. Changing the desktop wallpaper
 4. Changing the focus in OmniFocus
 5. Refreshing geeklets from GeekTool
 
-The `alfred` plugin is always enabled, even if it's not in your configuration. The only reason to add it is to configure the Ruby environment.
+The `alfred` plugin is always enabled, even if it's not in your configuration. You can't disable it.
 
 To enable all actions, add this to your configuration:
 
@@ -700,7 +700,7 @@ alfred:
 
 This ensures that the Alfred workflow always uses the global default, whatever it is.
 
-### Show the focused area in BitBar
+### Refreshing the name of the area in BitBar
 
 [BitBar](https://getbitbar.com) is a nice utility that can show all kinds of texts in the menubar. I use it to show the name of the focused area, so that I always know for sure which area I'm working in. (That's getting more and more important, with any new plugin this tool gets.)
 
@@ -709,9 +709,9 @@ To enable this plugin, first:
 - Install BitBar
 - Symlink (!) to the `bitbar/focused-area.1d.rb` script from your BitBar plugins folder. **Do not copy the script, otherwise it won't work! Really do make a symlink!**
 
-> Note: I found that the original BitBar binary (1.9.2) doesn't align text labels correctly vertically. To overcome that, I built my own version of BitBar from [Adrian Grimm's fork](https://github.com/Adrian-Grimm/bitbar#writing-plugins). Works wonders!
+> Note: I found that the original BitBar binary (1.9.2) doesn't align text labels correctly vertically. To overcome that, I built [my own version of BitBar](https://github.com/voostindie/bitbar) that applies a [fix from Adrian Grimm](https://github.com/Adrian-Grimm/bitbar) and disables non-working automated Sparkle updates. Works wonders!
 
-With this done, BitBar will already show the name of the focused area. But, you'll also want it to update itself whenever you change the focus. One way is polling, but I think that's silly for this use case (which is why the script ends with "1d", or: "refresh only once each day"). Instead, this suite can explicitly tell BitBar to refresh the name. To do that, add BitBar to the `actions` configuration, like:
+With this done, BitBar will already show the name of the focused area. But, you'll also want it to update itself whenever you change the focus. One way is polling, but I think that's silly for this use case (which is why the script ends with "1d", meaning: "refresh only once each day"). Instead, this suite can explicitly tell BitBar to refresh the name. To do that, add BitBar to the `actions` configuration, like:
 
 ```yaml
 bitbar:
@@ -750,7 +750,7 @@ With:
 
 - `path`: the path to the picture to use as desktop wallpaper. If not specified, the default will be used (see above).
 
-Unfortunately this plugin works only on the desktop (space) that's currently being shown. If you have multiple desktops, you'll probably end up with different wallpapers. Since I use mostly one desktop at a time, I haven't come around to fixing this.
+Unfortunately this plugin works only on the desktop (space) that's currently being shown. If you have multiple desktops, you'll probably end up with different wallpapers. I haven't yet found a way to fix this.
 
 ## Change the focus in OmniFocus
 
@@ -779,4 +779,4 @@ The geeklets property expects a list of geeklet *names* to refresh. Setting a na
 
 ## About the icon
 
-Icons made by [Freepik](http://www.freepik.com) from [Flaticon](https://www.flaticon.com) are licensed by a [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0).
+The icon used by VPS is made by [Freepik](http://www.freepik.com) from [Flaticon](https://www.flaticon.com) and is licensed by a [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0).
