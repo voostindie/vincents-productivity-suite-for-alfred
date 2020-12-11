@@ -709,8 +709,6 @@ To enable this plugin, first:
 - Install BitBar
 - Symlink (!) to the `bitbar/focused-area.1d.rb` script from your BitBar plugins folder. **Do not copy the script, otherwise it won't work! Really do make a symlink!**
 
-> Note: I found that the original BitBar binary (1.9.2) doesn't align text labels correctly vertically. To overcome that, I built [my own version of BitBar](https://github.com/voostindie/bitbar) that applies a [fix from Adrian Grimm](https://github.com/Adrian-Grimm/bitbar) and disables non-working automated Sparkle updates. Works wonders!
-
 With this done, BitBar will already show the name of the focused area. But, you'll also want it to update itself whenever you change the focus. One way is polling, but I think that's silly for this use case (which is why the script ends with "1d", meaning: "refresh only once each day"). Instead, this suite can explicitly tell BitBar to refresh the name. To do that, add BitBar to the `actions` configuration, like:
 
 ```yaml
