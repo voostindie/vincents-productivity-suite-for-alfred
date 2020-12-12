@@ -60,7 +60,7 @@ module VPS
   # its plugin might be.
   #
   # There are four different types of command; these are all subclasses of the {VPS::Plugin::Command}
-  # class. Subclasses any of these four; don't subclass {Command} yourself! The four are:
+  # class. Subclass any of these four; don't subclass {Command} yourself! The four are:
   #
   # 1. {EntityTypeCommand}
   # 2. {EntityInstanceCommand}

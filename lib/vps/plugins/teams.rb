@@ -21,7 +21,7 @@ module VPS
             parser.banner = 'Join Teams meeting'
             parser.separator 'Usage: event join <eventID>'
             parser.separator ''
-            parser.separator 'Where <eventID> is the ID of the event to write a mail to'
+            parser.separator 'Where <eventID> is the ID of the event to join'
           end
         end
 

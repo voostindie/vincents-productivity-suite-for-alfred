@@ -147,7 +147,7 @@ I haven't yet found a way to make the BitBar plugin use the same version. it alw
 - `contact` / *ctrl* + *opt* + *cmd* + C: selects a person from Contacts and shows an action list.
 - `project` / *ctrl* + *opt* + *cmd* + P: selects a project from OmniFocus and shows an action list.
 - `docs` / *ctrl* + *opt* + *cmd* + D: browses the Documents for the selected area in Alfred's file browser.
-- `refs` / *ctrl* + *opt* + *cmd* + D: browses the Reference Material for the selected area in Alfred's file browser.
+- `refs` / *ctrl* + *opt* + *cmd* + R: browses the Reference Material for the selected area in Alfred's file browser.
 
 The list of actions available for a contact or project depends on the configuration of the focused area of responsibility. E.g. if iA Writer is enabled, the action to create a note on a contact, project or event will
 automatically show up. 
@@ -221,6 +221,7 @@ An area looks as follow:
 key:
     name:
     root:
+    <plugin>:
 ```
 
 Where:
@@ -228,6 +229,7 @@ Where:
 - `key`: the technical key. It doesn't really matter what it is, except that the name is derived from it, and that you'll have to use it in CLI when switching focus.
 - `name`: the name of the area as shown in Alfred, and as used by the other features as default values. The default value is the `key`, capitalized.
 - `root`: the directory under which all files for this area reside on disk. The default is set to `~/<name>`.
+- `<plugin>`: the name of the plugin you want to enable, followed by its configuration (if any). Enable as many plugins as needed!
 
 ### Obsidian (and note applications in general!)
 

@@ -59,7 +59,6 @@ class String
 
   # Source: https://stackoverflow.com/questions/22740252/how-to-generate-javas-string-hashcode-using-ruby#26063180
   def hash_code
-    # Note the '.abs' in the end isn't actually part of the algorithm. I just don't like the minuses...
     self.each_char.reduce(0) do |result, char|
       [((result << 5) - result) + char.ord].pack('L').unpack('l').first
     end

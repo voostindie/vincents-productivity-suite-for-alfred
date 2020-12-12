@@ -43,7 +43,8 @@ module VPS
         ruby = configuration.actions['alfred'][:ruby]
         script = configuration.actions['alfred'][:script]
 
-        output = [state.focus['bitbar'][:label], '---']
+        label = (state.focus['bitbar'] || {})[:label] || state.focus[:name]
+        output = [label, '---']
         configuration.areas.each_pair do |key, area|
           next if key == state.focus[:key]
           name = area[:name]
