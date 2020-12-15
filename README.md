@@ -31,7 +31,7 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Apple Mail
 - Apple Calendar
 - Bear
-- BitBar
+- BitBar / SwiftBar
 - Desktop wallpapers
 - GeekTool
 - iA Writer
@@ -624,9 +624,9 @@ marked:
 
 There's no point enabling this plugin when you keep your notes in Bear. It won't show up in that case, because there are no files on disk that Marked can open.
 
-### BitBar
+### BitBar / SwiftBar
 
-In case you enable the BitBar action that's triggered when the focus changes (see below), you can override the name that the BitBar will show as a label. By default it's the name of the area.
+In case you enable the BitBar or SwiftBar action that's triggered when the focus changes (see below), you can override the label that's shown in the menubar. By default it's the name of the area.
 
 The configuration for BitBar looks as follows:
 
@@ -637,7 +637,9 @@ bitbar:
 
 With:
 
-- `label`: the text to show in the menu bar. (Tip: you can use emoji's as short titles, and you can configure the label in several ways, like setting the font, the size, the color... See the [BitBar Plugin API documentation](https://github.com/matryer/bitbar#plugin-api).)
+- `label`: the text to show in the menubar. (Tip: you can use emoji's as short titles, and you can configure the label in several ways, like setting the font, the size, the color... See the [BitBar Plugin API documentation](https://github.com/matryer/bitbar#plugin-api).)
+
+Note: also if you use SwiftBar, the configuration to use is `bitbar`!
 
 ### Paste
 
@@ -650,7 +652,7 @@ For events it adds another command: `paste-attendees`, which pastes the names of
 Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently these are available:
 
 1. Rebuilding the Alfred workflow
-2. Refreshing the name of the area in BitBar
+2. Refreshing the name of the area in BitBar / SwiftBar
 3. Changing the desktop wallpaper
 4. Changing the focus in OmniFocus
 5. Refreshing geeklets from GeekTool
@@ -702,7 +704,7 @@ alfred:
 
 This ensures that the Alfred workflow always uses the global default, whatever it is.
 
-### Refreshing the name of the area in BitBar
+### Refreshing the name of the area in BitBar / SwiftBar
 
 [BitBar](https://getbitbar.com) is a nice utility that can show all kinds of texts in the menubar. I use it to show the name of the focused area, so that I always know for sure which area I'm working in. (That's getting more and more important, with any new plugin this tool gets.)
 
@@ -723,6 +725,19 @@ With:
 - `plugin` (optional): the exact name of the plugin. You only need to set this if you changed the name of the symlink.
 
 To override what BitBar shows in the menubar for the focused, see the BitBar configuration on area level, described above.
+
+[SwiftBar](https://swiftbar.app) is a newer alternative to BitBar, that aims to be fully compatible. The BitBar plugin bundled with VPS works with SwiftBar as well.
+
+In case you use SwiftBar, follow the instructions above replacing "BitBar" with "SwiftBar". Only the configuration is slightly different:
+
+```yaml
+swiftbar:
+    plugin:
+```
+
+Here the (optional) `plugin` refers to the name of the VPS plugin *without any extensions*!.
+
+What I personally like about SwiftBar is that it can hide the default built-in menu options, all 5 of them, resulting in a much cleaner application interface. The VPS plugin does exactly that when running under SwiftBar.
 
 ### Change the desktop wallpaper
 
