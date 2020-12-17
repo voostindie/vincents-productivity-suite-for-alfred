@@ -90,6 +90,75 @@ module VPS
       class Event < CollaborationCommand
         include NoteSupport::EventTemplateNote, ObsidianNote
       end
+
+      module Search
+        def name
+          "notes"
+        end
+
+        def collaboration_entity_type
+          EntityType::Note
+        end
+
+        def option_parser
+          name = supported_entity_type.entity_type_name
+          OptionParser.new do |parser|
+            parser.banner = "Search notes for this #{name}"
+            parser.separator "Usage: #{name} notes <#{name}Id>"
+            parser.separator ''
+            parser.separator "Where <#{name}Id> is the ID of the #{name} to search for"
+          end
+        end
+
+        def run(context, shell_runner = Shell::SystemRunner.instance)
+          entity = context.load_instance
+          vault = context.configuration[:vault]
+          query = '"' + query_for(entity) + '"'
+          callback = "obsidian://search?vault=#{vault.url_encode}&query=#{query.url_encode}"
+          shell_runner.execute('open', callback)
+        end
+
+        def query(entity)
+          entity.id
+        end
+      end
+
+      class SearchProjects < CollaborationCommand
+        include Search
+
+        def supported_entity_type
+          EntityType::Project
+        end
+
+        def query_for(project)
+          config = project.config['obsidian'] || {}
+          config['query'] || config['title'] || project.name
+        end
+      end
+
+      class SearchEvents < CollaborationCommand
+        include Search
+
+        def supported_entity_type
+          EntityType::Event
+        end
+
+        def query_for(event)
+          event.title
+        end
+      end
+
+      class SearchContacts < CollaborationCommand
+        include Search
+
+        def supported_entity_type
+          EntityType::Contact
+        end
+
+        def query_for(contact)
+          contact.name
+        end
+      end
     end
   end
 end

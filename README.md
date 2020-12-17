@@ -68,6 +68,7 @@ Where <type> and <command> are one of:
     list      : List all available contacts in this area
     mail      : Write an e-mail
     note      : Edit this contact's note
+    notes     : Search notes for this contact
     open      : Open in Contacts
     paste     : Paste contact to the frontmost app
   event
@@ -75,6 +76,7 @@ Where <type> and <command> are one of:
     list      : List all events for today in this area
     markdown  : Paste event as Markdown to the frontmost app
     note      : Edit this event's note
+    notes     : Search notes for this event
     paste     : Paste event to the frontmost app
     paste-attendees: Paste event attendees to the frontmost app
   file
@@ -97,6 +99,7 @@ Where <type> and <command> are one of:
     list      : List all available projects in this area
     markdown  : Paste project as Markdown to the frontmost app
     note      : Edit this project's note
+    notes     : Search notes for this project
     open      : Open in OmniFocus
     paste     : Paste project to the frontmost app
 
@@ -369,6 +372,17 @@ You can have configurations for different plugins next to each other; VPS will p
 - `input`: empty; there is no input text
 
 Tip: Obsidian has a nice *Daily notes* plugin that works nicely with the `vps note today` command. Note that VPS's templates are more powerful than those from Obsidian. Also, you can trigger it from any application using Alfred's global shortcut, not just from within Obsidian. By setting the filename template to `{{year}}-{{month}}-{{day}}` compatibility is guaranteed.
+
+#### Search
+
+The Obsidian plugin also supports searching for projects, events and contacts. Given one of these, VPS can open the search results in Obsidian for it.
+
+This works automatically and requires no additional configuration. However for (OmniFocus) project you can tweak the query by configuring it in the YAML Back Matter of the project, like so:
+
+```yaml
+obsidian:
+    query: "SEARCH STRING"
+```
 
 ### iA Writer
 
