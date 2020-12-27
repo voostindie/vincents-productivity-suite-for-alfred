@@ -5,7 +5,7 @@ module VPS
     context 'with the echo script' do
       it 'returns the script result as parsed JSON' do
         expected = {
-          'echo' => ['foo', 'bar']
+          'echo' => %w[foo bar]
         }
         result = JxaRunner.new(File.join('..', 'spec')).execute('echo', 'foo', 'bar')
         expect(result).to eq(expected)

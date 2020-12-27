@@ -1,7 +1,6 @@
 module VPS
   # Manages the persistent state of the application. This is just one thing: the currently focused area.
   class State
-
     # @return [String] the default file name of the state file: +`~/.vpsrc.state`+
     DEFAULT_FILE = File.join(Configuration::ROOT, 'state.yaml').freeze
 
@@ -37,7 +36,7 @@ module VPS
     # @param configuration [Configuration] the full configuration
     # @return [Hash<String, Object>] the area with the focus
     def change_focus(area_name, configuration)
-      @focus = if area_name != nil && configuration.areas.has_key?(area_name)
+      @focus = if !area_name.nil? && configuration.areas.key?(area_name)
                  configuration.areas[area_name]
                else
                  # This is a 'null' area, used when the focus is empty or invalid

@@ -3,8 +3,8 @@ module VPS
   # parses command line arguments runs the show.
   class Cli
     def initialize(config_file = Configuration::DEFAULT_FILE, state_file = State::DEFAULT_FILE)
-      @configuration = configuration = Configuration::load(config_file)
-      @state = State::load(state_file, configuration)
+      @configuration = Configuration.load(config_file)
+      @state = State.load(state_file, @configuration)
       @output_formatter = OutputFormatter::Console
       @parser = option_parser
     end
@@ -35,7 +35,6 @@ module VPS
       end
     end
 
-    ##
     # Runs the application based on the arguments provided.
     #
     # @param arguments [Array<String>] the program arguments.
@@ -43,18 +42,17 @@ module VPS
     # @return void
     def run(arguments = ARGV, environment = ENV)
       @parser.order!(arguments)
-      if arguments.size < 1
+      if arguments.empty?
         puts @parser.help
         return
       end
-      if arguments[0] == 'help'
+      if arguments.first == 'help'
         run_help(arguments.drop(1))
       else
         run_command(arguments, environment)
       end
     end
 
-    ##
     # Shows help information; either overall help or plugin-specific help.
     #
     # @param arguments [Array<String>] the program arguments.
@@ -68,7 +66,6 @@ module VPS
       end
     end
 
-    ##
     # Runs a command, provided that one can be derived from the program arguments.
     #
     # @param arguments [Array<String>] the program arguments.
@@ -84,7 +81,6 @@ module VPS
       end
     end
 
-    ##
     # Shows overall help information, including information on each individual plugin.
     # @return void
     def show_overall_help
@@ -105,22 +101,21 @@ module VPS
       puts @parser.help
     end
 
-    ##
     # Shows help information on a single command.
     # @param runner [CommandRunner]
     # @return void
     def show_command_help(runner)
       if runner.help_available?
         puts runner.help
-      else
-        $stderr.puts 'No help information is available for this command'
-        $stderr.puts
-        $stderr.puts 'Dear developer,'
-        $stderr.puts
-        $stderr.puts "Please implement the method 'option_parser' in class #{clazz}"
-        $stderr.puts
-        $stderr.puts 'The user of your software thanks you!'
+        return
       end
+      warn 'No help information is available for this command'
+      warn
+      warn 'Dear developer,'
+      warn
+      warn "Please implement the method 'option_parser' in class #{runner.command.class.name}"
+      warn
+      warn 'The user of your software thanks you!'
     end
   end
 end

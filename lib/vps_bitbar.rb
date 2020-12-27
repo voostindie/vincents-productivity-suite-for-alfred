@@ -1,5 +1,5 @@
+# See +vps_bitbar.rb+ for module documentation.
 module VPS
-  ;
 end
 
 # Load just a subset of libraries, just enough for the code for BitBar to work.

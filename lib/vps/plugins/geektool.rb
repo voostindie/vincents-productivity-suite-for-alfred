@@ -12,6 +12,7 @@ module VPS
     module GeekTool
       include Plugin
 
+      # Configures the GeekTool plugin.
       class GeekToolConfiguration < Configurator
         def process_action_configuration(hash)
           {
@@ -20,6 +21,7 @@ module VPS
         end
       end
 
+      # Action to refresh geeklets in GeekTool when the focus changes.
       class Refresh < Action
         def run(context, runner = JxaRunner.new('geektool'))
           geeklets = context.configuration.actions['geektool'][:geeklets]

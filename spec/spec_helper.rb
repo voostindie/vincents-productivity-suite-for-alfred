@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 require 'vps'
-VPS::FileSystem::enable_testing

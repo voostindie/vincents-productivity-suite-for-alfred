@@ -59,12 +59,12 @@ module VPS
 
         def run(context)
           if context.arguments.size != 1
-            $stderr.puts "Exactly one argument required: the name of the area to focus on"
+            warn 'Exactly one argument required: the name of the area to focus on'
             return nil
           end
           area = context.configuration.areas[context.arguments[0]]
           if area.nil?
-            $stderr.puts "Unknown area: #{context.arguments[0]}"
+            warn "Unknown area: #{context.arguments[0]}"
             return nil
           end
           context.change_focus(area)
@@ -112,7 +112,6 @@ module VPS
         def run(context)
           context.area[:name]
         end
-
       end
 
       # Lists all available commands in this area. This command purely exists to support the
@@ -134,8 +133,9 @@ module VPS
         def run(context)
           type_name = context.arguments.shift
           raise 'No type specified' if type_name.nil?
+
           instance = load_instance(context, type_name)
-          raise "Entity not found" if instance.nil?
+          raise 'Entity not found' if instance.nil?
 
           root = File.expand_path('../../..', File.dirname(File.realdirpath(__FILE__)))
           context.configuration
@@ -145,15 +145,15 @@ module VPS
                  .flatten
                  .reject { |command| command.is_a?(VPS::Plugin::EntityTypeCommand) }
                  .select { |command| command.enabled?(context.for_command(command), instance) }
-                 .map { |command|
-                   {
-                     title: command.option_parser.banner,
-                     arg: "#{type_name} #{command.name} #{instance.id}",
-                     icon: {
-                       path: "#{root}/icons/#{Registry.instance.for_command(command).name}.png"
-                     }
-                   }
-                 }
+                 .map do |command|
+            {
+              title: command.option_parser.banner,
+              arg: "#{type_name} #{command.name} #{instance.id}",
+              icon: {
+                path: "#{root}/icons/#{Registry.instance.for_command(command).name}.png"
+              }
+            }
+          end
         end
 
         def load_instance(context, type_name)

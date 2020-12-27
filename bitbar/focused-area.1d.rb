@@ -30,4 +30,4 @@ $LOAD_PATH.unshift VPS_ROOT
 require 'vps_bitbar'
 
 $stderr.reopen(File.new('/dev/null', 'w'))
-puts VPS::Plugins::BitBar::output
+puts VPS::Plugins::BitBar.output

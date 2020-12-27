@@ -1,5 +1,4 @@
 module VPS
-
   # Very (!) simple wrapper around XCall: https://github.com/martinfinke/xcall,
   # for use in plugins for applications that use x-callback-urls, like Bear.
   #
@@ -8,7 +7,7 @@ module VPS
     include Singleton
 
     def initialize
-      @command = File.dirname(__FILE__).gsub(' ', '\ ') + "/xcall.app/Contents/MacOS/xcall"
+      @command = "#{File.dirname(__FILE__).gsub(' ', '\ ')}/xcall.app/Contents/MacOS/xcall"
     end
 
     # @param uri [String] x-callback-url to execute

@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 # We shouldn't be doing this, but otherwise the sqlite3 code barfs.
 # I really should find out how to configure sqlite3 separately...
-Encoding::default_internal = Encoding::UTF_8
-Encoding::default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+Encoding.default_external = Encoding::UTF_8
 
 require 'vps'
 
 begin
   VPS::Cli.new.run
-rescue Exception => e
+rescue StandardError => e
   if e.message != 'exit' # There's probably a better way to do this...
     puts e.message
     exit(-1)

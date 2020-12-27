@@ -5,18 +5,16 @@ module VPS
   # Instances of entities always have an ID, hence the {BaseType}. The actual entities might introduce
   # more.
   module EntityType
-
     # Base class for entities. All subclasses need to do is define +attr_accessor+s for
     # the fields they want to expose.
     # @abstract
     class BaseType
-
       # @return [String] every entity has an ID.
       attr_accessor :id
 
       # @return [String] name of the entity as used in the CLI. Defaults to the class name in lower case.
       def self.entity_type_name
-        self.name.split('::').last.downcase
+        name.split('::').last.downcase
       end
 
       # Initialize a new entity. The pattern here is that you get an empty entity back
@@ -46,9 +44,9 @@ module VPS
       def to_env
         env = {}
         prefix = env_prefix
-        self.instance_variables.each do |symbol|
-          var = prefix + symbol[1..-1].to_s.upcase
-          value = self.instance_variable_get(symbol)
+        instance_variables.each do |symbol|
+          var = prefix + symbol[1..].to_s.upcase
+          value = instance_variable_get(symbol)
           env[var] = value unless value.nil?
         end
         env
@@ -59,15 +57,14 @@ module VPS
       # @param env [Hash] the set of environment variables
       # @return [BaseType]
       def self.from_env(env)
-        entity = self.new do |entity|
+        new do |entity|
           prefix = entity.env_prefix
           index = prefix.size
           env.select { |key, _| key.start_with?(prefix) }.each_pair do |key, value|
-            variable = "@#{key[index..-1].downcase}".to_sym
+            variable = "@#{key[index..].downcase}".to_sym
             entity.instance_variable_set(variable, value)
           end
         end
-        entity
       end
 
       # Creates a new entity from a hash. The keys in the hash must be strings, and
@@ -77,20 +74,19 @@ module VPS
       # @param hash [Hash]
       # @return [BaseType]
       def self.from_hash(hash)
-        entity = self.new do |entity|
+        new do |entity|
           hash.each_pair do |key, value|
             variable = "@#{key}".to_sym
             entity.instance_variable_set(variable, value)
           end
         end
-        entity
       end
 
       # Helper method that returns the prefix for the entity class in the environment.
       # E.g. +VPS::Entities::Contact+ becomes +CONTACT_+.
       # @return [String]
       def env_prefix
-        self.class.name.split('::').last.upcase + '_'
+        "#{self.class.name.split('::').last.upcase}_"
       end
     end
 
@@ -110,20 +106,19 @@ module VPS
           if note.nil?
             {}
           else
-            yaml = note
-                     .lines
-                     .drop_while { |l| !l.start_with?('---') }
-                     .drop(1)
-                     .join
-                     .gsub("\t", '  ')
-                     .gsub("’", "'")
-                     .gsub("“", '"')
-                     .gsub("”", '"')
-                     .strip
+            yaml = note.lines
+                       .drop_while { |l| !l.start_with?('---') }
+                       .drop(1)
+                       .join
+                       .gsub("\t", '  ')
+                       .gsub('’', '\'')
+                       .gsub('“', '"')
+                       .gsub('”', '"')
+                       .strip
             if yaml.empty?
               {}
             else
-              YAML.load(yaml)
+              YAML.safe_load(yaml)
             end
           end
       end

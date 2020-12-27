@@ -9,12 +9,12 @@ module VPS
 
     def initialize
       @plugins = VPS::Plugins.constants(false)
-                   .map { |c| VPS::Plugins.const_get(c) }
-                   .select { |c| c.is_a?(Module) && c.include?(VPS::Plugin) }
-                   .map { |m| Plugin.new(m) }
-                   .map { |p| [p.name, p] }
-                   .to_h
-                   .freeze
+                             .map { |c| VPS::Plugins.const_get(c) }
+                             .select { |c| c.is_a?(Module) && c.include?(VPS::Plugin) }
+                             .map { |m| Plugin.new(m) }
+                             .map { |p| [p.name, p] }
+                             .to_h
+                             .freeze
     end
 
     # @param command [VPS::Plugin::Command]
@@ -71,9 +71,9 @@ module VPS
 
       def instantiate_classes(plugin, super_class)
         plugin.constants(false)
-          .map { |c| plugin.const_get(c) }
-          .select { |c| c.is_a?(Class) && c < super_class }
-          .map { |c| c.new }
+              .map { |c| plugin.const_get(c) }
+              .select { |c| c.is_a?(Class) && c < super_class }
+              .map(&:new)
       end
     end
   end

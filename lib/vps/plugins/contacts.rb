@@ -4,17 +4,19 @@ module VPS
     module Contacts
       include Plugin
 
+      # Configures the Contacts plugin
       class ContactsConfigurator < Configurator
         def process_area_configuration(area, hash)
           group = force(hash['group'], String) || area[:name]
           {
             group: group,
-            prefix: force(hash['prefix'], String) || group + ' - ',
-            cache_enabled: hash['cache'] || false,
+            prefix: force(hash['prefix'], String) || "#{group} - ",
+            cache_enabled: hash['cache'] || false
           }
         end
       end
 
+      # Repository for contacts from Apple Contacts
       class ContactRepository < Repository
         include CacheSupport
 
@@ -36,12 +38,14 @@ module VPS
         def load_instance(context, runner = JxaRunner.new('contacts'))
           id = context.environment['CONTACT_ID'] || context.arguments[0]
           return nil if id.nil?
+
           cache(context, id) do
             EntityType::Contact.from_hash(runner.execute('contact-details', id))
           end
         end
       end
 
+      # Repository for groups from Apple Contacts
       class GroupRepository < Repository
         include CacheSupport
 
@@ -68,13 +72,14 @@ module VPS
         end
       end
 
+      # Support module for list commands.
       module ListSupport
         def name
           'list'
         end
 
         def option_parser
-          name = supported_entity_type.entity_type_name + 's'
+          name = "#{supported_entity_type.entity_type_name}s"
           OptionParser.new do |parser|
             parser.banner = "List all available #{name} in this area"
             parser.separator "Usage: #{name} list"
@@ -99,6 +104,7 @@ module VPS
         end
       end
 
+      # Command to list contacts.
       class ListContacts < EntityTypeCommand
         include ListSupport
 
@@ -107,6 +113,7 @@ module VPS
         end
       end
 
+      # Command to lists groups.
       class ListGroups < EntityTypeCommand
         include ListSupport
 
@@ -115,8 +122,8 @@ module VPS
         end
       end
 
+      # Command to open a contact in Apple Contacts
       class Open < EntityInstanceCommand
-
         def supported_entity_type
           EntityType::Contact
         end

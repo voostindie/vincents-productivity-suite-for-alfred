@@ -7,6 +7,7 @@ module VPS
     module SwiftBar
       include Plugin
 
+      # Configures the SwiftBar plugin.
       class SwiftBarConfigurator < Configurator
         def process_action_configuration(hash)
           {
@@ -15,6 +16,7 @@ module VPS
         end
       end
 
+      # Action to refresh SwiftBar whenever the focus changes.
       class Refresh < Action
         def run(context, runner = Shell::SystemRunner.instance)
           plugin = context.configuration.actions['swiftbar'][:plugin]

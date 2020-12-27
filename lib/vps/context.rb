@@ -1,4 +1,5 @@
 module VPS
+  # Basic context passed to plugin classes.
   class Context
     # @return [Hash<String, Object>]
     attr_reader :area
@@ -20,7 +21,7 @@ module VPS
     def resolve_command(entity_type_name, command_name)
       @area.keys
            .filter_map { |name| Registry.instance.plugins[name] }
-           .map { |plugin| plugin.commands }
+           .map(&:commands)
            .flatten
            .select { |command| command.supported_entity_type.entity_type_name == entity_type_name }
            .select { |command| command.name == command_name }
@@ -30,7 +31,7 @@ module VPS
     def resolve_repository(entity_type_name)
       @area.keys
            .filter_map { |name| Registry.instance.plugins[name] }
-           .map { |plugin| plugin.repositories }
+           .map(&:repositories)
            .flatten
            .select { |repository| repository.supported_entity_type.entity_type_name == entity_type_name }
            .first
@@ -58,6 +59,7 @@ module VPS
     end
   end
 
+  # Context passed to +Repository+ plugin classes.
   class RepositoryContext < Context
     # @return Hash
     attr_reader :configuration
@@ -69,12 +71,13 @@ module VPS
     end
   end
 
+  # Context passed to +Command+ plugin classes.
   class CommandContext < RepositoryContext
     # Creates a new repository context. Don't call this method directly. Instead, use Context#for_command.
     def initialize(context, plugin_configuration, entity_type_contexts = {})
       super(context, plugin_configuration)
       @entity_type_contexts = entity_type_contexts
-      @entity_instance = nil
+      @load_instance = nil
     end
 
     # @return [Boolean]
@@ -95,7 +98,7 @@ module VPS
     # @return [VPS::EntityType::BaseType, nil]
     def load_instance
       entity_type_context = @entity_type_contexts[@entity_type_contexts.keys.first]
-      @entity_instance ||= entity_type_context[:repository].load_instance(entity_type_context[:context])
+      @load_instance ||= entity_type_context[:repository].load_instance(entity_type_context[:context])
     end
 
     ##
@@ -106,6 +109,7 @@ module VPS
     end
   end
 
+  # Context passed to +SystemCommand+ plugin classes.
   class SystemContext < Context
     # @return [Configuration]
     attr_reader :configuration

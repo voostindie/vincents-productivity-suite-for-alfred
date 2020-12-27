@@ -18,15 +18,14 @@ module VPS
   #     end
   #   end
   module CacheSupport
-
     CACHE_PREFIX = File.join(Dir.home, '.vps', 'caches').freeze
     private_constant :CACHE_PREFIX
 
     # Is the cache enabled? Override this method, or it never will be!
     #
-    # @param context [RepositoryContext]
+    # @param _context [RepositoryContext]
     # @return [Boolean]
-    def cache_enabled?(context)
+    def cache_enabled?(_context)
       false
     end
 
@@ -51,7 +50,7 @@ module VPS
     # @return [Integer] the number of caches flushed
     def flush_plugin_cache(area_key)
       count = 0
-      Dir.glob(File.join(CACHE_PREFIX, area_key + '-*')) do |f|
+      Dir.glob(File.join(CACHE_PREFIX, "#{area_key}-*")) do |f|
         File.delete(f)
         count += 1
       end
@@ -61,12 +60,10 @@ module VPS
     private
 
     def cache_filename(context, id = nil)
-      @cache_filename ||= File.join(CACHE_PREFIX,
-                                    context.area_key +
-                                      '-' +
-                                      supported_entity_type.entity_type_name +
-                                      '-' +
-                                      (id.nil? ? 'all' : id.hash_code.to_s))
+      @cache_filename ||= File.join(
+        CACHE_PREFIX,
+        "#{context.area_key}-#{supported_entity_type.entity_type_name}-#{id.nil? ? 'all' : id.hash_code.to_s}"
+      )
     end
 
     def cache_present?(context, id)
@@ -85,4 +82,3 @@ module VPS
     end
   end
 end
-

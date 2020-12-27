@@ -6,14 +6,16 @@ module VPS
     module Mail
       include Plugin
 
+      # Configures the Mail plugin.
       class MailConfigurator < Configurator
-        def process_area_configuration(area, hash)
+        def process_area_configuration(_area, hash)
           {
             from: force(hash['from'], String) || nil
           }
         end
       end
 
+      # Command to create a mail for a contact.
       class Contact < EntityInstanceCommand
         def name
           'mail'
@@ -23,7 +25,7 @@ module VPS
           EntityType::Contact
         end
 
-        def enabled?(context, contact)
+        def enabled?(_context, contact)
           !contact.email.nil?
         end
 
@@ -45,6 +47,7 @@ module VPS
         end
       end
 
+      # Command to create a mail for a contact group.
       class Group < EntityInstanceCommand
         def name
           'mail'

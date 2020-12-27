@@ -4,12 +4,13 @@ module VPS
     module Marked
       include Plugin
 
+      # Command to view a note in Marked
       class View < EntityInstanceCommand
         def supported_entity_type
           EntityType::Note
         end
 
-        def enabled?(context, note)
+        def enabled?(_context, note)
           !note.path.nil?
         end
 

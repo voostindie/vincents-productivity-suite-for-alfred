@@ -18,13 +18,15 @@ module VPS
     # @param args [Array<String>] the arguments to be passed to the JavaScript
     # @return [Hash] the output of the script, parsed as JSON.
     def execute(script, *args)
-      script = File.join(@root, script) + '.js'
+      script = "#{File.join(@root, script)}.js"
       raise "JXA script not found: #{script}" unless File.exist?(script)
+
       script = Shellwords.escape(script)
       args = args.map { |arg| Shellwords.escape(arg) }
       command = ([script] + args).join(' ')
       json = `#{command}`
-      raise "JXA script execution failed: '#{command}'" unless $? == 0
+      raise "JXA script execution failed: '#{command}'" unless $CHILD_STATUS == 0
+
       JSON.parse(json)
     end
   end

@@ -7,6 +7,7 @@ module VPS
     module Alfred
       include Plugin
 
+      # Configures the Alfred plugin
       class AlfredConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
@@ -16,10 +17,10 @@ module VPS
         end
 
         def process_action_configuration(hash)
-          ruby = hash['ruby'] || ENV["RUBY"] || File.join(
-            RbConfig::CONFIG["bindir"],
-            RbConfig::CONFIG["ruby_install_name"] + RbConfig::CONFIG["EXEEXT"]).
-            sub(/.*\s.*/m, '"\&"')
+          ruby = hash['ruby'] || ENV['RUBY'] || File.join(
+            RbConfig::CONFIG['bindir'],
+            RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT']
+          ).sub(/.*\s.*/m, '"\&"')
           root = File.expand_path('../../..', File.dirname(File.realdirpath(__FILE__)))
           script = File.join(root, 'exe', 'vps')
           {
@@ -41,6 +42,7 @@ module VPS
         end
       end
 
+      # Base module for file browsing commands.
       module FileBrowser
         def supported_entity_type
           EntityType::File
@@ -60,24 +62,29 @@ module VPS
         end
       end
 
+      # Command to browse documents in Alfred
       class Documents < EntityTypeCommand
         include FileBrowser
 
         def initialize
-          @description = "documents"
+          super
+          @description = 'documents'
           @symbol = :docs
         end
       end
 
+      # Command to browse reference material in Alfred
       class Reference < EntityTypeCommand
         include FileBrowser
 
         def initialize
+          super
           @description = 'reference material'
           @symbol = :refs
         end
       end
 
+      # Command to browse files for a project in Alfred
       class ProjectFiles < CollaborationCommand
         def name
           'files'
@@ -118,7 +125,7 @@ module VPS
                    else
                      project.name
                    end
-          File.join(context.configuration[:refs], folder) + '/'
+          "#{File.join(context.configuration[:refs], folder)}/"
         end
       end
 
@@ -168,7 +175,15 @@ module VPS
 
         def prepare_target_directory
           Dir.mkdir(@target_dir) unless Dir.exist?(@target_dir)
-          symlink = File.join(Dir.home, 'Library', 'Application Support', 'Alfred', 'Alfred.alfredpreferences', 'workflows', 'vps')
+          symlink = File.join(
+            Dir.home,
+            'Library',
+            'Application Support',
+            'Alfred',
+            'Alfred.alfredpreferences',
+            'workflows',
+            'vps'
+          )
           File.delete(symlink) if File.exist?(symlink)
           File.symlink(@target_dir, symlink)
           Dir.glob(File.join(@target_dir, '*.png')) do |file|
@@ -185,9 +200,9 @@ module VPS
             description: 'Companion workflow for VPS. Automatically generated. Do not edit!',
             category: 'Productivity',
             disabled: false,
-            readme: 'Add the Alfred action to your VPS configuration to update this workflow automatically when the focus changes.',
+            readme: 'This workflow is generated automatically every time you change the focus in VPS.',
             webaddress: 'https://github.com/voostindie/vincents-productivity-suite-for-alfred',
-            version: 'GENERATED - ' + DateTime.now.to_s
+            version: "GENERATED - #{DateTime.now}"
           )
           @workflow.scope = @context.area[:key]
         end
@@ -210,11 +225,11 @@ module VPS
         end
 
         def add_notification
-          if @config[:notifications]
-            @workflow.row
-            @workflow.column(5)
-            @notification = @workflow.notification('{query}', 'Vincent\'s Productivity Suite')
-          end
+          return unless @config[:notifications]
+
+          @workflow.row
+          @workflow.column(5)
+          @notification = @workflow.notification('{query}', 'Vincent\'s Productivity Suite')
         end
 
         def add_flush_caches
@@ -230,7 +245,9 @@ module VPS
         def add_focus_area
           @workflow.row
           f = @workflow.hotkey('F')
-          focus_list = @workflow.script_filter("#{@config[:vps]} area list", keyword: 'focus', title: 'Focus on area of responsibility {query}')
+          focus_list = @workflow.script_filter(
+            "#{@config[:vps]} area list", keyword: 'focus', title: 'Focus on area of responsibility {query}'
+          )
           @workflow.column
           focus_action = @workflow.script("#{@config[:vps]} area focus $*")
           @workflow.wire(f, focus_list, focus_action)
@@ -239,21 +256,21 @@ module VPS
 
         def add_entity_actions
           types = @context.configuration.plugins_for(@context.area)
-                          .map { |p| p.repositories }
+                          .map(&:repositories)
                           .flatten
                           .map { |r| r.supported_entity_type.entity_type_name }
-          %w(note project contact group event).each do |entity_type_name|
-            if types.include?(entity_type_name)
-              plugin_name = @context.configuration.plugins_for(@context.area).find do |p|
-                !p.repositories.select do |r|
-                  r.supported_entity_type.entity_type_name == entity_type_name
-                end.empty?
-              end.name
-              add_actions_for_entity(entity_type_name, plugin_name)
-              if entity_type_name == 'note'
-                add_create_note(plugin_name)
-                add_today_note(plugin_name)
-              end
+          %w[note project contact group event].each do |entity_type_name|
+            next unless types.include?(entity_type_name)
+
+            plugin_name = @context.configuration.plugins_for(@context.area).find do |p|
+              !p.repositories.select do |r|
+                r.supported_entity_type.entity_type_name == entity_type_name
+              end.empty?
+            end.name
+            add_actions_for_entity(entity_type_name, plugin_name)
+            if entity_type_name == 'note'
+              add_create_note(plugin_name)
+              add_today_note(plugin_name)
             end
           end
         end
@@ -261,10 +278,12 @@ module VPS
         def add_actions_for_entity(entity_type_name, plugin_name)
           first = entity_type_name[0]
           single = entity_type_name
-          plural = entity_type_name + 's'
+          plural = "#{entity_type_name}s"
           @workflow.row
           hotkey = @workflow.hotkey(first.upcase)
-          list = @workflow.script_filter("#{@config[:vps]} #{single} list", keyword: "#{plural}", title: "Select #{single} {query}")
+          list = @workflow.script_filter(
+            "#{@config[:vps]} #{single} list", keyword: plural, title: "Select #{single} {query}"
+          )
           commands = @workflow.script_filter("#{@config[:vps]} area commands #{single} $*", arguments_required: true)
           command = @workflow.script("#{@config[:vps]} $*")
           @workflow.wire(hotkey, list, commands, command, @notification)
@@ -327,6 +346,7 @@ module VPS
           end
         end
 
+        # Builder for Alfred Workflows
         class Workflow
           attr_accessor :scope
 
@@ -361,7 +381,7 @@ module VPS
           def wire(*uids)
             uids.compact!
             i = 0
-            while i < uids.size - 1 do
+            while i < uids.size - 1
               @connections[uids[i]] ||= []
               @connections[uids[i]] << {
                 destinationuid: uids[i + 1],
@@ -418,8 +438,8 @@ module VPS
             '4' => 21, '6' => 22, '5' => 23, '=' => 24, '9' => 25, '7' => 26, '-' => 27,
             '8' => 28, '0' => 29, ']' => 30, 'O' => 31, 'U' => 32, '[' => 33, 'I' => 34,
             'P' => 35, 'L' => 37, 'J' => 38, '\'' => 39, 'K' => 40, ';' => 41, '\\' => 42,
-            ',' => 43, '/' => 44, 'N' => 45, 'M' => 46, '.' => 47, ' ' => 49, '`' => 50,
-          }
+            ',' => 43, '/' => 44, 'N' => 45, 'M' => 46, '.' => 47, ' ' => 49, '`' => 50
+          }.freeze
 
           # How did I get to all the configuration settings below? Simple: I created a workflow,
           # configured it the way I wanted it to be, and then watched what happened in the Alfred
@@ -427,24 +447,26 @@ module VPS
 
           def hotkey(character)
             char = character.upcase
-            object('alfred.workflow.trigger.hotkey', 2, :normal,
-                   action: 0,
-                   focusedappvariable: false,
-                   focusedappvariablename: '',
-                   hotkey: HOTKEYS[char],
-                   hotmod: 1835008,
-                   hotstring: char,
-                   leftcursor: false,
-                   modsmode: 2,
-                   relatedAppsMode: 0
+            object(
+              'alfred.workflow.trigger.hotkey', 2, :normal,
+              action: 0,
+              focusedappvariable: false,
+              focusedappvariablename: '',
+              hotkey: HOTKEYS[char],
+              hotmod: 1_835_008,
+              hotstring: char,
+              leftcursor: false,
+              modsmode: 2,
+              relatedAppsMode: 0
             )
           end
 
           def snippet(keyword)
-            object('alfred.workflow.trigger.snippet', 1, :normal,
-                   focusedappvariable: false,
-                   focusedappvariablename: '',
-                   keyword: keyword
+            object(
+              'alfred.workflow.trigger.snippet', 1, :normal,
+              focusedappvariable: false,
+              focusedappvariablename: '',
+              keyword: keyword
             )
           end
 
@@ -453,88 +475,96 @@ module VPS
           end
 
           def script_filter(script, keyword: '', title: '', arguments_required: false)
-            object('alfred.workflow.input.scriptfilter', 3, :normal,
-                   alfredfiltersresults: arguments_required ? false : true,
-                   alfredfiltersresultsmatchmode: 0,
-                   argumenttreatemptyqueryasnil: false,
-                   argumenttrimmode: 0,
-                   argumenttype: arguments_required ? 0 : 1,
-                   escaping: 0,
-                   keyword: keyword,
-                   queuedelaycustom: 3,
-                   queuedelayimmediatelyinitially: true,
-                   queuedelaymode: 0,
-                   queuemode: 1,
-                   runningsubtext: '',
-                   script: script,
-                   scriptargtype: 1,
-                   scriptfile: '',
-                   subtext: '',
-                   title: title,
-                   type: 0,
-                   withspace: false
+            object(
+              'alfred.workflow.input.scriptfilter', 3, :normal,
+              alfredfiltersresults: arguments_required ? false : true,
+              alfredfiltersresultsmatchmode: 0,
+              argumenttreatemptyqueryasnil: false,
+              argumenttrimmode: 0,
+              argumenttype: arguments_required ? 0 : 1,
+              escaping: 0,
+              keyword: keyword,
+              queuedelaycustom: 3,
+              queuedelayimmediatelyinitially: true,
+              queuedelaymode: 0,
+              queuemode: 1,
+              runningsubtext: '',
+              script: script,
+              scriptargtype: 1,
+              scriptfile: '',
+              subtext: '',
+              title: title,
+              type: 0,
+              withspace: false
             )
           end
 
           def keyword(keyword, text)
-            object('alfred.workflow.input.keyword', 1, :normal,
-                   argumenttype: 2,
-                   keyword: keyword,
-                   subtext: '',
-                   text: text,
-                   scriptfile: '',
-                   withspace: false
+            object(
+              'alfred.workflow.input.keyword', 1, :normal,
+              argumenttype: 2,
+              keyword: keyword,
+              subtext: '',
+              text: text,
+              scriptfile: '',
+              withspace: false
             )
           end
 
           def script(script)
-            object('alfred.workflow.action.script', 2, :normal,
-                   concurrently: false,
-                   escaping: 102,
-                   script: script,
-                   scriptargtype: 1,
-                   scriptfile: '',
-                   type: 0
+            object(
+              'alfred.workflow.action.script', 2, :normal,
+              concurrently: false,
+              escaping: 102,
+              script: script,
+              scriptargtype: 1,
+              scriptfile: '',
+              type: 0
             )
           end
 
           def open_file(file, application = nil)
-            object('alfred.workflow.action.openfile', 3, :normal,
-                   openwith: application || '',
-                   sourcefile: file
+            object(
+              'alfred.workflow.action.openfile', 3, :normal,
+              openwith: application || '',
+              sourcefile: file
             )
           end
 
           def notification(text, title)
-            object('alfred.workflow.output.notification', 1, :normal,
-                   lastpathcomponent: false,
-                   onlyshowifquerypopulated: true,
-                   removeextension: false,
-                   text: text,
-                   title: title
+            object(
+              'alfred.workflow.output.notification', 1, :normal,
+              lastpathcomponent: false,
+              onlyshowifquerypopulated: true,
+              removeextension: false,
+              text: text,
+              title: title
             )
           end
 
           def clipboard(text, autopaste)
-            object('alfred.workflow.output.clipboard', 3, :normal,
-                   text: text,
-                   autopaste: autopaste
+            object(
+              'alfred.workflow.output.clipboard', 3, :normal,
+              text: text,
+              autopaste: autopaste
             )
           end
 
           def argument(name, value)
-            object('alfred.workflow.utility.argument', 1, :small,
-                   argument: '{query}',
-                   passthroughargument: false,
-                   variables: {
-                     name => value.to_s
-                   }
+            object(
+              'alfred.workflow.utility.argument', 1, :small,
+              argument: '{query}',
+              passthroughargument: false,
+              variables: {
+                name => value.to_s
+              }
             )
           end
 
           def delay(seconds)
-            object('alfred.workflow.utility.delay', 1, :small,
-                   seconds: seconds.to_s
+            object(
+              'alfred.workflow.utility.delay', 1, :small,
+              seconds: seconds.to_s
             )
           end
         end

@@ -77,7 +77,6 @@ module VPS
   # Class {Action} is your friend!
   #
   module Plugin
-
     # Configures a plugin from the user's configuration.
     class Configurator
       ##
@@ -93,11 +92,11 @@ module VPS
       #
       # Be strict in what you accept, and feel free to use +$stderr+ to notify the user of issues.
       #
-      # @param area [Hash] The area in the configuration being processed,
+      # @param _area [Hash] The area in the configuration being processed,
       #             a hash with +:key+, +:name+ and +:root+
-      # @param hash [Hash] The configuration for this plugin as defined in the configuration.
+      # @param _hash [Hash] The configuration for this plugin as defined in the configuration.
       # @return [Hash] the configuration for this plugin in this area; typically a hash.
-      def process_area_configuration(area, hash)
+      def process_area_configuration(_area, _hash)
         {}
       end
 
@@ -108,8 +107,8 @@ module VPS
       # Be strict in what you accept, and feel free to use +$stderr+ to notify the user of issues.
       #
       # @return [Hash] the configuration for this plugin when executing the action; typically a hash.
-      # @param hash [Hash] The configuration for this plugin as defined in the configuration.
-      def process_action_configuration(hash)
+      # @param _hash [Hash] The configuration for this plugin as defined in the configuration.
+      def process_action_configuration(_hash)
         {}
       end
 
@@ -139,16 +138,16 @@ module VPS
       # @return [Class<VPS::EntityType::BaseType>]
       # @abstract
       def supported_entity_type
-        raise "#{self.class.name}.supported_entity_type is not yet implemented!"
+        raise NotImplementedError
       end
 
       # Lists all entities in this repository, or as many as can be handled.
       #
-      # @param context [VPS::RepositoryContext]
+      # @param _context [VPS::RepositoryContext]
       # @return [Array<VPS::EntityType::BaseType>]
       # @abstract
-      def find_all(context)
-        raise "#{self.class.name}.find_all is not yet implemented!"
+      def find_all(_context)
+        raise NotImplementedError
       end
 
       # Loads a single entity instance from the context
@@ -159,20 +158,20 @@ module VPS
       # not be necessary to fetch the instance from the application that is managed by the
       # plugin.
       #
-      # @param context [VPS::RepositoryContext]
+      # @param _context [VPS::RepositoryContext]
       # @return [VPS::EntityType::BaseType, nil]
       # @abstract
-      def load_instance(context)
-        raise "#{self.class.name}.load is not yet implemented!"
+      def load_instance(_context)
+        raise NotImplementedError
       end
 
       # Persists an instance, or, if this would lead to a duplicate, return the original.
       #
-      # @param context [VPS::RepositoryContext]
-      # @param instance [VPS::EntityType::BaseType] Instance to persist
+      # @param _context [VPS::RepositoryContext]
+      # @param _instance [VPS::EntityType::BaseType] Instance to persist
       # @abstract
-      def create_or_find(context, instance)
-        raise "#{self.class.name}.create_or_find is not yet implemented!"
+      def create_or_find(_context, _instance)
+        raise NotImplementedError
       end
     end
 
@@ -187,20 +186,20 @@ module VPS
       # @return [Class<VPS::EntityType::BaseType>]
       # @abstract
       def supported_entity_type
-        raise "#{self.class.name}.supported_entity_type is not yet implemented!"
+        raise NotImplementedError
       end
 
       # @return [OptionParser]
       # @abstract
       def option_parser
-        raise "#{self.class.name}.option_parser is not yet implemented!"
+        raise NotImplementedError
       end
 
-      # @param context [VPS::CommandContext]
+      # @param _context [VPS::CommandContext]
       # @return [String, Array, nil]
       # @abstract
-      def run(context)
-        raise "#{self.class.name}.run is not yet implemented!"
+      def run(_context)
+        raise NotImplementedError
       end
     end
 
@@ -217,7 +216,7 @@ module VPS
     # @abstract
     class EntityInstanceCommand < Command
       # @return [Boolean] whether this command is enabled for the given instance.
-      def enabled?(context, instance)
+      def enabled?(_context, _instance)
         true
       end
     end
@@ -230,11 +229,11 @@ module VPS
       # @return [Class<VPS::EntityType::BaseType>]
       # @abstract
       def collaboration_entity_type
-        raise "#{self.class.name}.collaboration_entity_type is not yet implemented!"
+        raise NotImplementedError
       end
 
       # @return [Boolean] whether this command is enabled for the given instance.
-      def enabled?(context, instance)
+      def enabled?(_context, _instance)
         true
       end
     end
@@ -243,11 +242,11 @@ module VPS
     # Normally you shouldn't need to implement a command such as this yourself.
     # @abstract
     class SystemCommand < Command
-      # @param context [VPS::SystemContext]
+      # @param _context [VPS::SystemContext]
       # @return [String, Array, nil]
       # @abstract
-      def run(context)
-        raise "#{self.class.name}.run is not yet implemented!"
+      def run(_context)
+        raise NotImplementedError
       end
     end
 
@@ -255,11 +254,11 @@ module VPS
     # An action that gets triggered when the focus changes.
     # @abstract
     class Action
-      # @param context [VPS::SystemContext]
+      # @param _context [VPS::SystemContext]
       # @return void
       # @abstract
-      def run(context)
-        raise "#{self.class.name}.run is not yet implemented!"
+      def run(_context)
+        raise NotImplementedError
       end
     end
   end

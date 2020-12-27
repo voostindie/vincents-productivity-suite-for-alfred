@@ -57,7 +57,7 @@ module VPS
   #
   # See the {VPS::Plugins::Obsidian}, {VPS::Plugins::Bear} and {VPS::Plugins::IAWriter} for examples.
   module NoteSupport
-
+    # Configurator for note plugins to extract template configurations.
     module Configurator
       # Pulls template definitions from the input hash and stores them in the configuration hash
       # @param config [Hash<Symbol, Object>]
@@ -65,7 +65,7 @@ module VPS
       # @return [Hash<Symbol, Object>]
       def process_templates(config, hash)
         config[:templates] = {}
-        %w(default plain contact event project today).each do |set|
+        %w[default plain contact event project today].each do |set|
           templates = if hash['templates'] && hash['templates'][set]
                         hash['templates'][set]
                       else
@@ -96,7 +96,7 @@ module VPS
 
       # @return [Boolean] whether the file should include frontmatter or not. If yes, any tags will be written
       # in the frontmatter; if not, tags will be added at the bottom of the file, prepended with '#'.
-      def frontmatter?(context)
+      def frontmatter?(_context)
         false
       end
 
@@ -115,6 +115,7 @@ module VPS
       def load_instance(context)
         id = context.arguments.join(' ')
         return nil if id.empty?
+
         matches = Dir.glob("#{context.configuration[:root]}/**/#{id}.md")
         if matches.empty?
           nil
@@ -130,17 +131,15 @@ module VPS
 
       def create_or_find(context, note)
         path = note.path.nil? ? note.id : note.path
-        note.path = File.join(context.configuration[:root], path + '.md')
+        note.path = File.join(context.configuration[:root], "#{path}.md")
         note.is_new = false
-        if !File.exist?(note.path) || File.size(note.path) == 0
+        if !File.exist?(note.path) || File.size(note.path).zero?
           title = note.title
           text = note.text
           content = ''
           if frontmatter?(context)
             tags = note.tags.join(', ')
-            unless tags.empty?
-              content += "---\ntags: [#{tags}]\n---\n"
-            end
+            content += "---\ntags: [#{tags}]\n---\n" unless tags.empty?
             content += "# #{title}\n" unless title.empty?
             content += "\n#{text}" unless text.empty?
           else
@@ -158,6 +157,7 @@ module VPS
       end
     end
 
+    # Return the root on disk of the notes
     module Root
       def supported_entity_type
         EntityType::Note
@@ -206,6 +206,7 @@ module VPS
       end
     end
 
+    # Base module for templated notes
     module TemplateNote
       def application
         self.class.name.split('::')[2].downcase
@@ -232,8 +233,7 @@ module VPS
                  end
           n.id = Zaru.sanitize!(n.id)
           n.text = template(context, :text).render_template(template_context)
-          n.tags = template(context, :tags)
-                     .map { |t| t.render_template(template_context).strip }
+          n.tags = template(context, :tags).map { |t| t.render_template(template_context).strip }
         end
         context.create_or_find(note, EntityType::Note)
       end
@@ -257,6 +257,7 @@ module VPS
       end
     end
 
+    # Base module for "plain" notes.
     module PlainTemplateNote
       include TemplateNote
 
@@ -272,6 +273,7 @@ module VPS
       end
     end
 
+    # Base module for "today" notes.
     module TodayTemplateNote
       include TemplateNote
 
@@ -300,11 +302,13 @@ module VPS
             'tomorrow_month' => tomorrow.strftime('%m'),
             'tomorrow_week' => tomorrow.strftime('%V'),
             'tomorrow_day' => tomorrow.strftime('%d')
-          })
+          }
+        )
         template_context
       end
     end
 
+    # Base module for "project" notes.
     module ProjectTemplateNote
       include TemplateNote
 
@@ -344,6 +348,7 @@ module VPS
       end
     end
 
+    # Base module for "contact" notes.
     module ContactTemplateNote
       include TemplateNote
 
@@ -377,6 +382,7 @@ module VPS
       end
     end
 
+    # Base module for "event" notes.
     module EventTemplateNote
       include TemplateNote
 

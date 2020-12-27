@@ -1,10 +1,12 @@
 module VPS
   module Plugins
+    # Plugin to paste entities as Markdown text.
     module Markdown
       include Plugin
 
+      # Configures the Markdown plugin.
       class MarkdownConfigurator < Configurator
-        def process_area_configuration(area, hash)
+        def process_area_configuration(_area, hash)
           {
             level: force(hash['level'], Integer) || 2,
             link: hash['link'] || false
@@ -12,6 +14,7 @@ module VPS
         end
       end
 
+      # Base module for Markdown commands
       module MarkdownCommand
         def name
           'markdown'
@@ -34,9 +37,10 @@ module VPS
             'year' => date.strftime('%Y'),
             'month' => date.strftime('%m'),
             'week' => date.strftime('%V'),
-            'day' => date.strftime('%d'),
+            'day' => date.strftime('%d')
           }
-          output = '#' * context.configuration[:level] + ' '
+          output = '#' * context.configuration[:level]
+          output += ' '
           output += title(context, entity)
           output += "\n"
           text = text(context, entity)
@@ -55,6 +59,7 @@ module VPS
         end
       end
 
+      # Command to paste a project as Markdown.
       class Project < EntityInstanceCommand
         include MarkdownCommand
 
@@ -71,14 +76,13 @@ module VPS
           end
         end
 
-        def text(context, project)
+        def text(_context, project)
           config = project.config['markdown'] || {}
-          unless config['text'].nil?
-            config['text'].render_template(@template_context)
-          end
+          config['text']&.render_template(@template_context)
         end
       end
 
+      # Command to paste an event as Markdown.
       class Event < EntityInstanceCommand
         include MarkdownCommand
 
@@ -86,7 +90,7 @@ module VPS
           EntityType::Event
         end
 
-        def title(context, event)
+        def title(_context, event)
           event.title
         end
 

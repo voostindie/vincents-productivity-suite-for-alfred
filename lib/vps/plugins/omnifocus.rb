@@ -4,6 +4,7 @@ module VPS
     module OmniFocus
       include Plugin
 
+      # Configures the OmniFocus plugin.
       class OmniFocusConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
@@ -12,6 +13,7 @@ module VPS
         end
       end
 
+      # Repository to manage projects in OmniFocus
       class OmniFocusRepository < Repository
         def supported_entity_type
           EntityType::Project
@@ -27,10 +29,12 @@ module VPS
         def load_instance(context, runner = JxaRunner.new('omnifocus'))
           id = context.environment['PROJECT_ID'] || context.arguments[0]
           return nil if id.nil?
+
           EntityType::Project.from_hash(runner.execute('project-details', id))
         end
       end
 
+      # Command to list projects from OmniFocus.
       class List < EntityTypeCommand
         def supported_entity_type
           EntityType::Project
@@ -43,7 +47,7 @@ module VPS
           end
         end
 
-        def run(context, runner = JxaRunner.new('omnifocus'))
+        def run(context)
           context.find_all.map do |project|
             {
               uid: project.id,
@@ -61,6 +65,7 @@ module VPS
         end
       end
 
+      # Command to open a project in OmniFocus.
       class Open < EntityInstanceCommand
         def supported_entity_type
           EntityType::Project
@@ -82,11 +87,12 @@ module VPS
         end
       end
 
+      # Action to set the focus in OmniFocus when VPS changes focus.
       class Focus < Action
         def run(context, runner = JxaRunner.new('omnifocus'))
-          if context.area['omnifocus']
-            runner.execute('set-focus', context.area['omnifocus'][:folder])
-          end
+          return unless context.area['omnifocus']
+
+          runner.execute('set-focus', context.area['omnifocus'][:folder])
         end
       end
     end

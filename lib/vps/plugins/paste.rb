@@ -8,6 +8,7 @@ module VPS
     module Paste
       include Plugin
 
+      # Support module for commands that paste values from entities.
       module PasteTemplate
         def name
           'paste'
@@ -39,11 +40,11 @@ module VPS
           nil
         end
 
-        # @param entity [VPS::EntityType::BaseType]
+        # @param _entity [VPS::EntityType::BaseType]
         # @return [String]
         # @abstract
-        def text_from(entity)
-          nil
+        def text_from(_entity)
+          raise NotImplementedError
         end
       end
 

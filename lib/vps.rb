@@ -8,23 +8,23 @@
 # force myself into a fairly rigid structure. The code works, but it's definitely not the best Ruby
 # you ever encountered. *Ye be warned!*
 module VPS
-  ;
 end
 
 # Libraries
-require 'singleton'
 require 'date'
-require 'yaml'
-require 'json'
-require 'fileutils'
-require 'shellwords'
+require 'English'
 require 'erb'
-require 'optparse'
-require 'sqlite3'
+require 'fileutils'
 require 'ice_cube'
+require 'json'
 require 'liquid'
-require 'zaru'
+require 'optparse'
 require 'plist'
+require 'shellwords'
+require 'singleton'
+require 'sqlite3'
+require 'yaml'
+require 'zaru'
 
 # Core code
 require 'vps/output_formatter'
@@ -59,13 +59,12 @@ class String
 
   # Source: https://stackoverflow.com/questions/22740252/how-to-generate-javas-string-hashcode-using-ruby#26063180
   def hash_code
-    self.each_char.reduce(0) do |result, char|
-      [((result << 5) - result) + char.ord].pack('L').unpack('l').first
+    each_char.reduce(0) do |result, char|
+      [((result << 5) - result) + char.ord].pack('L').unpack1('l')
     end
   end
 end
 
-
 # Plugins
 files = Dir.glob(File.join(File.dirname(__FILE__), 'vps/plugins/**.rb')).sort
-files.each {|f| require f}
+files.each { |f| require f }

@@ -6,6 +6,7 @@ module VPS
     module Outlook
       include Plugin
 
+      # Configures the Outlook plugin.
       class OutlookConfigurator < Configurator
         def process_area_configuration(area, hash)
           {
@@ -16,6 +17,7 @@ module VPS
         end
       end
 
+      # Repository for events managed in Outlook. Note: it's slooooooooow!
       class OutlookCalendarRepository < Repository
         def supported_entity_type
           EntityType::Event
@@ -24,6 +26,7 @@ module VPS
         def load_instance(context, runner = JxaRunner.new('outlook'))
           id = context.environment['EVENT_ID'] || context.arguments[0]
           return nil if id.nil?
+
           event = runner.execute('event-details', id)
           people = [Person.new(nil, event['organizer'])]
           event['attendees'].each do |attendee|
@@ -31,7 +34,7 @@ module VPS
           end
           me = context.configuration[:me]
           people.reject! { |p| p.email == me } unless me.nil?
-          event['people'] = people.map { |p| p.name }
+          event['people'] = people.map(&:name)
           event.delete('organizer')
           event.delete('attendees')
           EventTypes::Event.from_hash(event)
@@ -45,6 +48,7 @@ module VPS
         end
       end
 
+      # Command to list events from Outlook.
       class List < EntityTypeCommand
         def supported_entity_type
           EntityType::Event
@@ -75,6 +79,7 @@ module VPS
         end
       end
 
+      # Represents an attendee in Outlook.
       class Person
         attr_reader :name, :email
 
@@ -83,10 +88,10 @@ module VPS
                     if address.nil?
                       'UNKNOWN'
                     else
-                      Person::name_from_email(address)
+                      Person.name_from_email(address)
                     end
                   else
-                    Person::format_name(name)
+                    Person.format_name(name)
                   end
           @email = if address.nil?
                      'UNKNOWN'
@@ -107,12 +112,12 @@ module VPS
           # <last name(s)> <middle name(s)>, <initials> (<first name(s)>)
           if name =~ /^(.+?), \w+ \((.+)\)$/
             first_name = Regexp.last_match(2)
-            parts = Regexp.last_match(1).split(' ')
+            parts = Regexp.last_match(1).split
             middle_index = parts.index { |w| w[0] =~ /[a-z]/ }
             last_name = if middle_index.nil?
                           parts.join(' ')
                         else
-                          (parts[middle_index..-1] + parts[0..middle_index - 1]).join(' ')
+                          (parts[middle_index..] + parts[0..middle_index - 1]).join(' ')
                         end
             "#{first_name} #{last_name}"
           else

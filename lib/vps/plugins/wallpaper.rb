@@ -19,8 +19,9 @@ module VPS
     module Wallpaper
       include Plugin
 
+      # Configures the Wallpaper plugin
       class WallpaperConfigurator < Configurator
-        def process_area_configuration(area, hash)
+        def process_area_configuration(_area, hash)
           if hash['path'].nil?
             {}
           else
@@ -37,12 +38,11 @@ module VPS
         end
       end
 
+      # Action that changes the wallpaper whenever the focus changes.
       class Wallpaper < Action
         def run(context, runner = JxaRunner.new('wallpaper'))
           path = if context.area['wallpaper']
                    context.area['wallpaper'][:path]
-                 else
-                   nil
                  end || context.configuration.actions['wallpaper'][:path]
           runner.execute('change-wallpaper', path)
         end

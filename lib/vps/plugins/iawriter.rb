@@ -4,6 +4,7 @@ module VPS
     module IAWriter
       include Plugin
 
+      # Configures the IA Writer plugin
       class IAWriterConfigurator < Configurator
         include NoteSupport::Configurator
 
@@ -18,6 +19,7 @@ module VPS
         end
       end
 
+      # Repository for notes managed by IA Writer.
       class IAWriterRepository < Repository
         include NoteSupport::FileRepository
 
@@ -26,17 +28,20 @@ module VPS
         end
       end
 
+      # Command to return the root of the notes on disk.
       class Root < EntityTypeCommand
         include NoteSupport::Root
       end
 
+      # Command to list notes.
       class List < EntityTypeCommand
         include NoteSupport::List
       end
 
+      # Support module for notes managed in IA Writer.
       module IAWriterNote
         def run(context, runner = Shell::SystemRunner.instance)
-          note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
+          note = if is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else
                    create_note(context)
@@ -49,6 +54,7 @@ module VPS
         end
       end
 
+      # Command to open a note in IA Writer.
       class Open < EntityInstanceCommand
         include IAWriterNote
 
@@ -66,24 +72,34 @@ module VPS
         end
       end
 
+      # Command to create a "plain" note in IA Writer.
       class Create < EntityTypeCommand
-        include NoteSupport::PlainTemplateNote, IAWriterNote
+        include IAWriterNote
+        include NoteSupport::PlainTemplateNote
       end
 
+      # Command to create a "today" note in IA Writer.
       class Today < EntityTypeCommand
-        include NoteSupport::TodayTemplateNote, IAWriterNote
+        include IAWriterNote
+        include NoteSupport::TodayTemplateNote
       end
 
+      # Command to create a "project" note in IA Writer.
       class Project < CollaborationCommand
-        include NoteSupport::ProjectTemplateNote, IAWriterNote
+        include IAWriterNote
+        include NoteSupport::ProjectTemplateNote
       end
 
+      # Command to create a "contact" note in IA Writer.
       class Contact < CollaborationCommand
-        include NoteSupport::ContactTemplateNote, IAWriterNote
+        include IAWriterNote
+        include NoteSupport::ContactTemplateNote
       end
 
+      # Command to create an "event" note in IA Writer.
       class Event < CollaborationCommand
-        include NoteSupport::EventTemplateNote, IAWriterNote
+        include IAWriterNote
+        include NoteSupport::EventTemplateNote
       end
     end
   end

@@ -5,7 +5,6 @@ module VPS
   # which gets passed the Ruby hash parsed from the YAML configuration file for that plugin. The output of
   # that process is then kept in here, in memory.
   class Configuration
-
     ROOT = File.join(Dir.home, '.vps')
 
     # @return [String] default location of the configuration file: +~/.vps/config.yaml+
@@ -25,9 +24,9 @@ module VPS
     # @return [Configuration]
     def self.load(path)
       unless File.readable?(path)
-        $stderr.puts 'ERROR: cannot read configuration file'
-        $stderr.puts
-        $stderr.puts 'VPS requires a configuration file at ' #{path}'"
+        warn 'ERROR: cannot read configuration file'
+        warn
+        warn "VPS requires a configuration file at '#{path}'"
         raise 'Configuration file missing or unreadable'
       end
       Configuration.new(path)
@@ -48,10 +47,10 @@ module VPS
     # @return [Hash<VPS::Plugin::Repository, Array<VPS::Plugin::Command>]
     def available_commands(area)
       plugins_for(area)
-        .map { |plugin| plugin.repositories }
+        .map(&:repositories)
         .flatten
-        .sort_by { |repository| repository.supported_entity_type.name }
-        .map { |repository| [repository.supported_entity_type, commands_per_entity_type(area, repository.supported_entity_type)] }
+        .sort_by { |r| r.supported_entity_type.name }
+        .map { |r| [r.supported_entity_type, commands_per_entity_type(area, r.supported_entity_type)] }
         .reject { |_, commands| commands.empty? }
         .to_h
     end
@@ -67,16 +66,16 @@ module VPS
 
     def commands_per_entity_type(area, entity_type)
       plugins_for(area)
-        .map { |plugin| plugin.commands }
+        .map(&:commands)
         .flatten
-        .sort_by { |command| command.name }
+        .sort_by(&:name)
         .select { |command| command.supported_entity_type == entity_type }
     end
 
     def extract_areas(hash)
       @areas = {}
       hash['areas'].each_pair do |key, config|
-        config = config || {}
+        config ||= {}
         name = config['name'] || key.capitalize
         root = if config['root']
                  File.expand_path(config['root'])
@@ -96,15 +95,16 @@ module VPS
         plugins['paste'] = {}
         entity_types = [EntityType::Area]
         config.each_pair do |plugin_key, plugin_config|
-          next if %w(key name root).include?(plugin_key)
+          next if %w[key name root].include?(plugin_key)
+
           plugin = Registry.instance.plugins[plugin_key]
           if plugin.nil?
-            $stderr.puts "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
+            warn "WARNING: no area plugin found for key '#{plugin_key}'. Please check your configuration!"
             next
           end
-          plugin.repositories.map { |r| r.supported_entity_type }.each do |entity_type|
+          plugin.repositories.map(&:supported_entity_type).each do |entity_type|
             if entity_types.include? entity_type
-              $stderr.puts "WARNING: the area #{name} has multiple repositories for type #{entity_type}. Skipping plugin #{plugin_key}"
+              warn "WARNING: area #{name} has multiple repositories for #{entity_type}s. Skipping plugin #{plugin_key}"
               next
             end
             entity_types << entity_type
@@ -122,7 +122,7 @@ module VPS
       (hash['actions'] || {}).each_pair do |key, config|
         plugin = Registry.instance.plugins[key]
         if plugin.nil? || plugin.action.nil?
-          $stderr.puts "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
+          warn "WARNING: no action plugin found for key '#{key}'. Please check your configuration!"
           next
         end
         @actions[key] = plugin.configurator.process_action_configuration(config || {}).freeze

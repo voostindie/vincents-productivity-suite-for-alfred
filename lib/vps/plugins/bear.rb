@@ -7,6 +7,7 @@ module VPS
     module Bear
       include Plugin
 
+      # Configures the Bear plugin
       class BearConfigurator < Configurator
         include NoteSupport::Configurator
 
@@ -20,6 +21,7 @@ module VPS
         end
       end
 
+      # Repository for Bear notes
       class BearRepository < Repository
         def supported_entity_type
           EntityType::Note
@@ -31,9 +33,8 @@ module VPS
           callback = "bear://x-callback-url/search?show_window=no&token=#{token}"
           callback += "&tag=#{tag}" unless tag.nil?
           output = runner.execute(callback)
-          if output.nil? || output.empty?
-            return []
-          end
+          return [] if output.nil? || output.empty?
+
           JSON.parse(output['notes']).map do |record|
             EntityType::Note.new do |note|
               note.id = record['identifier']
@@ -46,6 +47,7 @@ module VPS
           if context.environment['NOTE_ID'].nil?
             id = context.arguments[0]
             return nil if id.nil?
+
             token = context.configuration[:token]
             callback = "bear://x-callback-url/open-note?id=#{id.url_encode}&show_window=no&token=#{token}"
             record = runner.execute(callback)
@@ -62,7 +64,7 @@ module VPS
           token = context.configuration[:token]
           title = note.title.url_encode
           text = note.text.url_encode
-          tags = note.tags.map { |t| t.url_encode }.join(',')
+          tags = note.tags.map(&:url_encode).join(',')
           callback = "bear://x-callback-url/create?title=#{title}&text=#{text}&tags=#{tags}&token=#{token}"
           output = runner.execute(callback)
           note.id = output['identifier']
@@ -70,17 +72,19 @@ module VPS
         end
       end
 
+      # Command to list Bear notes
       class List < EntityTypeCommand
         include NoteSupport::List
       end
 
+      # Base module for Bear commands
       module BearNote
         def supported_entity_type
           EntityType::Note
         end
 
         def run(context, runner = Xcall.instance)
-          note = if self.is_a?(VPS::Plugin::EntityInstanceCommand)
+          note = if is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else
                    create_note(context)
@@ -92,6 +96,7 @@ module VPS
         end
       end
 
+      # Command to open notes in Bear.
       class Open < EntityInstanceCommand
         include BearNote
 
@@ -105,24 +110,34 @@ module VPS
         end
       end
 
+      # Command to create "plain" notes in Bear.
       class Create < EntityTypeCommand
-        include NoteSupport::PlainTemplateNote, BearNote
+        include BearNote
+        include NoteSupport::PlainTemplateNote
       end
 
+      # Command to create "today" notes in Bear.
       class Today < EntityTypeCommand
-        include NoteSupport::TodayTemplateNote, BearNote
+        include BearNote
+        include NoteSupport::TodayTemplateNote
       end
 
+      # Command to create "project" notes in Bear.
       class Project < CollaborationCommand
-        include NoteSupport::ProjectTemplateNote, BearNote
+        include BearNote
+        include NoteSupport::ProjectTemplateNote
       end
 
+      # Command to create "contact" notes in Bear.
       class Contact < CollaborationCommand
-        include NoteSupport::ContactTemplateNote, BearNote
+        include BearNote
+        include NoteSupport::ContactTemplateNote
       end
 
+      # Command to create "event" notes in Bear.
       class Event < CollaborationCommand
-        include NoteSupport::EventTemplateNote, BearNote
+        include BearNote
+        include NoteSupport::EventTemplateNote
       end
     end
   end

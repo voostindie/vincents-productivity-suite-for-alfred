@@ -30,19 +30,19 @@ module VPS
       # @return [String]
       def self.format(output)
         if output.is_a?(Array)
-          id = if output.size > 0 && output[0][:uid].nil?
+          id = if !output.empty? && output[0][:uid].nil?
                  :arg
                else
                  :uid
                end
-          width = output.map { |entry| entry[id].size}.max
+          width = output.map { |entry| entry[id].size }.max
           output.map do |entry|
             if entry[id] == entry[:title]
               "- #{entry[id]}"
             else
               "- #{entry[id].ljust(width)}: #{entry[:title]}"
             end
-          end.join("\n")+ "\n"
+          end.join("\n") + "\n"
         elsif !output.nil?
           output
         else

@@ -7,13 +7,14 @@ module VPS
     module Teams
       include Plugin
 
+      # Command to join a Teams meeting from an event.
       class Join < EntityInstanceCommand
         def supported_entity_type
           EntityType::Event
         end
 
-        def enabled?(context, event)
-          (event.notes || '') =~ /<https:\/\/teams.microsoft.com\/l\/meetup-join.*>/
+        def enabled?(_context, event)
+          (event.notes || '') =~ %r{<https://teams.microsoft.com/l/meetup-join.*>}
         end
 
         def option_parser
@@ -27,9 +28,8 @@ module VPS
 
         def run(context, runner = Shell::SystemRunner.instance)
           event = context.load_instance
-          if (event.notes || '') =~ /<https:(\/\/teams.microsoft.com\/l\/meetup-join.*)>/
-            url = "msteams://#{$1}"
-            runner.execute('open', url)
+          if (event.notes || '') =~ %r{<https:(//teams.microsoft.com/l/meetup-join.*)>}
+            runner.execute('open', "msteams://#{Regexp.last_match(1)}")
             nil
           else
             'No Teams meeting found in event'
