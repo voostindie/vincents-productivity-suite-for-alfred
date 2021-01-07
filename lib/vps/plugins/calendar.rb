@@ -56,8 +56,8 @@ module VPS
           end
           event.people = record.people
                                .map(&:name)
-                               .reject { |n| n == context.configuration[:me] }
                                .map { |n| context.configuration[:replacements][n] || n }
+                               .reject { |n| n == context.configuration[:me] }
                                .uniq
           event
         end
@@ -310,8 +310,13 @@ module VPS
         end
 
         def self.format_name(name)
-          # <last name(s)> <middle name(s)>, <initials> (<first name(s)>)
+          if name =~ /^(.+)@(.+)/
+            # The name is actually an e-mail address; let's try to format that
+            address = Regexp.last_match(1)
+            return address.gsub('.', ' ')
+          end
           if name =~ /^(.+?), \w+ \((.+)\)$/
+            # Name is formatted like: <last name(s)> <middle name(s)>, <initials> (<first name(s)>)
             first_name = Regexp.last_match(2)
             parts = Regexp.last_match(1).split
             middle_index = parts.index { |w| w[0] =~ /[a-z]/ }
@@ -320,10 +325,19 @@ module VPS
                         else
                           (parts[middle_index..] + parts[0..middle_index - 1]).join(' ')
                         end
-            "#{first_name} #{last_name}"
-          else
-            name
+            return "#{first_name} #{last_name}"
           end
+          if name =~ /^(.+?), (.+)$/
+            # Name is formatted like: <middle name(s)> <last name(s)>, <first name(s)>
+            first_name = Regexp.last_match(2)
+            last_name_parts = Regexp.last_match(1).split
+            last_name = last_name_parts
+                          .reverse.drop(1).map(&:downcase).reverse
+                          .append(last_name_parts.last)
+                          .join(' ')
+            return "#{first_name} #{last_name}"
+          end
+          name
         end
       end
     end
