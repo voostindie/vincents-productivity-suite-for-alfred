@@ -5,7 +5,7 @@ module VPS
     describe Console, '#format' do
       context 'with code that returns a list of items' do
         it 'prints newline separated list' do
-          expected = "- 1: One\n- 2: Two\n- 3: Three"
+          expected = "- 1: One\n- 2: Two\n- 3: Three\n"
           result = Console.format(
             [
               { uid: '1', title: 'One' },
