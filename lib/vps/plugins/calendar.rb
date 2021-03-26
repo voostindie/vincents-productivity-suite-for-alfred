@@ -58,6 +58,7 @@ module VPS
                                .map(&:name)
                                .map { |n| context.configuration[:replacements][n] || n }
                                .reject { |n| n == context.configuration[:me] }
+                               .sort
                                .uniq
           event
         end
@@ -310,25 +311,36 @@ module VPS
         end
 
         def self.format_name(name)
-          if name =~ /^(.+)@(.+)/
-            # The name is actually an e-mail address; let's try to format that
-            address = Regexp.last_match(1)
-            return address.gsub('.', ' ')
-          end
-          if name =~ /^(.+?), \w+ \((.+)\)$/
-            # Name is formatted like: <last name(s)> <middle name(s)>, <initials> (<first name(s)>)
+          # Name is formatted like: <last name(s)>, <initials> (<first name(s)>) (<e-mail address>)
+          if name =~ /^(.+?), .+? \((.+?)\) \(.+?\)$/
+            last_name = Regexp.last_match(1)
             first_name = Regexp.last_match(2)
-            parts = Regexp.last_match(1).split
-            middle_index = parts.index { |w| w[0] =~ /[a-z]/ }
-            last_name = if middle_index.nil?
-                          parts.join(' ')
-                        else
-                          (parts[middle_index..] + parts[0..middle_index - 1]).join(' ')
-                        end
             return "#{first_name} #{last_name}"
           end
+          # Name is formatted like: <initials> <middle name(s)> <last name(s)> (<first name(s)>) (<e-mail address>)
+          if name =~ /^(.+?) \((.+?)\) \(.+?\)$/
+            first_name = Regexp.last_match(2)
+            last_name = Regexp.last_match(1).split.drop(1).join(' ')
+            return "#{first_name} #{last_name}"
+          end
+          # Name is formatted like: <last name(s)> <middle name(s)>, <initials> (<first name(s)>)
+          # Name is formatted like: <middle name> <last name(s)> <middle name>, <initials> (<first name(s)>)
+          if name =~ /^(.+?), \w+ \((.+)\)$/
+            first_name = Regexp.last_match(2)
+            middle_names = []
+            last_names = []
+            Regexp.last_match(1).split.each do |word|
+              if word[0] =~ /[a-z]/
+                middle_names << word
+              else
+                last_names << word
+              end
+            end
+            last_name = [middle_names, last_names].flatten.join(' ')
+            return "#{first_name} #{last_name}"
+          end
+          # Name is formatted like: <middle name(s)> <last name(s)>, <first name(s)>
           if name =~ /^(.+?), (.+)$/
-            # Name is formatted like: <middle name(s)> <last name(s)>, <first name(s)>
             first_name = Regexp.last_match(2)
             last_name_parts = Regexp.last_match(1).split
             last_name = last_name_parts
@@ -337,6 +349,12 @@ module VPS
                           .join(' ')
             return "#{first_name} #{last_name}"
           end
+          # The name is actually an e-mail address; let's try to format that
+          if name =~ /^(.+)@(.+)/
+            address = Regexp.last_match(1)
+            return address.split('.').map(&:capitalize).join(' ')
+          end
+          # No match at all; just return the name as is
           name
         end
       end

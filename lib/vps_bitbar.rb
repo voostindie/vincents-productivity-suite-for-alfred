@@ -12,11 +12,10 @@ require 'optparse'
 require 'liquid'
 
 # Core code
-require 'vps/entity_type'
-require 'vps/registry'
-require 'vps/configuration'
-require 'vps/state'
-require 'vps/plugin'
-
-require 'vps/plugins/alfred'
-require 'vps/plugins/bitbar'
+require_relative 'vps/entity_type'
+require_relative 'vps/registry'
+require_relative 'vps/configuration'
+require_relative 'vps/state'
+require_relative 'vps/plugin'
+require_relative 'vps/plugins/alfred'
+require_relative 'vps/plugins/bitbar'
