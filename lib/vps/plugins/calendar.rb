@@ -311,6 +311,8 @@ module VPS
         end
 
         def self.format_name(name)
+          # Name is surrounded with ' '
+          name = $1 if name =~ /^'(.*)'$/
           # Name is formatted like: <last name(s)>, <initials> (<first name(s)>) (<e-mail address>)
           if name =~ /^(.+?), .+? \((.+?)\) \(.+?\)$/
             last_name = Regexp.last_match(1)

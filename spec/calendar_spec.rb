@@ -34,6 +34,11 @@ module VPS
           name = Person.format_name('Doe, J (John) (john.doe@example.com)')
           expect(name).to eq('John Doe')
         end
+
+        it 'formats \'anything\' as anything' do
+          name = Person.format_name('\'Doe, J (John) (john.doe@example.com)\'')
+          expect(name).to eq('John Doe')
+        end
       end
     end
   end
