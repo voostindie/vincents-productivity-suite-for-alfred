@@ -336,6 +336,8 @@ module VPS
       def create_template_context(context)
         project = context.load_instance
         template_context = super
+        template_context['id'] = project.id
+        template_context['url'] = project.url
         template_context['input'] = project.name
         template_context['name'] = project.name
         template_context

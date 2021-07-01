@@ -350,6 +350,8 @@ You can see here that the arguments are passed both in `query` and in `input`. T
 
 ##### Project
 
+- `id`: the ID of the project in the project repository
+- `url`: the URL of the project
 - `input`: the name of the project
 - `name`: the name of the project
 

@@ -97,7 +97,7 @@ module VPS
 
     # Represents a project with a name and a note that might contain "YAML Back Matter"
     class Project < BaseType
-      attr_accessor :name, :note
+      attr_accessor :url, :name, :note
 
       # Read "YAML Back Matter" from the project note if present.
       # @return [Hash]

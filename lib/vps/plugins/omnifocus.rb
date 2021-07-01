@@ -82,7 +82,7 @@ module VPS
 
         def run(context, runner = Shell::SystemRunner.instance)
           project = context.load_instance
-          runner.execute("open omnifocus:///task/#{project.id}")
+          runner.execute("open #{project.url}")
           "Opened #{project.name} in OmniFocus"
         end
       end

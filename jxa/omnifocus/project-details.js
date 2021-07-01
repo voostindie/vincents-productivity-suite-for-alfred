@@ -15,8 +15,10 @@ function run(argv) {
         .projects
         .byId(projectId);
 
+    let id = project.id();
     let result = {
-        id: project.id(),
+        id: id,
+        url: `omnifocus:///task/${id}`,
         name: project.name(),
         note: project.note.text()
     };
