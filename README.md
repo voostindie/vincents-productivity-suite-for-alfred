@@ -88,6 +88,7 @@ Where <type> and <command> are one of:
     paste     : Paste group to the frontmost app
   note
     create    : Create a new, empty note, optionally with a title
+    index     : Create an index of all notes in this area
     list      : List all notes in this area
     open      : Open in Obsidian
     paste     : Paste note to the frontmost app
@@ -273,6 +274,24 @@ What's there to break? Two things:
 
 This is, by the way, fully compatible with how Obsidian works.
 
+#### A note on indexing
+
+The Obsidian plugin (and also the iA Writer plugin) offer a command called `index`. This command goes through all notes in the area, creates an index and stores it in a JSON file in the root of the notes directory. The file is called `index.json`.
+
+If this index is present, other note commands, like `open` and `list` use it *instead* of going through all notes on disk themselves. Not only does this improve the performance of these commands, it also improves their functionality: the index also stores pages under their *aliases*, if they have any.
+
+Say you have a note called `Home.md`, containing this front matter:
+
+```yaml
+---
+aliases: [Start, Index]
+---
+```
+
+Using the index, the same note can be found under three different names: `Home`, `Start` and `Index`.
+
+A downside of the index is that it isn't automatically updated. You'll need to run the `note index` command for every area that uses it every once in a while. What works for me is scheduling it early each morning.
+
 #### Templates
 
 The note templating support in VPS allows you to set up templates for different types of entities, and for all parts of a note separately. Every individual property you can configure is actually a [Liquid template](https://shopify.github.io/liquid/).
@@ -316,7 +335,7 @@ iawriter:
                 {% endfor %}
 ```
 
-This sets up the defaults to prepend the current date to every note filename in YYYY-MM-DD format, append it to the title in DD-MM-YYYY format and also add a "todo" tag. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event (pulled from the calender).
+This sets up the defaults to prepend the current date to every note filename in YYYY-MM-DD format, append it to the title in DD-MM-YYYY format and also add a "todo" tag. Since these are the defaults, this happens for every note type. But, for events, the text is set to a template that fills in the attendees of the event (pulled from the calendar).
 
 The default template for the filename - if you don't configure anything - is `null` (in YAML). In that case VPS uses the template for the title instead. This saves you the trouble of having to define the same thing twice if you want filename and title to be the same.
 

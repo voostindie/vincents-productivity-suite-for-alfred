@@ -33,6 +33,11 @@ module VPS
         include NoteSupport::Root
       end
 
+      # Command to index the notes
+      class Index < EntityTypeCommand
+        include NoteSupport::Index
+      end
+
       # Command to list notes.
       class List < EntityTypeCommand
         include NoteSupport::List

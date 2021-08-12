@@ -100,31 +100,91 @@ module VPS
         false
       end
 
-      def find_all(context)
-        notes = Dir.glob("#{context.configuration[:root]}/**/*.md").sort_by { |p| File.basename(p) }
-        notes.map do |path|
-          EntityType::Note.new do |note|
-            note.id = File.basename(path, '.md')
-            note.title = note.id
-            note.path = path
-            note.is_new = false
+      def update_index(root)
+        index = {}
+        Dir.chdir(root) do
+          Dir.glob('**/*.md') do |path|
+            page = Page.new(root, path)
+            [page.name, page.front_matter['aliases']].compact.flatten.each do |name|
+              index[name] ||= []
+              index[name] << page.relative_path
+            end
           end
+        end
+        IO.write(File.join(root, 'index.json'), index.to_json)
+      end
+
+      def find_all(context)
+        root = context.configuration[:root]
+        index = load_index(root)
+        if index.nil?
+          notes = Dir.glob("#{context.configuration[:root]}/**/*.md").sort_by { |p| File.basename(p) }
+          notes.map do |path|
+            EntityType::Note.new do |note|
+              note.id = File.basename(path, '.md')
+              note.title = note.id
+              note.path = path
+              note.is_new = false
+            end
+          end
+        else
+          index.map do |page, paths|
+            paths.map do |path|
+              EntityType::Note.new do |note|
+                note.id = page
+                note.title = page
+                note.path = File.join(root, path)
+                note.is_new = false
+              end
+            end
+          end.flatten
+        end
+      end
+
+      def load_index(root)
+        path = File.join(root, 'index.json')
+        return nil unless File.exist?(path)
+        File.open(path) do | file |
+          return JSON.load(file)
         end
       end
 
       def load_instance(context)
+        note = EntityType::Note.from_env(context.environment)
+        return note unless note.path.nil?
+
         id = context.arguments.join(' ')
         return nil if id.empty?
-
-        matches = Dir.glob("#{context.configuration[:root]}/**/#{id}.md")
-        if matches.empty?
-          nil
+        root = context.configuration[:root]
+        index = load_index(root)
+        if index.nil?
+          matches = Dir.glob("#{context.configuration[:root]}/**/#{id}.md")
+          if matches.empty?
+            nil
+          else
+            EntityType::Note.new do |note|
+              note.id = id
+              note.title = id
+              note.path = matches[0]
+              note.is_new = false
+            end
+          end
         else
-          EntityType::Note.new do |note|
-            note.id = id
-            note.title = id
-            note.path = matches[0]
-            note.is_new = false
+          paths = index[id]
+          if paths.nil?
+            nil
+          else
+            # This is not right: the first path is always selected, even when there are
+            # multiple hits. In very rare cases it may open the wrong file.
+            # I haven't thought of an elegant way to solve it yet.
+            # In practice this only happens when using the CLI.
+            # The Alfred workflow works fine, because it hands over more data between CLI invocations.
+            EntityType::Note.new do |note|
+              note.id = id
+              note.title = id
+              note.path = paths[0]
+              note.is_new = false
+            end
           end
         end
       end
@@ -155,6 +215,27 @@ module VPS
         end
         note
       end
+
+      class Page
+        attr_reader :name, :relative_path, :front_matter, :text
+
+        def initialize(root, relative_path)
+          @name = File.basename(relative_path, '.md')
+          @relative_path = relative_path
+          path = File.join(root, relative_path)
+          @front_matter = {}
+          lines = IO.readlines(path)
+          @front_matter_present = lines[0].start_with?('---')
+          if @front_matter_present
+            lines.shift
+            i = lines.find_index { |l| l.start_with?('---') } - 1
+            yaml = lines[0..i].join
+            @front_matter = YAML.load(yaml, path)
+            lines = lines.drop(i + 2)
+          end
+          @text = lines.join.strip
+        end
+      end
     end
 
     # Return the root on disk of the notes
@@ -175,7 +256,37 @@ module VPS
       end
     end
 
-    # List all notes. Only include this if your repository supports the fina_all method.
+    # Creates an index of notes and stores them on disk in JSON format. Only include this
+    # if your repository has Markdown files on disk.
+    module Index
+      def supported_entity_type
+        EntityType::Note
+      end
+
+      def option_parser
+        OptionParser.new do |parser|
+          parser.banner = 'Create the index of all notes in this area'
+          parser.separator 'Usage: note index'
+          parser.separator ''
+          parser.separator 'This command creates an index and stores it in a JSON file in the'
+          parser.separator 'root of the notes directory. Other commands, like `list` and `open`'
+          parser.separator 'use the index if it exists. They can also do without, but the index'
+          parser.separator 'provides better performance and additional functionality:'
+          parser.separator ''
+          parser.separator 'With the index, notes can also be found using their aliases.'
+          parser.separator ''
+          parser.separator 'Tip: schedule this command every day or so for each of your areas!'
+        end
+      end
+
+      def run(context)
+        repository = context.resolve_repository(EntityType::Note.entity_type_name)
+        repository.update_index(context.configuration[:root])
+        nil
+      end
+    end
+
+    # List all notes. Only include this if your repository supports the find_all method.
     module List
       def supported_entity_type
         EntityType::Note
