@@ -137,7 +137,7 @@ module VPS
 
     # Represents a note.
     class Note < BaseType
-      attr_accessor :path, :title, :text, :tags, :is_new
+      attr_accessor :path, :title, :text, :tags, :is_new, :is_unique
     end
 
     # Represents an area of responsibility in the system itself.

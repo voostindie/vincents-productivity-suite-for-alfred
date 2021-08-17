@@ -51,8 +51,7 @@ module VPS
                  else
                    create_note(context)
                  end
-          filename = note.path[context.configuration[:root].size..]
-          location = File.join('/Locations', context.configuration[:location], filename)
+          location = File.join('/Locations', context.configuration[:location], note.path)
           callback = "iawriter://open?path=#{location.url_encode}"
           runner.execute('open', callback)
           "Opened note '#{note.title}' in iA Writer"

@@ -118,23 +118,27 @@ module VPS
         root = context.configuration[:root]
         index = load_index(root)
         if index.nil?
-          notes = Dir.glob("#{context.configuration[:root]}/**/*.md").sort_by { |p| File.basename(p) }
-          notes.map do |path|
-            EntityType::Note.new do |note|
-              note.id = File.basename(path, '.md')
-              note.title = note.id
-              note.path = path
-              note.is_new = false
+          Dir.chdir(root) do
+            notes = Dir.glob('**/*.md').sort_by { |p| File.basename(p) }
+            notes.map do |path|
+              EntityType::Note.new do |note|
+                note.id = File.basename(path, '.md')
+                note.title = note.id
+                note.path = path
+                note.is_new = false
+              end
             end
           end
         else
           index.map do |page, paths|
             paths.map do |path|
+              is_unique = paths.size == 1
               EntityType::Note.new do |note|
                 note.id = page
                 note.title = page
-                note.path = File.join(root, path)
+                note.path = path
                 note.is_new = false
+                note.is_unique = is_unique
               end
             end
           end.flatten
@@ -158,15 +162,18 @@ module VPS
         root = context.configuration[:root]
         index = load_index(root)
         if index.nil?
-          matches = Dir.glob("#{context.configuration[:root]}/**/#{id}.md")
-          if matches.empty?
-            nil
-          else
-            EntityType::Note.new do |note|
-              note.id = id
-              note.title = id
-              note.path = matches[0]
-              note.is_new = false
+          Dir.chdir(root) do
+            matches = Dir.glob("**/#{id}.md")
+            if matches.empty?
+              nil
+            else
+              EntityType::Note.new do |note|
+                note.id = id
+                note.title = id
+                note.path = matches[0]
+                note.is_new = false
+                note.is_unique = matches.size == 1
+              end
             end
           end
         else
@@ -184,6 +191,7 @@ module VPS
               note.title = id
               note.path = paths[0]
               note.is_new = false
+              note.is_unique = paths.size == 1
             end
           end
         end
@@ -191,9 +199,11 @@ module VPS
 
       def create_or_find(context, note)
         path = note.path.nil? ? note.id : note.path
-        note.path = File.join(context.configuration[:root], "#{path}.md")
+        path = "#{path}.md" unless path.end_with?('.md')
+        note.path = path
+        filename = File.join(context.configuration[:root], note.path)
         note.is_new = false
-        if !File.exist?(note.path) || File.size(note.path).zero?
+        if !File.exist?(filename) || File.size(filename).zero?
           title = note.title
           text = note.text
           content = ''
@@ -208,7 +218,7 @@ module VPS
             content += "\n#{text}" unless text.empty?
             content += "\n#{tags}" unless tags.empty?
           end
-          File.open(note.path, 'w') do |file|
+          File.open(filename, 'w') do |file|
             file.puts content
           end
           note.is_new = true

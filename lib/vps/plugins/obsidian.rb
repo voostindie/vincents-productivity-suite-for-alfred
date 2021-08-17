@@ -61,8 +61,7 @@ module VPS
             sleep(0.5)
           end
           vault = context.configuration[:vault]
-          file = note.path[context.configuration[:root].size..]
-          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{file.url_encode}"
+          callback = "obsidian://open?vault=#{vault.url_encode}&file=#{note.path.url_encode}"
           shell_runner.execute('open', callback)
           nil # No output here, as Obsidian has its own notification
         end

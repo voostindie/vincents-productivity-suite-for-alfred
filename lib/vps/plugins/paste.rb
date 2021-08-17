@@ -48,7 +48,7 @@ module VPS
         end
       end
 
-      # Command to paste a note title to the front-most app
+      # Command to paste a note title as a [[WikiLink]] to the front-most app
       class Note < EntityInstanceCommand
         include PasteTemplate
 
@@ -57,7 +57,18 @@ module VPS
         end
 
         def text_from(note)
-          note.title
+          aliaz = note.title
+          name = File.basename(note.path, '.md')
+          path = if note.is_unique
+                   name
+                 else
+                   note.path[..-3]
+                 end
+          if name == aliaz
+            "[[#{path}]]"
+          else
+            "[[#{path}|#{aliaz}]]"
+          end
         end
       end
 
