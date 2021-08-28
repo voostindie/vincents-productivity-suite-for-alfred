@@ -210,13 +210,13 @@ module VPS
           if frontmatter?(context)
             tags = note.tags.join(', ')
             content += "---\ntags: [#{tags}]\n---\n" unless tags.empty?
-            content += "# #{title}\n" unless title.empty?
-            content += "\n#{text}" unless text.empty?
+            content += "# #{title}\n\n" unless title.empty?
+            content += "#{text}\n" unless text.empty?
           else
             tags = note.tags.map { |t| "##{t}" }.join(' ')
-            content += "# #{title}\n" unless title.empty?
-            content += "\n#{text}" unless text.empty?
-            content += "\n#{tags}" unless tags.empty?
+            content += "# #{title}\n\n" unless title.empty?
+            content += "#{text}\n" unless text.empty?
+            content += "\n#{tags}\n" unless tags.empty?
           end
           File.open(filename, 'w') do |file|
             file.puts content
