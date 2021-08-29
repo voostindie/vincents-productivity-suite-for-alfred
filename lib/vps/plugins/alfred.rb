@@ -84,6 +84,8 @@ module VPS
         end
       end
 
+      # Resolves the path to a project on disk. The project directory defaults to the name
+      # of the project, but can be overridden in the project YAML back matter.
       module ProjectPathResolver
         def resolve_path(context, project)
           directory = if project.config['alfred']
@@ -139,7 +141,6 @@ module VPS
         def name
           'finder'
         end
-
 
         def supported_entity_type
           EntityType::Project
