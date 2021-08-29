@@ -84,8 +84,21 @@ module VPS
         end
       end
 
+      module ProjectPathResolver
+        def resolve_path(context, project)
+          directory = if project.config['alfred']
+                        project.config['alfred']['folder'] || project.name
+                      else
+                        project.name
+                      end
+          "#{File.join(context.configuration[:refs], directory)}/"
+        end
+      end
+
       # Command to browse files for a project in Alfred
       class ProjectFiles < CollaborationCommand
+        include ProjectPathResolver
+
         def name
           'files'
         end
@@ -118,14 +131,39 @@ module VPS
           runner.execute('browse', path)
           "Opened Alfred for directory '#{path}'"
         end
+      end
 
-        def resolve_path(context, project)
-          folder = if project.config['alfred']
-                     project.config['alfred']['folder'] || project.name
-                   else
-                     project.name
-                   end
-          "#{File.join(context.configuration[:refs], folder)}/"
+      class ProjectFinder < CollaborationCommand
+        include ProjectPathResolver
+
+        def name
+          'finder'
+        end
+
+
+        def supported_entity_type
+          EntityType::Project
+        end
+
+        def collaboration_entity_type
+          EntityType::File
+        end
+
+        def option_parser
+          OptionParser.new do |parser|
+            parser.banner = 'Open project folder in Finder'
+            parser.separator 'Usage: project finder <projectId>'
+            parser.separator ''
+            parser.separator 'Where <projectId> is the ID of the project open.'
+            parser.separator 'If the project folder on disk doesn\'t exist, it will be created.'
+          end
+        end
+
+        def run(context, runner = Shell::SystemRunner.instance)
+          project = context.load_instance
+          path = resolve_path(context, project)
+          Dir.mkdir(path) unless Dir.exist?(path)
+          runner.execute('open', path)
         end
       end
 
@@ -134,7 +172,7 @@ module VPS
       # This action is far from perfect. For one: it assumes too much. It assumes, for example:
       # - The entity hotkeys
       # - The entity keywords
-      # - Every supported entity has a "list" command
+      # - That every supported entity has a "list" command
       # - That if the 'note' repository exists, the 'today' action should be added
       # - ...and lots more.
       #
