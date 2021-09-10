@@ -206,7 +206,7 @@ areas:
             name: 'Work'
         alfred:
             documents: 'Documents'
-            reference material: 'Reference Material'
+            reference material: '.'
         bitbar:
             label: 'Work'
 actions:
@@ -470,43 +470,41 @@ The YAML Back Matter applies specifically to OmniFocus, but it should be fairly 
 
 ### Alfred
 
-I store files on disk for an area in two separate directories:
+I store all the files for an area under a single directory on disk.
+By enabling the Alfred plugin I can this directory, and specific subdirectories, through a global shortcut, or quickly open them in the Finder.
 
-1. Documents: everything I create myself (or collaborate on with others)
-2. Reference Material: all documents I get from others as reference or support material.
-
-By enabling the Alfred plugin I can browse these directories through a global shortcut.
+The Alfred plugin also add commands to projects and contacts for browsing their files, or opening them in the Finder.
 
 The configuration looks as follows:
 
 ```yaml
 alfred:
+    path:
     documents:
-    reference material:
+    projects:
+    contacts:
 ```
 
 With:
 
-* `documents` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Documents`.
-* `reference material` (optional): the subdirectory under the area's root directory where documents are stored. Defaults to `Reference Material`.
+* `path` (optional): the subdirectory under the area's root directory where files are stored. Defaults to `.`.
+* `documents` (optional): the subdirectory under the `path` where documents are stored. Defaults to `Documents`.
+* `projects` (optional): the subdirectory under the `path` material directory where project files are kept. Defaults to `Projects`.
+* `contacts` (optional): the subdirectory under the `path` material directory where contacts are kept. Defaults to `Contacts`.
 
 But wait, there's more:
 
 #### Project Files
 
-The Alfred plugin also adds a command to projects: you can browse the files belonging to that project.
-
-The way the plugin resolves the directory on disk is by taking the path to the reference material (see previous section) and appending the name of the project to it.
-
-In case of OmniFocus you can have a different specified in the note of the project, in the "YAML Back Matter", for example:
+In case of OmniFocus you can have a different project directory specified in the note of the project, in the "YAML Back Matter", for example:
 
 ```yaml
 ---
 alfred:
-    folder: My Project
+    folder: "Projects/My Project"
 ```
 
-This will make Alfred browse the "My Project" folder in the reference material, even if the project is named differently.
+This will make Alfred browse the "Projects/My Project" directory, no matter the name of the project.
 
 ### Apple Contacts
 

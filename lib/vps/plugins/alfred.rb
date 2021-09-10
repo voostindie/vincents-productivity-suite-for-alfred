@@ -1,6 +1,6 @@
 module VPS
   module Plugins
-    # Alfred plugin to allow easy access to files in the area: documents, reference material and per-project.
+    # Alfred plugin to allow easy access to files in the area, for all files, documents and projects.
     #
     # It also contains an action to generate the Alfred workflow for VPS whenever the focus changes. This
     # action is still a little rough around the edges, but it works "good enough" for me at the moment.
@@ -10,9 +10,12 @@ module VPS
       # Configures the Alfred plugin
       class AlfredConfigurator < Configurator
         def process_area_configuration(area, hash)
+          root = File.join(area[:root], force(hash['path'], String) || '.')
           {
-            docs: File.join(area[:root], force(hash['documents'], String) || 'Documents', '/'),
-            refs: File.join(area[:root], force(hash['reference material'], String) || 'Reference Material', '/')
+            root: root,
+            documents: File.join(root, force(hash['documents'], String) || 'Documents'),
+            projects: File.join(root, force(hash['projects'], String) || 'Projects'),
+            contacts: File.join(root, force(hash['contacts'], String) || 'Contacts')
           }
         end
 
@@ -57,7 +60,7 @@ module VPS
 
         def run(context, runner = JxaRunner.new('alfred'))
           path = context.configuration[@symbol]
-          runner.execute('browse', path)
+          runner.execute('browse', File.join(path, '/'))
           "Opened Alfred for directory '#{path}'"
         end
       end
@@ -69,7 +72,7 @@ module VPS
         def initialize
           super
           @description = 'documents'
-          @symbol = :docs
+          @symbol = :documents
         end
       end
 
@@ -80,7 +83,67 @@ module VPS
         def initialize
           super
           @description = 'reference material'
-          @symbol = :refs
+          @symbol = :root
+        end
+      end
+
+      module BrowseCommand
+        def name
+          'files'
+        end
+
+        def enabled?(context, project)
+          path = resolve_path(context, project)
+          Dir.exist?(path)
+        end
+
+        def collaboration_entity_type
+          EntityType::File
+        end
+
+        def option_parser
+          entity = supported_entity_type.entity_type_name
+          OptionParser.new do |parser|
+            parser.banner = "Browse #{entity} files"
+            parser.separator "Usage: #{entity} files <#{entity}Id>"
+            parser.separator ''
+            parser.separator "Where <#{entity}Id> is the ID of the #{entity} to browse"
+          end
+        end
+
+        def run(context, runner = JxaRunner.new('alfred'))
+          entity = context.load_instance
+          path = resolve_path(context, entity) + '/'
+          runner.execute('browse', path)
+          "Opened Alfred for directory '#{path}'"
+        end
+      end
+
+      module FinderCommand
+        def name
+          'finder'
+        end
+
+        def collaboration_entity_type
+          EntityType::File
+        end
+
+        def option_parser
+          entity = supported_entity_type.entity_type_name
+          OptionParser.new do |parser|
+            parser.banner = "Open #{entity} folder in Finder"
+            parser.separator "Usage: #{entity} finder <#{entity}Id>"
+            parser.separator ''
+            parser.separator "Where <#{entity}Id> is the ID of the project open."
+            parser.separator 'If the folder on disk doesn\'t exist, it will be created.'
+          end
+        end
+
+        def run(context, runner = Shell::SystemRunner.instance)
+          project = context.load_instance
+          path = resolve_path(context, project)
+          Dir.mkdir(path) unless Dir.exist?(path)
+          runner.execute('open', path)
         end
       end
 
@@ -93,78 +156,46 @@ module VPS
                       else
                         project.name
                       end
-          "#{File.join(context.configuration[:refs], directory)}/"
+          File.join(context.configuration[:projects], directory)
         end
       end
 
       # Command to browse files for a project in Alfred
       class ProjectFiles < CollaborationCommand
-        include ProjectPathResolver
-
-        def name
-          'files'
-        end
-
-        def enabled?(context, project)
-          path = resolve_path(context, project)
-          Dir.exist?(path)
-        end
+        include BrowseCommand, ProjectPathResolver
 
         def supported_entity_type
           EntityType::Project
-        end
-
-        def collaboration_entity_type
-          EntityType::File
-        end
-
-        def option_parser
-          OptionParser.new do |parser|
-            parser.banner = 'Browse project files'
-            parser.separator 'Usage: project files <projectId>'
-            parser.separator ''
-            parser.separator 'Where <projectId> is the ID of the project to browse'
-          end
-        end
-
-        def run(context, runner = JxaRunner.new('alfred'))
-          project = context.load_instance
-          path = resolve_path(context, project)
-          runner.execute('browse', path)
-          "Opened Alfred for directory '#{path}'"
         end
       end
 
       class ProjectFinder < CollaborationCommand
-        include ProjectPathResolver
-
-        def name
-          'finder'
-        end
+        include FinderCommand, ProjectPathResolver
 
         def supported_entity_type
           EntityType::Project
         end
+      end
 
-        def collaboration_entity_type
-          EntityType::File
+      module ContactPathResolver
+        def resolve_path(context, contact)
+          File.join(context.configuration[:contacts], contact.name)
         end
+      end
 
-        def option_parser
-          OptionParser.new do |parser|
-            parser.banner = 'Open project folder in Finder'
-            parser.separator 'Usage: project finder <projectId>'
-            parser.separator ''
-            parser.separator 'Where <projectId> is the ID of the project open.'
-            parser.separator 'If the project folder on disk doesn\'t exist, it will be created.'
-          end
+      class ContactFiles < CollaborationCommand
+        include BrowseCommand, ContactPathResolver
+
+        def supported_entity_type
+          EntityType::Contact
         end
+      end
 
-        def run(context, runner = Shell::SystemRunner.instance)
-          project = context.load_instance
-          path = resolve_path(context, project)
-          Dir.mkdir(path) unless Dir.exist?(path)
-          runner.execute('open', path)
+      class ContactFinder < CollaborationCommand
+        include FinderCommand, ContactPathResolver
+
+        def supported_entity_type
+          EntityType::Contact
         end
       end
 
