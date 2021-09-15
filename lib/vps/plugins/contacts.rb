@@ -139,7 +139,7 @@ module VPS
 
         def run(context, runner = Shell::SystemRunner.instance)
           contact = context.load_instance
-          runner.execute('open', "addressbook://#{contact.id}")
+          runner.execute('open', "addressbook://#{contact.id.url_encode}")
           "Opened #{contact.name} in Contacts"
         end
       end
