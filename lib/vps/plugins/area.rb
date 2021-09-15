@@ -98,6 +98,10 @@ module VPS
 
       # Outputs the name of the focused area.
       class Current < SystemCommand
+        def initialize
+          @as_key = false
+        end
+        
         def supported_entity_type
           EntityType::Area
         end
@@ -105,12 +109,20 @@ module VPS
         def option_parser
           OptionParser.new do |parser|
             parser.banner = 'Prints the name of the area that has focus'
-            parser.separator 'Usage: area current'
+            parser.separator 'Usage: area current [options]'
+            parser.on('-k', '--[no-]key', 'Print the key, not the name') do |key|
+              @as_key = key
+            end
           end
         end
 
         def run(context)
-          context.area[:name]
+          option_parser.order!(context.arguments)
+          if @as_key
+            context.area[:key]
+          else
+            context.area[:name]
+          end
         end
       end
 
