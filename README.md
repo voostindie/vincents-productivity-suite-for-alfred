@@ -65,6 +65,9 @@ Where <type> and <command> are one of:
     focus     : Set the focus to the specified area
     list      : List all available areas
   contact
+    files     : Browse contact files
+    finder    : Open contact folder in Finder
+    focus     : Focus on this contact
     list      : List all available contacts in this area
     mail      : Write an e-mail
     note      : Edit this contact's note
@@ -72,6 +75,7 @@ Where <type> and <command> are one of:
     open      : Open in Contacts
     paste     : Paste contact to the frontmost app
   event
+    focus     : Focus on this event
     join      : Join Teams meeting
     list      : List all events for today in this area
     markdown  : Paste event as Markdown to the frontmost app
@@ -88,7 +92,7 @@ Where <type> and <command> are one of:
     paste     : Paste group to the frontmost app
   note
     create    : Create a new, empty note, optionally with a title
-    index     : Create an index of all notes in this area
+    index     : Create the index of all notes in this area
     list      : List all notes in this area
     open      : Open in Obsidian
     paste     : Paste note to the frontmost app
@@ -97,6 +101,8 @@ Where <type> and <command> are one of:
     view      : Open in Marked
   project
     files     : Browse project files
+    finder    : Open project folder in Finder
+    focus     : Focus on this project
     list      : List all available projects in this area
     markdown  : Paste project as Markdown to the frontmost app
     note      : Edit this project's note
@@ -673,6 +679,29 @@ With:
 - `label`: the text to show in the menubar. (Tip: you can use emoji's as short titles, and you can configure the label in several ways, like setting the font, the size, the color... See the [BitBar Plugin API documentation](https://github.com/matryer/bitbar#plugin-api).)
 
 Note: also if you use SwiftBar, the configuration to use is `bitbar`!
+
+### Focus
+
+The "Focus" plugin executes multiple commands consecutively against a single entity instance. You can use it, for example, to open a project in OmniFocus, the accompanying note in Obsidian, and a Finder window pointing to its reference data, all in one go. Hence the name "focus".
+
+Not only do I find this plugin useful for myself, it's also quite magical to watch it in action!
+
+This plugin supports projects, events and contacts. Supporting other entities is trivial, but I haven't seen the need yet.
+
+The configuration for this plugin looks as follows:
+
+```yaml
+focus:
+    project: [finder, note, open]
+    event: [command1, command2, command3]
+    contact: [command1, command2, command3]
+```
+
+With:
+
+- `project`: the list of commands to execute on a single project. In this case the `finder`, `note` and `open` commands.
+- `event`: the list of commands to execute on a single event. 
+- `contact`: the list of commands to execute on a single event.
 
 ### Paste
 

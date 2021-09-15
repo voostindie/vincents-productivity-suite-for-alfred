@@ -195,6 +195,11 @@ module VPS
         raise NotImplementedError
       end
 
+      # @return nil
+      # @abstract
+      def process_arguments(_context)
+      end
+
       # @param _context [VPS::CommandContext]
       # @return [String, Array, nil]
       # @abstract

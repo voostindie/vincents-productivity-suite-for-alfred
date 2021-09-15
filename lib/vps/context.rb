@@ -77,7 +77,11 @@ module VPS
     def initialize(context, plugin_configuration, entity_type_contexts = {})
       super(context, plugin_configuration)
       @entity_type_contexts = entity_type_contexts
-      @load_instance = nil
+      @load_instance = if context.is_a?(CommandContext)
+                         context.load_instance
+                       else
+                         nil
+                       end
     end
 
     # @return [Boolean]

@@ -151,12 +151,12 @@ module VPS
       # of the project, but can be overridden in the project YAML back matter.
       module ProjectPathResolver
         def resolve_path(context, project)
-          directory = if project.config['alfred']
-                        project.config['alfred']['folder'] || project.name
-                      else
-                        project.name
-                      end
-          File.join(context.configuration[:projects], directory)
+          config = project.config['alfred']
+          if config && config['folder']
+            File.join(context.configuration[:root], config['folder'])
+          else
+            File.join(context.configuration[:projects], project.name)
+          end
         end
       end
 

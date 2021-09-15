@@ -116,8 +116,11 @@ module VPS
           end
         end
 
-        def run(context)
+        def process_arguments(context)
           option_parser.order!(context.arguments)
+        end
+
+        def run(context)
           if @as_key
             context.area[:key]
           else

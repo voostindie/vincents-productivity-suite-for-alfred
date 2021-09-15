@@ -128,6 +128,10 @@ module VPS
     # and the attendees.
     class Event < BaseType
       attr_accessor :title, :people, :notes
+
+      def name
+        @title
+      end
     end
 
     # Represents a group with a name and a list of people.

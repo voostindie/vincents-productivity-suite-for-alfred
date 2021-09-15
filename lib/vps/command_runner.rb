@@ -28,6 +28,7 @@ module VPS
     # @return void
     def execute
       command_context = create_context
+      @command.process_arguments(command_context)
       if @command.is_a?(VPS::Plugin::EntityInstanceCommand) || @command.is_a?(VPS::Plugin::CollaborationCommand)
         instance = command_context.load_instance
         raise 'Aborting. Could not load entity instance. Did you specify an identifier?' if instance.nil?
