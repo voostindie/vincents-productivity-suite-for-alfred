@@ -6,20 +6,6 @@ This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothin
 
 But please remember that I've had exactly one person in mind while creating this suite: me. *Your mileage may vary!*
 
-**Update November 2020**: Hot on the heels of version 3.0, version 4.0 is out! A new major release, because the contracts with you, the user, are broken. Specifically:
-
-- The configuration file is now expected to be in `~/.vps/config.yaml`. To migrate:
-    - Create `~/.vps`
-    - Move `~/.vpsrc` to `~/.vps/config.yaml`
-    - Delete all files with prefix `.vps` from your home folder. (These are typically caches.)
-- The Alfred workflow is now generated whenever you change focus. This ensures that hotkeys and keywords are only enabled when the required entity type is supported in the area. Plus, it sets the action icons to the correct applications. To migrate:
-    - Delete the current VPS workflow from Alfred.
-    - Change the focus at least once through the command line
-    - It might be necessary to restart Alfred after this. That's just needed this one time though.
-- Due to the way VPS is now set up, with a stable code directory - all changes are stored under `~/.vps` it's now theoretically possible to release an actual Gem from this code.
-
-**Update October 2020**: Version 3.0 of VPS is out. A little over one year since version 2.0 from August 2019! The biggest change on the outside is that commands are now grouped by the type of entity instead of by the plugin that provides them. That seems like a small change, but actually it makes the naming of the commands much more reasonable. Internally a lot has changed as well. There's now a much better decoupling of plugin classes from each other. There's more reuse between plugins, and plugins require less code. But, the configuration file hasn't actually changed.
-
 **A note on the code**: I'm not particularly proud of the code in this project. True Rubyists probably will avert their eyes in disgust. Unit tests are also seriously lacking. But hey, I've been running this tool for several years now day in day out, and it gets the job done!
 
 ## So, what's this all about?
@@ -42,9 +28,9 @@ This is a command-line interface (CLI) as well as an [Alfred](https://www.alfred
 - Outlook Calendar
 - Teams
 
-A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, writing e-mails in Mail and tracking people and groups in Contacts. This CLI and the workflow on top of it give me the means to quickly edit notes and write e-mails and refer to projects and people, either through the terminal, keyboard shortcuts, keywords, or snippets.
+A lot of activity at my computer consists of managing projects and tasks in OmniFocus, editing notes in Obsidian, managing files in Finder, writing e-mails in Mail and tracking people and groups in Contacts. This CLI and the workflow on top of it give me the means to quickly edit notes and write e-mails and refer to projects and people, either through the terminal, keyboard shortcuts, keywords, or snippets.
 
-An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are always the same, but they do different things depending on the area that has the focus.
+An important aspect of this tool is that it works with *areas of responsibility* (a [Getting Things Done (GTD)](https://gettingthingsdone.com) term), like work, family, sports, and software projects (like this one). In VPS you configure all of these areas independently. Then you set the focus to a specific one. At any time, exactly one area has focus. The CLI commands and the keyboard hotkeys, keywords and snippets for Alfred are tuned to the area that has focus. For example, Alfred will only list projects, notes, contacts, events and so on in the area that has focus.
 
 To give you an idea of what the CLI and Alfred workflow can do, here is the output of `vps help` on my own configuration, for the area with the most extensive configuration (work):
 
@@ -120,6 +106,8 @@ The accompanying Alfred workflow looks like this (at least, a tiny portion of it
 ![](alfred-screenshot.png)
 
 What you see here is that the CLI and workflow act on *entities*, like projects, contacts, files and notes. Under the hood, VPS triggers macOS applications according to the configuration. For notes, for example, you can use either Obsidian, Bear or iA Writer. The CLI commands, hotkeys and keywords are always the same. You remember the hotkey for creating a new note once, and it will continue to work, even if you switch from one application to another!
+
+How it works: whenever you change the focus, a new Alfred workflow is generated on the fly for the selected area, based on the configuration. The result: same hotkeys, different functionality.
 
 ## Installation
 
@@ -477,7 +465,7 @@ The YAML Back Matter applies specifically to OmniFocus, but it should be fairly 
 ### Alfred
 
 I store all the files for an area under a single directory on disk.
-By enabling the Alfred plugin I can this directory, and specific subdirectories, through a global shortcut, or quickly open them in the Finder.
+By enabling the Alfred plugin I can browse this directory, and specific subdirectories, through a global shortcut, or quickly open them in the Finder.
 
 The Alfred plugin also add commands to projects and contacts for browsing their files, or opening them in the Finder.
 
@@ -514,7 +502,7 @@ This will make Alfred browse the "Projects/My Project" directory, no matter the 
 
 ### Apple Contacts
 
-For me, the default Contacts app from Apple is good enough to manage all my contacts. For that to work across my areas of responsibility, I have set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see and use them on all your devices!)
+For me, the default Contacts app from Apple, although buggy, is good enough to manage all my contacts. For that to work across my areas of responsibility, I have set up several groups. (You can create and edit groups only on macOS, not on iOS, but once you have them, you can see and use them on all your devices!)
 
 This plugin supports contacts as well as groups of contacts. 
 
@@ -649,7 +637,7 @@ With:
 
 In case of using OmniFocus for projects, the title and text for a project can be defined in the YAML Back Matter of the project, defined under the key `markdown`. If there is no YAML Back Matter, the project name is used as the title of the Markdown, and text is omitted. Note that the configuration in OmniFocus are not just strings of characters, but actual Liquid templates. You can use mostly the same variables as for other notes: day, month, year and week.
 
-In case of an event, the text of the is set to the list of attendees of the event.
+In case of an event, the text is set to the list of attendees of the event.
 
 ### Marked
 
@@ -711,7 +699,7 @@ For events it adds another command: `paste-attendees`, which pastes the names of
 
 ## Performing actions when the focus changes
 
-Apart from the `areas` section, the configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently these are available:
+Apart from the `areas` section, the main configuration also supports an `actions` section, where you can list things that must happen whenever the focus changes. Currently these are available:
 
 1. Rebuilding the Alfred workflow
 2. Refreshing the name of the area in BitBar / SwiftBar
@@ -814,7 +802,7 @@ wallpaper:
 
 With:
 
-- `default` (optional): the path to the default picture to select when no specific picture is configured for an area. If you don't specifiy this value, you get the built-in High Sierra wallpaper.
+- `default` (optional): the path to the default picture to select when no specific picture is configured for an area. If you don't specify this value, you get the built-in High Sierra wallpaper.
 
 This only enables the action. To make it do anything useful, you'll also want to configure a different wallpaper per area. You do that by adding a `wallpaper` section in each area, like so:
 
