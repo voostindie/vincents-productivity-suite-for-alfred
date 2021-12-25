@@ -235,7 +235,7 @@ module VPS
           path = File.join(root, relative_path)
           @front_matter = {}
           lines = IO.readlines(path)
-          @front_matter_present = lines[0].start_with?('---')
+          @front_matter_present = !lines.empty? && lines[0].start_with?('---')
           if @front_matter_present
             lines.shift
             i = lines.find_index { |l| l.start_with?('---') } - 1
