@@ -14,6 +14,6 @@ function run(arguments) {
 
     let query = arguments[0];
 
-    Application('Alfred 3').search(query);
+    Application('Alfred').search(query);
     Application('System Events').keyCode(RETURN_KEYCODE);
 }

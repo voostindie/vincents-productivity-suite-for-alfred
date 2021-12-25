@@ -12,6 +12,6 @@ function run(arguments) {
 
     let folder = arguments[0];
 
-    Application('Alfred 4').browse(folder);
+    Application('Alfred').browse(folder);
     return true;
 }
