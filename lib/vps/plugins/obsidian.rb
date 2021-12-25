@@ -124,7 +124,7 @@ module VPS
         def option_parser
           name = supported_entity_type.entity_type_name
           OptionParser.new do |parser|
-            parser.banner = "Search notes for this #{name}"
+            parser.banner = "Search in Obsidian for this #{name}"
             parser.separator "Usage: #{name} notes <#{name}Id>"
             parser.separator ''
             parser.separator "Where <#{name}Id> is the ID of the #{name} to search for"
