@@ -71,7 +71,7 @@ module VPS
     end
 
     def from_cache(context, id)
-      YAML.load_file(cache_filename(context, id))
+      YAML.unsafe_load_file(cache_filename(context, id))
     end
 
     def to_cache(context, id, data)
