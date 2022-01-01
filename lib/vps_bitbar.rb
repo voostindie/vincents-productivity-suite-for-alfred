@@ -9,7 +9,6 @@ require 'singleton'
 require 'date'
 require 'yaml'
 require 'optparse'
-require 'liquid'
 
 # Core code
 require_relative 'vps/entity_type'
