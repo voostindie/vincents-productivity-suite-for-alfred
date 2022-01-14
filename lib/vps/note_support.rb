@@ -240,7 +240,7 @@ module VPS
             lines.shift
             i = lines.find_index { |l| l.start_with?('---') } - 1
             yaml = lines[0..i].join
-            @front_matter = YAML.load(yaml, path)
+            @front_matter = YAML.unsafe_load(yaml)
             lines = lines.drop(i + 2)
           end
           @text = lines.join.strip
