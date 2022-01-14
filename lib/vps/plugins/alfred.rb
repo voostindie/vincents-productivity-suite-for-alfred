@@ -243,6 +243,9 @@ module VPS
 
         private
 
+        # Constants for modifiers in Alfred. Right now all we need is the Command key.
+        MODIFIER_COMMAND = 1048576
+
         def prepare_target_directory
           Dir.mkdir(@target_dir) unless Dir.exist?(@target_dir)
           symlink = File.join(
@@ -359,6 +362,12 @@ module VPS
           @workflow.wire(hotkey, list, commands, command, @notification)
           @icons[list] = plugin_name
           @icons[commands] = plugin_name
+          if (entity_type_name != "event")
+            @workflow.row
+            @workflow.column(3)
+            open = @workflow.script("#{@config[:vps]} #{entity_type_name} open $*")
+            @workflow.wire(list, open, modifiers: MODIFIER_COMMAND, modifiersubtext: "Open in default application")
+          end
           @workflow.row
           snippet = @workflow.snippet(first)
           argument = @workflow.argument('TRIGGERED_AS_SNIPPET', true)
@@ -448,15 +457,15 @@ module VPS
           # Create connections between the UIDs passed in the array.
           # If the array is ['1', '2', '3'+, you'll get connections from +1+ to +2+ and from +2+ to +3+.
           # @return Void
-          def wire(*uids)
+          def wire(*uids, modifiers: 0, modifiersubtext: '')
             uids.compact!
             i = 0
             while i < uids.size - 1
               @connections[uids[i]] ||= []
               @connections[uids[i]] << {
                 destinationuid: uids[i + 1],
-                modifiers: 0,
-                modifiersubtext: '',
+                modifiers: modifiers,
+                modifiersubtext: modifiersubtext,
                 vitoclose: false
               }
               i += 1
