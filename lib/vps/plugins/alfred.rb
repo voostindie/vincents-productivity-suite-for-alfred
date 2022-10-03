@@ -87,13 +87,15 @@ module VPS
         end
       end
 
+      # Open the Alfred file browser in the correct folder.
+      # If the folder doesn't exist, the command is not available.
       module BrowseCommand
         def name
           'files'
         end
 
-        def enabled?(context, project)
-          path = resolve_path(context, project)
+        def enabled?(context, entity)
+          path = resolve_path(context, entity)
           Dir.exist?(path)
         end
 
@@ -119,6 +121,8 @@ module VPS
         end
       end
 
+      # Opens the Finder in the correct folder.
+      # This command is always available. If the folder doesn't exist, it will be created.
       module FinderCommand
         def name
           'finder'
@@ -140,8 +144,8 @@ module VPS
         end
 
         def run(context, runner = Shell::SystemRunner.instance)
-          project = context.load_instance
-          path = resolve_path(context, project)
+          entity = context.load_instance
+          path = resolve_path(context, entity)
           Dir.mkdir(path) unless Dir.exist?(path)
           runner.execute('open', path)
         end
@@ -174,6 +178,34 @@ module VPS
 
         def supported_entity_type
           EntityType::Project
+        end
+      end
+
+      # Resolves the path to reference files for a note on disk. The path is a mirror of the
+      # path to the note in the note system, with the name of the note as a directory.
+      # This is a bit of an ugly kludge, because it doesn't always work automatically.
+      # What I think I need (in the future) is a mechanism to map any entity to any other entity type.
+      module NotePathResolver
+        def resolve_path(context, note)
+          if note.path
+            File.join(context.configuration[:root], File.dirname(note.path), File.basename(note.path, '.md'))
+          end
+        end
+      end
+
+      class NoteFiles < CollaborationCommand
+        include BrowseCommand, NotePathResolver
+
+        def supported_entity_type
+          EntityType::Note
+        end
+      end
+
+      class NoteFinder < CollaborationCommand
+        include FinderCommand, NotePathResolver
+
+        def supported_entity_type
+          EntityType::Note
         end
       end
 
