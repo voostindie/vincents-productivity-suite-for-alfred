@@ -5,7 +5,7 @@ module VPS
     registry = Registry.instance
 
     it 'registers all plugins under the Plugins module' do
-      expect(registry.plugins.size).to be(18)
+      expect(registry.plugins.size).to be(19)
     end
 
     it 'registers the Alfred plugin' do
@@ -21,7 +21,7 @@ module VPS
 
     it 'instantiates the commands' do
       commands = registry.plugins['alfred'].commands
-      expect(commands.size).to be(3)
+      expect(commands.size).to be(8)
       expect(commands.all? { |c| c.is_a?(VPS::Plugin::Command) }).to be_truthy
     end
   end
