@@ -49,12 +49,14 @@ module VPS
           note = if is_a?(VPS::Plugin::EntityInstanceCommand)
                    context.load_instance
                  else
-                   create_note(context)
+                   note = create_note(context)
+                   sleep 0.5
+                   note
                  end
           location = File.join('/Locations', context.configuration[:location], note.path)
           url = "iawriter://open?path=#{location.url_encode}"
           runner.execute('open', url)
-          "Opened note '#{note.title}' in iA Writer"
+          "Opened note '#{note.path}' in iA Writer"
         end
       end
 
