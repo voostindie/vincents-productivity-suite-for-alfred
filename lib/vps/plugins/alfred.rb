@@ -564,7 +564,7 @@ module VPS
               focusedappvariable: false,
               focusedappvariablename: '',
               hotkey: HOTKEYS[char],
-              hotmod: 1_835_008,
+              hotmod: 1966080, # Hyper: Ctrl + Option + Command + Shift
               hotstring: char,
               leftcursor: false,
               modsmode: 2,
