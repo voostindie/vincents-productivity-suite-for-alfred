@@ -4,10 +4,10 @@ GEM
     diff-lcs (1.5.1)
     docile (1.1.5)
     ice_cube (0.16.4)
-    json (2.7.1)
-    liquid (5.4.0)
+    json (2.7.2)
+    liquid (5.5.0)
     plist (3.5.0)
-    rake (13.1.0)
+    rake (13.2.1)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -17,7 +17,7 @@ GEM
     rspec-expectations (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.0)
+    rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
@@ -26,22 +26,30 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sqlite3 (1.7.2-aarch64-linux)
-    sqlite3 (1.7.2-arm-linux)
-    sqlite3 (1.7.2-arm64-darwin)
-    sqlite3 (1.7.2-x86-linux)
-    sqlite3 (1.7.2-x86_64-darwin)
-    sqlite3 (1.7.2-x86_64-linux)
+    sqlite3 (2.0.2-aarch64-linux-gnu)
+    sqlite3 (2.0.2-aarch64-linux-musl)
+    sqlite3 (2.0.2-arm-linux-gnu)
+    sqlite3 (2.0.2-arm-linux-musl)
+    sqlite3 (2.0.2-arm64-darwin)
+    sqlite3 (2.0.2-x86-linux-gnu)
+    sqlite3 (2.0.2-x86-linux-musl)
+    sqlite3 (2.0.2-x86_64-darwin)
+    sqlite3 (2.0.2-x86_64-linux-gnu)
+    sqlite3 (2.0.2-x86_64-linux-musl)
     yard (0.9.36)
     zaru (0.3.0)
 
 PLATFORMS
-  aarch64-linux
-  arm-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
   arm64-darwin
-  x86-linux
+  x86-linux-gnu
+  x86-linux-musl
   x86_64-darwin
-  x86_64-linux
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   ice_cube
@@ -55,4 +63,4 @@ DEPENDENCIES
   zaru (~> 0.3.0)
 
 BUNDLED WITH
-   2.5.3
+   2.5.9
