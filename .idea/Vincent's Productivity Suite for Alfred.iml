@@ -9,6 +9,7 @@
     </content>
     <orderEntry type="jdk" jdkName="rbenv: 4.0.2" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="base64 (v0.2.0, rbenv: 4.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bigdecimal (v4.1.2, rbenv: 4.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v4.0.6, rbenv: 4.0.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.6.2, rbenv: 4.0.2) [gem]" level="application" />

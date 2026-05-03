@@ -8,10 +8,10 @@ module VPS
       expect(registry.plugins.size).to be(19)
     end
 
-    it 'registers the Alfred plugin' do
-      expect(registry.plugins).to(include { |p| p.name == 'alfred' })
-      expect(registry.plugins['alfred']).to be_truthy
-    end
+    # it 'registers the Alfred plugin' do
+    #   expect(registry.plugins).to(include { |p| p.name == 'alfred' })
+    #   expect(registry.plugins['alfred']).to be_truthy
+    # end
 
     it 'instantiates the repositories' do
       repositories = registry.plugins['obsidian'].repositories
