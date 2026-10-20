@@ -99,7 +99,7 @@ module VPS
 
         def initialize(calendar_name)
           @calendar_name = calendar_name
-          file = File.expand_path('~/Library/Calendars/Calendar Cache')
+          file = File.expand_path('~/Library/Calendars/Calendar.sqlitedb')
           unless File.exist? file
             puts "Calendar database not found: #{file}"
             exit(1)

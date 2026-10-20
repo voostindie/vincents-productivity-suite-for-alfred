@@ -1,5 +1,24 @@
 # Vincent's Productivity Suite (for Alfred)
 
+## Project archived!
+
+As of October 20, 2026, this project is archived. It was dormant for a few years already, although I was actively using it every day. Not anymore. 
+
+What happened?
+
+- I built and extended the [Markdown Curator](https://github.com/voostindie/markdown-curator) (Java) over the years. It started as a daemon monitoring my Markdown files and running embedded queries in them. That was then. These days it offers an embedded HTTP server to run queries on demand, and spit out JSON instead of Markdown. It’s a framework that is supposed to be extended.
+- I built [Vincent’s Markdown Curator](https://github.com/voostindie/vincents-markdown-curator) (Java), my custom implementation of the Markdown Curator on top of my own personal knowledge management wikis. 
+- I built the [Alfred Markdown Curator Workflow](https://github.com/voostindie/alfred-markdown-curator-workflow) (zsh), a workflow for [Alfred](https://www.alfredapp.com) that uses the embedded web server of the Markdown Curator to browse documents and folders, paste snippets, perform actions, and more.
+- I built the [Obsidian Alfred Trigger Plugin](https://github.com/voostindie/obsidian-alfred-trigger-plugin), a plugin for [Obsidian](https://obsidian.md) that triggers my Alfred workflow on the current document or the document  under the cursor.
+
+Despite all the things I built, this project is more versatile. However, I find I don’t need that versatility anymore. The simpler Alfred workflow I now have is enough for my current needs.
+
+In the meantime on my work computer I can’t install this project anymore, because the machine is getting locked down for security reasons more and more. Installing gems is no longer an option.
+
+All in all, more than enough reason to archive this project.
+
+<hr/>
+
 ## Beware!
 
 This project isn't called "*Vincent's* Productivity Suite for Alfred" for nothing. It might not be of any use to anyone but myself. But there's also no reason not to make it public; it could be useful to at least one other person beside me. So why not share?
